@@ -1,5 +1,4 @@
-import React from 'react'
-import Dashboard from './Dashboard'
+import Dashboard from '../../src/pages/Dashboard'
 
 describe('<Dashboard />', () => {
   it('renders', () => {
