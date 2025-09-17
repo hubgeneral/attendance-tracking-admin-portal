@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import Footer from "../Component/Footer";
 import clsx from "clsx";
 import HM_Clockr_Logo from "../assets/HM-Clockr-Logo.png";
 import ProfileMenu from "./ProfileMenu";
@@ -32,14 +33,14 @@ function NavItem({
 
 function AppLayout() {
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-800 flex-col">
+    <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800">
       {/* ========= TOP NAVBAR ========= */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="px-4 sm:px-6">
           <div className="flex items-center justify-between h-16 gap-6">
             {/* ============ Left Section (Logo + Nav) ================ */}
             <div className="flex items-center gap-6">
-              <a href="/">
+              <a href="/app/dashboard">
                 <img
                   src={HM_Clockr_Logo}
                   alt="HM-Clockr-Logo"
@@ -48,24 +49,28 @@ function AppLayout() {
               </a>
 
               <nav className="hidden md:flex items-center space-x-1">
-                <NavItem to="/dashboard" label="Dashboard" />
-                <NavItem to="/attendance" label="Attendance" />
-                <NavItem to="/manualLogs" label="Manual Logs" />
-                <NavItem to="/settings" label="Settings" />
+                <NavItem to="/app/dashboard" label="Dashboard" />
+                <NavItem to="/app/attendance" label="Attendance" />
+                <NavItem to="/app/manualLogs" label="Manual Logs" />
+                <NavItem to="/app/settings" label="Settings" />
               </nav>
             </div>
 
-            {/* Right Section (Profile) */}
+            {/* ============ Right Section (Profile Menu) ============ */}
             <ProfileMenu />
           </div>
         </div>
       </header>
 
+      {/* ========= MAIN CONTENT ========= */}
       <main className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
+
+      {/* ========= FOOTER ========= */}
+      <Footer />
     </div>
   );
 }

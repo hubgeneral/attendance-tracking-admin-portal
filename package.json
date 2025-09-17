@@ -17,15 +17,19 @@
     "@mui/material": "^7.3.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.1",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@cypress/react": "^9.0.1",
     "@eslint/js": "^9.33.0",
+    "@types/node": "^24.5.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.21",
+    "cypress": "^14.5.4",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -34,6 +38,6 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "vite": "^7.1.5"
   }
 }
