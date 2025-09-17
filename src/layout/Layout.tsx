@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import HMlogo from  "../assets/HM.logo.png"
+import Footer from "../Component/Footer";
 const Layout = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -16,7 +16,8 @@ const Layout = () => {
         <Outlet />
       </main>
 
- 
+      {/* Footer */}
+      <Footer />
 
     </div>
   );

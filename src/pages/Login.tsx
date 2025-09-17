@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "../App.css";
 import HMLogo from "../assets/HM.logo.png";
 import TimeClocker from "../assets/TimeClocker.logo.png";
+import TimeClockerwh from "../assets/TimeClockerwh.logo.png"
+import HMlogowh from "../assets/HM.logowh.png"
 import {
   MdOutlineRemoveRedEye,
   MdLogin,
@@ -9,6 +11,7 @@ import {
 } from "react-icons/md";
 import { GoEyeClosed } from "react-icons/go";
 import { IoMoonOutline } from "react-icons/io5";
+import Footer from "../Component/Footer";
 
 type Theme = "light" | "dark";
 
@@ -51,12 +54,26 @@ const Login = () => {
   <div className="flex-1 flex items-center justify-center">
     <div className="bg-white dark:bg-[#14201C] shadow-md rounded-xl p-8 w-full max-w-md">
       <div className="flex items-center justify-center space-x-4 mb-7">
-        <img
-          src={TimeClocker}
-          alt="HM Clockr"
-          className="h-10 border-e-2 border-gray-200 pe-4"
-        />
-        <img src={HMLogo} alt="Heidelberg Materials" className="h-10" />
+        {theme === "light" ? (
+          <>
+            <img
+              src={TimeClocker}
+              alt="HM Clockr"
+              className="h-8 border-e-2 border-gray-200 pe-4"
+            />
+            <img src={HMLogo} alt="Heidelberg Materials" className="h-8" />
+          </>
+        ) : (
+          <>
+            <img
+              src={TimeClockerwh}
+              alt="HM Clockr"
+              className="h-8 border-e-2 border-gray-200 pe-4"
+            />
+            <img src={HMlogowh} alt="Heidelberg Materials" className="h-8" />
+          </>
+        )}
+      
       </div>
 
       <h1 className="text-center text-2xl font-semibold text-gray-900 dark:text-white mb-5">
@@ -67,7 +84,7 @@ const Login = () => {
       </p>
 
       {/* Form */}
-      <form onSubmit={handleLogin} className="space-y-3">
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
@@ -102,7 +119,7 @@ const Login = () => {
 
         <div className="text-right">
           <a
-            href="#"
+            href="/app/dashboard"
             className="text-green-600 text-sm hover:underline dark:text-green-400"
           >
             Reset password?
@@ -121,28 +138,7 @@ const Login = () => {
   </div>
 
   {/* Footer */}
-  <footer className="w-full border-t bg-white py-4 px-6 dark:border-t-0 dark:bg-[#14201C] flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
-    <div className="flex items-center space-x-2">
-      <img src={TimeClocker} alt="Heidelberg Materials" className="h-6" />
-    </div>
-
-    <div className="flex flex-wrap items-center justify-center space-x-2 text-gray-400 mt-2 md:mt-0">
-      <span>© Copyright 2025 Heidelberg Materials</span>
-      <span>|</span>
-      <a href="/imprint" className="hover:text-gray-600">Imprint</a>
-      <span>|</span>
-      <a href="/disclaimer" className="hover:text-gray-600">Disclaimer</a>
-      <span>|</span>
-      <a href="/copyright" className="hover:text-gray-600">Copyright</a>
-      <span>|</span>
-      <a href="/dataprotection" className="hover:text-gray-600">Data Protection</a>
-    </div>
-
-    <div className="flex items-center space-x-2 mt-2 md:mt-0">
-      <span className="text-gray-400">Powered by</span>
-      <img src={HMLogo} alt="Heidelberg Materials" className="h-6" />
-    </div>
-  </footer>
+  <Footer />
 </div>
 
   );

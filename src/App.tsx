@@ -8,12 +8,12 @@ import Login from "./pages/Login";
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />}></Route>
-      <Route path="/" element={<Layout />} >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/attendance" element={<Attendance />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/logs" element={<ManualLogs />} />
+      <Route path="/" element={<Login />}></Route>
+      <Route path="/app" element={<Layout />} >
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="attendance" element={<Attendance />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="logs" element={<ManualLogs />} />
       </Route>
     </Routes>
   );
