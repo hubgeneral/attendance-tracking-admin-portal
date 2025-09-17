@@ -1,0 +1,12 @@
+  {
+    "compilerOptions": {
+      "target": "ESNext",
+      "lib": ["ESNext", "DOM"],
+      "sourceMap": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "jsx": "react-jsx",
+      "types": ["cypress", "node"]
+    },
+    "include": ["**/*.ts", "**/*.tsx"]
+  }
