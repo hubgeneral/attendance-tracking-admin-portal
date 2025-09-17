@@ -3,7 +3,9 @@
       "target": "es6",
       "lib": ["es6", "dom"],
       "sourceMap": true,
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
       "types": ["cypress", "node"]
     },
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts", "**/*.tsx"]
   }
