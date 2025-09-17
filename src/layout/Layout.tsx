@@ -1,8 +1,8 @@
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom";
+import HMlogo from  "../assets/HM.logo.png"
 const Layout = () => {
   return (
-    <div>
-         <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Navbar */}
       {/* <nav className="bg-gray-800 text-white p-4 flex gap-4">
         <Link to="/dashboard">Dashboard</Link>
@@ -15,10 +15,11 @@ const Layout = () => {
       <main className="flex-1 p-0">
         <Outlet />
       </main>
-    </div>
+
+ 
 
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
