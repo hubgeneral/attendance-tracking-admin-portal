@@ -12,7 +12,7 @@ const Layout = () => {
       </nav> */}
 
       {/* Main content */}
-      <main className="flex-1 p-0">
+      <main className="flex-1 p-8 bg-[#F0F2F5]">
         <Outlet />
       </main>
 

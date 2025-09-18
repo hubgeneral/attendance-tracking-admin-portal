@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import HMLogo from "../assets/HM.logo.png";
 import TimeClocker from "../assets/TimeClocker.logo.png";
@@ -19,6 +20,7 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [theme, setTheme] = useState<Theme>(
     (localStorage.getItem("theme") as Theme) || "light"
   );
@@ -32,10 +34,13 @@ const Login = () => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log("Email:", email, "Password:", password);
+    navigate("/app/dashboard");
+
   };
 
   return (
