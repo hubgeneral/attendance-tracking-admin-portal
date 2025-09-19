@@ -10,7 +10,7 @@ import {
 } from "react-icons/md";
 import { GoEyeClosed } from "react-icons/go";
 import { IoMoonOutline } from "react-icons/io5";
-import Footer from "../Component/Footer";
+import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
 
