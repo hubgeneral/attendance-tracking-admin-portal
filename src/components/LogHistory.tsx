@@ -69,61 +69,68 @@ export default function LogHistory() {
     <Card elevation={1}>
       <CardContent>
         {/* ========= Search + Filters ========== */}
-        <Typography variant="h6" component="h6" className="font-bold mb-4">
-          Logs History
-        </Typography>
-        <Box className="flex flex-col md:flex-row gap-4 mb-6">
-          <TextField
-            placeholder="Search employee name or id ..."
-            variant="outlined"
-            size="small"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon className="text-gray-400" />
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              flex: 1,
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-              },
-            }}
-          />
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>Departments</InputLabel>
-            <Select
-              value={departmentFilter}
-              label="Departments"
-              onChange={(e) => setDepartmentFilter(e.target.value)}
-              startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
-            >
-              {departments.map((dept) => (
-                <MenuItem key={dept} value={dept}>
-                  {dept}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={statusFilter}
-              label="Status"
-              onChange={(e) => setStatusFilter(e.target.value)}
-              startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
-            >
-              {statuses.map((status) => (
-                <MenuItem key={status} value={status}>
-                  {status}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+          <Box className="flex items-center justify-between mb-6">
+            <Typography variant="h6" component="h6" className="font-bold">
+              Logs History
+            </Typography>
+
+            {/* Right: Search + Filters */}
+            <Box className="flex items-center gap-3" sx={{ maxWidth: 600 }}>
+              <TextField
+                placeholder="Search employee name or id ..."
+                variant="outlined"
+                size="small"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon className="text-gray-400" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  minWidth: 200,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+              />
+
+              <FormControl size="small" sx={{ minWidth: 150 }}>
+                <InputLabel>Departments</InputLabel>
+                <Select
+                  value={departmentFilter}
+                  label="Departments"
+                  onChange={(e) => setDepartmentFilter(e.target.value)}
+                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
+                >
+                  {departments.map((dept) => (
+                    <MenuItem key={dept} value={dept}>
+                      {dept}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={statusFilter}
+                  label="Status"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
+                >
+                  {statuses.map((status) => (
+                    <MenuItem key={status} value={status}>
+                      {status}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+
         {/* Table */}
         <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
           <Table>
