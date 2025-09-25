@@ -4,7 +4,7 @@ import digtalhubgh from "../assets/digtalhubgh.png"
 
 const Footer = () => {
   return (
-    <footer className="w-full border-t bg-white py-2 px-6 dark:border-t-0 dark:bg-[#14201C] flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
+    <footer className="fixed bottom-0 right-0 z-50 w-full border-t bg-white py-2 px-6 dark:border-t-0 dark:bg-[#14201C] flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
     <div className="flex items-center space-x-2">
       <img src={HMlogo} alt="Heidelberg Materials" className="h-6" />
     </div>

@@ -1,7 +1,9 @@
 import { Card, CardContent } from "@mui/material";
-import { IoIosPeople } from "react-icons/io";
-// import { FaRegClock } from "react-icons/fa";
-import { TbClockEdit } from "react-icons/tb";
+import  TimeIcon from "../assets/TimeIcon.svg";
+import PeopleIcon from "../assets/peopleIcon.svg";
+import TimeIcon5 from "../assets/TimeIcon5.svg";
+import TimeIcon4 from "../assets/TimeIcon4.svg";
+import TimeIcon3 from "../assets/TimeIcon3.svg";
 
 interface StatCardProps {
   label: string;
@@ -12,28 +14,43 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ label, value, icon }) => {
   return (
     <div>
-      <Card className="shadow rounded-2xl h-[80px]">
+      <Card className="shadow rounded-2xl h-[100px]">
         <CardContent>
-          <div className="flex justify-between items-center mb-1">
-            <p className="text-gray-500 text-sm">{label}</p>
+          <div className="flex justify-between items-center ">
+            <p className="text-[#758DA3] text-sm">{label}</p>
+            
             {icon === "IoPeople" && (
-              <IoIosPeople className="h-6 w-6 text-[#016AD4]" />
+              <div className="w-10 h-10 flex items-center justify-center bg-[#F4F8FC] rounded">
+              <img src={PeopleIcon} className="h-6 w-6 " />
+             </div>
             )}
             {icon === "timeicon1" && (
-              <TbClockEdit className="h-6 w-6 text-[#07C437] " />
+              
+               <div className="w-10 h-10 flex items-center justify-center bg-[#00DD390F] rounded ">
+              <img src={TimeIcon} className="h-6 w-6  "/>
+             </div>
             )}
             {icon === "timeicon2" && (
-              <TbClockEdit className="h-6 w-6 text-[#AA1992] " />
+                <div className="w-10 h-10 flex items-center justify-center bg-[#AA19920F] rounded ">
+              <img src={TimeIcon5} className="h-6 w-6 "/>
+             </div>
             )}
             {icon === "timeicon3" && (
-              <TbClockEdit className="h-6 w-6 text-[#FF0101] " />
+        
+                <div className="w-10 h-10 flex items-center justify-center bg-[#FF01010F] rounded ">
+              <img src={TimeIcon4} className="h-6 w-6  "/>
+             </div>
+              
             )}
             {icon === "timeicon4" && (
-              <TbClockEdit className="h-6 w-6 text-[#FFA640] " />
+               <div className="w-10 h-10 flex items-center justify-center bg-[#FFA6400F] rouneded ">
+              <img src={TimeIcon3} className="h-6 w-6 "/>
+             </div>
+              
             )}
           </div>
 
-          <h2 className="text-2xl font-bold">{value}</h2>
+          <h2 className="text-2xl font-bold text-[#00274D] ">{value}</h2>
         </CardContent>
       </Card>
     </div>

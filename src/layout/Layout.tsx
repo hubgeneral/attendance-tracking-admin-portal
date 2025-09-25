@@ -74,12 +74,12 @@ import Header from "../Component/Header";
 
 function Layout() {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800">
+    <div className="flex h-screen flex-col bg-gray-50 text-gray-800">
       {/* ========= HEADER ========= */}
       <Header />
 
       {/* Main content */}
-      <main className="flex-1 p-8 bg-[#F0F2F5]">
+      <main className="flex-1  overflow-y-auto p-7 bg-[#F0F2F5] pt-20 pb-12 scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500">
         <Outlet />
       </main>
 

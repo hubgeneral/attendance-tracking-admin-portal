@@ -7,12 +7,13 @@ import RankingCard from "../Component/RankingCard";
 import { DashboardRangingCardData } from "../Mockdata/DashboardRangingCard";
 
 import WorkHourSummary from "../Component/WorkHourSummary";
+import Requests from "../Component/Requests";
 
 const Dashboard = () => {
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-2">
-        <h1 className="text-2xl sm:text-3xl font-semibold">Dashboard</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-2 ">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#29333D]">Dashboard</h1>
         <div className="flex-shrink-0 w-full sm:w-auto">
           <DateRangePicker
             size="md"
@@ -23,7 +24,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 gap-4 mb-3 ">
         {statsData.map((stat, index) => (
           <StatCard
             key={index}
@@ -42,53 +43,33 @@ const Dashboard = () => {
 
         {/* Right Side */}
         <div className="w-full md:w-[55%] h-[100%]">
-          <div className="flex flex-col md:flex-row gap-4 w-full">
+          <div className="flex flex-col md:flex-row gap-4 w-full h-full">
             {/* Left Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
-              <Card className="shadow rounded-2xl">
-                <CardContent className="text-center">
-                  <p className="text-gray-500">Average Clock-In Time</p>
+              <Card className="shadow rounded-2xl h-[100px]">
+                <CardContent className="text-start">
+                  <p className="text-[#758DA3] mb-2">Average Clock-In Time</p>
                   <h2 className="text-2xl font-bold">08:30 AM</h2>
                 </CardContent>
               </Card>
 
-              <>
+              <div className="flex-1">
                 <WorkHourSummary />
-              </>
+              </div>
             </div>
 
             {/* Right Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
-              <Card className="shadow rounded-2xl">
-                <CardContent className="text-center">
-                  <p className="text-gray-500">Average Clock-In Time</p>
+              <Card className="shadow rounded-2xl h-[100px]">
+                <CardContent className="text-start">
+                  <p className="text-[#758DA3] mb-2">Average Clock-Out Time</p>
                   <h2 className="text-2xl font-bold">08:30 AM</h2>
                 </CardContent>
               </Card>
-
-              <Card className="shadow rounded-2xl p-0">
-                <CardContent>
-                  <h3 className="text-lg font-semibold mb-2 text-gray-400">
-                    Requests
-                  </h3>
-                  {new Array(3).fill(0).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex justify-between items-center mb-3 p-2 border rounded-lg bg-[#F7F7F7] h-[100%]"
-                    >
-                      <div>
-                        <p className="text-sm">Addo Dankwa</p>
-                        <p className="text-sm text-gray-500">
-                          02/11/2025 09:00
-                        </p>
-                      </div>
-                      <button className="bg-white text-green-500 px-3 py-1 border-2 rounded border-gray-400 text-xs">
-                        Take Action
-                      </button>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+               
+               <div className="flex-1">
+              <Requests/>
+              </div>
             </div>
           </div>
         </div>

@@ -25,3 +25,20 @@ body {
 /* .container-safe {
   @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 } */
+
+
+/* global.css or index.css */
+main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main {
+  scrollbar-width: thin;        /* Firefox */
+  scrollbar-color: #a0aec0 transparent;
+}
+
+main {
+  -ms-overflow-style: none;     /* IE 10+ */
+  scrollbar-gutter: stable;     /* Keeps layout stable */
+}
+
