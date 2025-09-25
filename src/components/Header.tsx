@@ -32,7 +32,7 @@ function NavItem({
 
 export default function Header() {
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="fixed top-0 left-0 w-full bg-white shadow-sm border-b border-gray-200 z-50">
       <div className="px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 gap-6">
           {/* ============ Left Section ================ */}

@@ -2,20 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-
-:root {
-  --primary-color: #007102;
+/* global.css or index.css */
+main::-webkit-scrollbar {
+  width: 8px;
 }
 
-html, body, #root {
-  height: 100%;
+main {
+  scrollbar-width: thin;        /* Firefox */
+  scrollbar-color: #a0aec0 transparent;
 }
 
-body {
-  font-family: "Be Vietnam Pro", "Noto Sans", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-}
-
-/* Utility helpers */
-.container-safe {
-  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+main {
+  -ms-overflow-style: none;     /* IE 10+ */
+  scrollbar-gutter: stable;     /* Keeps layout stable */
 }
