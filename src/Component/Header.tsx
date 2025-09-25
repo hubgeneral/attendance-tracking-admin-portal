@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
-import HM_Clockr_Logo from "../assets/HM-Clockr-Logo.png";
+import HM_Clockr_Logo from "../assets/HmClockrLogo.svg";
 import ProfileMenu from "../layout/ProfileMenu";
 
 function NavItem({
