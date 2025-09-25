@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import HMLogo from "../assets/HM.logo.png";
-import TimeClocker from "../assets/TimeClocker.logo.png";
-import TimeClockerwh from "../assets/TimeClockerwh.logo.png"
-import HMlogowh from "../assets/HM.logowh.png"
+import HMLogo from "../assets/HMLogo.svg";
+import TimeClocker from "../assets/HmClockrLogo.svg";
+import TimeClockerwh from "../assets/HMClockrwh.svg"
+import HMlogowh from "../assets/HMLogowh.svg"
 import {
   MdOutlineRemoveRedEye,
   MdLogin,

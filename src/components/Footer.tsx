@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import HMlogo from  "../assets/HM.logo.png"
-import digtalhubgh from "../assets/digtalhubgh.png"
+import HMlogo from  "../assets/HMLogo.svg"
+import digtalhubgh from "../assets/HMDLogo.svg"
 
 const Footer = () => {
   return (

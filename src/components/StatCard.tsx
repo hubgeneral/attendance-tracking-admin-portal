@@ -14,7 +14,7 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ label, value, icon }) => {
   return (
     <div>
-      <Card className="shadow rounded-2xl h-[100px]">
+      <Card className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
         <CardContent>
           <div className="flex justify-between items-center ">
             <p className="text-[#758DA3] text-sm">{label}</p>

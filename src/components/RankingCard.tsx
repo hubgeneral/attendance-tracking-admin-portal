@@ -10,7 +10,7 @@ interface Props extends RankingIconProps {}
 
 const RankingCard = ({ title, color, entries }: Props) => {
   return (
-    <Card className="w-full shadow-md rounded-2xl">
+    <Card className="w-full shadow-sm shadow-gray-500 rounded-lg">
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-4">
          <h2 className="relative font-semibold pl-4 text-[#758DA3]">

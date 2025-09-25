@@ -16,7 +16,7 @@ const EmployerBarChart = () => {
   
   return (
     <div>
-      <Card className="lg:col-span-6 row-span-2 shadow rounded-2xl">
+      <Card className="lg:col-span-6 row-span-2 shadow-sm shadow-gray-500 rounded-lg">
         <CardContent>
           <h3 className="text-lg font-semibold mb-3 text-[#758DA3]">Total Employees</h3>
           <ResponsiveContainer width="100%" height={320}>
