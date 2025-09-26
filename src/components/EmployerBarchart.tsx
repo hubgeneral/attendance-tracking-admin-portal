@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@mui/material";
 import data from "../Mockdata/BarChartData";
-
+import CustomizedLegent from "./CustomizeLegent";
 
 import {
   BarChart,
@@ -13,7 +13,11 @@ import {
 } from "recharts";
 
 const EmployerBarChart = () => {
-  
+  const attendanceMetric = [
+    { value: "Clocked In", color: "#07C437", dataKey: "clockedIn"},
+    { value: "Absent", color: "#FF0101" , dataKey: "absent"},
+    { value: "On Leave", color: "#FFA640", dataKey: "onLeave"},
+  ]
   return (
     <div>
       <Card className="lg:col-span-6 row-span-2 shadow-sm shadow-gray-500 rounded-lg">
@@ -24,12 +28,14 @@ const EmployerBarChart = () => {
               <XAxis dataKey="day" />
               <YAxis  tickCount={6} domain={[0, 50]}  />
               <Tooltip />
-              <Legend />
-              
-              {/* <Bar dataKey="absent" fill="#FF0101" name="Absent"/> */}
-              <Bar dataKey="clockedIn" fill="#07C437" name="Clocked In" />
-              <Bar dataKey="absent" fill="#FF0101" name="Absent"  />
-              <Bar dataKey="onLeave" fill="#FFA640" name="On Leave" />
+              <Legend content={<CustomizedLegent payload={attendanceMetric} />}  />
+              {attendanceMetric.map((metric) => (
+                <Bar 
+                  dataKey={metric.dataKey} 
+                  fill={metric.color}
+                  name={metric.value}
+                  />
+                  ))}
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
