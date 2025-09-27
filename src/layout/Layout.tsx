@@ -4,19 +4,23 @@ import Header from "../components/Header";
 
 function Layout() {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800">
+    <div className="flex flex-col h-screen bg-gray-50 text-gray-800">
       {/* ========= HEADER ========= */}
-      <Header />
+      <div className="flex-shrink-0">
+        <Header />
+      </div>
 
-      {/* ========= MAIN CONTENT ========= */}
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
+      {/* ========= MAIN CONTENT (scrollable) ========= */}
+      <main className="flex-1 overflow-y-auto p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
 
       {/* ========= FOOTER ========= */}
-      <Footer />
+      <div className="flex-shrink-0">
+        <Footer />
+      </div>
     </div>
   );
 }
