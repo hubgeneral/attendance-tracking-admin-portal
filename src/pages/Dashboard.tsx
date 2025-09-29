@@ -75,7 +75,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <section className="w-full grid gap-3 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="w-full grid gap-3 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
         {DashboardRangingCardData?.map((value) => (
           <RankingCard
             key={value.title}
