@@ -5,23 +5,30 @@ export default function Settings() {
   const navigate = useNavigate();
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-8">Settings</h1>
+    <>
+      <h1
+        className="text-3xl font-bold mb-6 px-8"
+        style={{ color: "#29333D",fontFamily: "Inter" }}
+      >
+        Settings
+      </h1>
 
-      <div className="max-w-xs">
-        <div
-          onClick={() => navigate("users")}
-          className="bg-white border border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-gray-300"
-        >
-          <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
-            <ManageAccountsIcon style={{ fontSize: 40, color: "#16a34a" }} />
+      <div className="bg-gray-50 min-h-screen p-8 rounded-lg shadow-md">
+        <div className="max-w-xs">
+          <div
+            onClick={() => navigate("users")}
+            className="bg-white border border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-gray-300"
+          >
+            <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
+              <ManageAccountsIcon style={{ fontSize: 40, color: "#004E2B" }} />
+            </div>
+
+            <span className="text-base font-medium text-gray-800 mt-3">
+              Users
+            </span>
           </div>
-
-          <span className="text-base font-medium text-gray-800 mt-3">
-            Users
-          </span>
         </div>
       </div>
-    </div>
+    </>
   );
 }
