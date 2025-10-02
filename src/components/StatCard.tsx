@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@mui/material";
-import  TimeIcon from "../assets/TimeIcon.svg";
 import PeopleIcon from "../assets/peopleIcon.svg";
-import TimeIcon5 from "../assets/TimeIcon5.svg";
-import TimeIcon4 from "../assets/TimeIcon4.svg";
+import TimeIcon from "../assets/TimeIcon.svg";
 import TimeIcon3 from "../assets/TimeIcon3.svg";
+import TimeIcon4 from "../assets/TimeIcon4.svg";
+import TimeIcon5 from "../assets/TimeIcon5.svg";
 
 interface StatCardProps {
   label: string;

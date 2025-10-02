@@ -6,21 +6,18 @@ import Rank2 from "../assets/Rank2.svg?react";
 import Rank3 from "../assets/Rank3.svg?react";
 import Rank4th from "../assets/Rank4th.svg?react";
 
-interface Props extends RankingIconProps {}
-
-const RankingCard = ({ title, color, entries }: Props) => {
+const RankingCard = ({ title, color, entries }: RankingIconProps) => {
   return (
     <Card className="w-full shadow-sm shadow-gray-500 rounded-lg">
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-4">
-         <h2 className="relative font-semibold pl-4 text-[#758DA3]">
-      <span
-         className="absolute left-0 top-0 h-full w-1 rounded-full"
-         style={{ backgroundColor: color }}
-        ></span>
-       {title}
-    </h2>
-
+          <h2 className="relative font-semibold pl-4 text-[#758DA3]">
+            <span
+              className="absolute left-0 top-0 h-full w-1 rounded-full"
+              style={{ backgroundColor: color }}
+            ></span>
+            {title}
+          </h2>
         </div>
         <div className="space-y-1">
           {entries.map((entry, index) => (

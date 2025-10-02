@@ -1,30 +1,30 @@
-import React, { useMemo, useState } from "react";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import SearchIcon from "@mui/icons-material/Search";
 import {
+  Box,
   Card,
   CardContent,
-  Typography,
-  Box,
-  TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
+  Chip,
   FormControl,
+  InputAdornment,
   InputLabel,
+  MenuItem,
+  Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Chip,
+  TextField,
+  Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import { useMemo, useState } from "react";
 import {
-  logHistory,
   getDepartments,
   getStatuses,
+  logHistory,
   type AttendanceRecord,
 } from "../services/mockData";
 export default function LogHistory() {
