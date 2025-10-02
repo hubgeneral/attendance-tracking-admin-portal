@@ -45,7 +45,7 @@ export default function Header() {
               />
             </a>
 
-            <nav className="hidden md:flex items-center space-x-1">
+            <nav className="flex items-center space-x-1">
               <NavItem to="/app/dashboard" label="Dashboard" />
               <NavItem to="/app/attendance" label="Attendance" />
               <NavItem to="/app/logs" label="Manual Logs" />
