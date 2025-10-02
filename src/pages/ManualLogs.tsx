@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
-import RecentRequests from "../components/RecentRequest";
 import LogHistory from "../components/LogHistory";
+import RecentRequests from "../components/RecentRequest";
 
 
 export default function ManualLogs() {

@@ -1,13 +1,13 @@
-import { DateRangePicker } from "rsuite";
 import { Card, CardContent } from "@mui/material";
-import StatCard from "../components/StatCard";
-import statsData from "../Mockdata/Statmockdata";
+import { DateRangePicker } from "rsuite";
 import EmployerBarChart from "../components/EmployerBarchart";
 import RankingCard from "../components/RankingCard";
+import StatCard from "../components/StatCard";
 import { DashboardRangingCardData } from "../Mockdata/DashboardRangingCard";
+import statsData from "../Mockdata/Statmockdata";
 
-import WorkHourSummary from "../components/WorkHourSummary";
 import Requests from "../components/Requests";
+import WorkHourSummary from "../components/WorkHourSummary";
 
 const Dashboard = () => {
   return (

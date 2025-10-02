@@ -1,17 +1,17 @@
 import {
+  Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
 } from "@mui/material";
-import { mockData } from "../Mockdata/Mockatt";
 import { FaRegFileAlt } from "react-icons/fa";
 import { MdOutlineSearch } from "react-icons/md";
 import { DateRangePicker } from 'rsuite';
+import { mockData } from "../Mockdata/Mockatt";
 
 const Attendance = () => {
   return (
