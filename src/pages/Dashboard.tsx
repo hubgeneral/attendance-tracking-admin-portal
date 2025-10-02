@@ -46,7 +46,7 @@ const Dashboard = () => {
           <div className="flex flex-col md:flex-row gap-4 w-full h-full">
             {/* Left Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
-              <Card className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
+              <Card data-testid="avg-clockin-card" className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
                 <CardContent className="text-start">
                   <p className="text-[#758DA3] mb-2">Average Clock-In Time</p>
                   <h2 className="text-2xl font-bold">08:30 AM</h2>
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
             {/* Right Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
-              <Card className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
+              <Card data-testid="avg-clockout-card" className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
                 <CardContent className="text-start">
                   <p className="text-[#758DA3] mb-2">Average Clock-Out Time</p>
                   <h2 className="text-2xl font-bold">08:30 AM</h2>

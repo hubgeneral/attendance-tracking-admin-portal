@@ -68,5 +68,14 @@ export default function BasicGauges() {
         </Stack>
       </Box>
     </Stack>
+
   );
+
 }
+
+
+
+
+
+
+

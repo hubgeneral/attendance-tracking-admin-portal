@@ -8,7 +8,7 @@ import Rank4th from "../assets/Rank4th.svg?react";
 
 const RankingCard = ({ title, color, entries }: RankingIconProps) => {
   return (
-    <Card className="w-full shadow-sm shadow-gray-500 rounded-lg">
+    <Card data-testid="leaderboard-card" className="w-full shadow-sm shadow-gray-500 rounded-lg">
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="relative font-semibold pl-4 text-[#758DA3]">
@@ -24,10 +24,10 @@ const RankingCard = ({ title, color, entries }: RankingIconProps) => {
             <div key={index} className="flex items-center gap-2">
               <div className="flex items-center gap-2">
                 {/* <span className="text-lg">icon</span> */}
-                {entry.icon === "rank1" && <Rank1 />}
-                {entry.icon === "rank2" && <Rank2 />}
-                {entry.icon === "rank3" && <Rank3 />}
-                {entry.icon === "rank4" && <Rank4th />}
+                {entry.icon === "rank1" && <Rank1  data-testid="rank1-icon"/>}
+                {entry.icon === "rank2" && <Rank2 data-testid="rank2-icon"/>}
+                {entry.icon === "rank3" && <Rank3 data-testid="rank3-icon"/>}
+                {entry.icon === "rank4" && <Rank4th data-testid="rank4-icon"/>}
               </div>
               <div className="flex flex-col items-start">
                 <p className="text-md font-medium mb-1 text-gray-900">
