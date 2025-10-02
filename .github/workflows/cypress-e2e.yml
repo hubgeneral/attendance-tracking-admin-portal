@@ -1,0 +1,32 @@
+name: Cypress E2E Tests
+
+on:
+  pull_request:
+    branches: ["main"]
+
+  push:
+    branches: ["main"]
+
+jobs:
+  cypress-run:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          #build: npm run build
+          start: npm run dev
+          wait-on: "http://localhost:4173"
+          browser: chrome
+          spec: cypress/e2e/pages/**/*.cy.js
