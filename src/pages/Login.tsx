@@ -1,38 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { GoEyeClosed } from "react-icons/go";
+import {
+  MdLogin,
+  MdOutlineRemoveRedEye
+} from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import HMLogo from "../assets/HMLogo.svg";
 import TimeClocker from "../assets/HmClockrLogo.svg";
-import TimeClockerwh from "../assets/HMClockrwh.svg"
-import HMlogowh from "../assets/HMLogowh.svg"
-import {
-  MdOutlineRemoveRedEye,
-  MdLogin,
-  MdOutlineWbSunny,
-} from "react-icons/md";
-import { GoEyeClosed } from "react-icons/go";
-import { IoMoonOutline } from "react-icons/io5";
+import TimeClockerwh from "../assets/HMClockrwh.svg";
+import HMLogo from "../assets/HMLogo.svg";
+import HMlogowh from "../assets/HMLogowh.svg";
 import Footer from "../components/Footer";
+import ThemeBtn from "../components/ThemeBtn";
 
-type Theme = "light" | "dark";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<Theme>(
-    (localStorage.getItem("theme") as Theme) || "light"
-  );
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,37 +33,29 @@ const Login = () => {
     <div className="h-screen bg-gray-100 dark:bg-[#1B2420] flex flex-col">
   {/* Theme toggle */}
   <div className="absolute top-4 right-10">
-    <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="p-2 rounded-full bg-white-200 dark:bg-green-700 shadow-md"
-    >
-      {theme === "light" ? <IoMoonOutline /> : <MdOutlineWbSunny />}
-    </button>
+    <ThemeBtn/>
   </div>
 
   {/* Centered Login Box */}
   <div className="flex-1 flex items-center justify-center">
     <div className="bg-white dark:bg-[#14201C] shadow-md rounded-xl p-8 w-full max-w-md">
       <div className="flex items-center justify-center space-x-4 mb-7">
-        {theme === "light" ? (
           <>
             <img
               src={TimeClocker}
               alt="HM Clockr"
-              className="h-8 border-e-2 border-gray-200 pe-4"
+              className="h-8 border-e-2 border-gray-200 pe-4 dark:hidden"
             />
-            <img src={HMLogo} alt="Heidelberg Materials" className="h-8" />
+            <img src={HMLogo} alt="Heidelberg Materials" className="h-8 dark:hidden" />
           </>
-        ) : (
           <>
             <img
               src={TimeClockerwh}
               alt="HM Clockr"
-              className="h-8 border-e-2 border-gray-200 pe-4"
+              className="h-8 border-e-2 border-gray-200 pe-4 hidden dark:block"
             />
-            <img src={HMlogowh} alt="Heidelberg Materials" className="h-8" />
+            <img src={HMlogowh} alt="Heidelberg Materials" className="h-8 hidden dark:block" />
           </>
-        )}
       
       </div>
 
