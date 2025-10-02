@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import { Close as CloseIcon, PersonAdd as PersonAddIcon } from "@mui/icons-material";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Button,
-  Box,
-  IconButton,
   Alert,
-  Snackbar,
+  Box,
+  Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Snackbar,
+  TextField,
   Typography
 } from "@mui/material";
-import { Close as CloseIcon, PersonAdd as PersonAddIcon } from "@mui/icons-material";
+import React, { useState } from "react";
 
 // Types 
 interface InternData {

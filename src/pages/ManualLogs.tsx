@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
-import RecentRequests from "../components/RecentRequest";
 import LogHistory from "../components/LogHistory";
+import RecentRequests from "../components/RecentRequest";
 
 
 export default function ManualLogs() {
@@ -12,8 +12,6 @@ export default function ManualLogs() {
           Manual Logs
         </Typography>
       </div>
-
-      {/* =========== Component Sections ============= */}
       <RecentRequests />
       <LogHistory />
     </div>

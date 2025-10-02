@@ -6,9 +6,7 @@ import Rank2 from "../assets/Rank2.svg?react";
 import Rank3 from "../assets/Rank3.svg?react";
 import Rank4th from "../assets/Rank4th.svg?react";
 
-interface Props extends RankingIconProps {}
-
-const RankingCard = ({ title, color, entries }: Props) => {
+const RankingCard = ({ title, color, entries }: RankingIconProps) => {
   return (
     <Card className="w-full shadow-sm shadow-gray-500 rounded-lg">
       <CardContent className="p-4">

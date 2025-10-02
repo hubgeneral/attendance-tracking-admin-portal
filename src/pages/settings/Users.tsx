@@ -1,38 +1,38 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import {
+  Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Box,
-  TextField,
-  InputAdornment,
+  Chip,
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
-  Select,
   MenuItem,
+  Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Chip,
-  Button,
-  IconButton,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SearchIcon from "@mui/icons-material/Search";
 
 import {
-  logHistory,
   getDepartments,
   getStatuses,
+  logHistory,
 } from "../../services/mockData";
 
 import AddInternModal from "../../components/AddInternModal"; // modal component

@@ -1,16 +1,16 @@
-import { useState } from "react";
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
+import Logout from "@mui/icons-material/Logout";
 import {
+  Avatar,
+  Box,
+  Divider,
   IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
   Typography,
-  Divider,
-  Avatar,
-  Box,
-  ListItemIcon,
 } from "@mui/material";
-import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
-import Logout from "@mui/icons-material/Logout";
+import { useState } from "react";
 
 function ProfileMenu() {
   const [menuAnchor, setmenuAnchor] = useState<null | HTMLElement>(null);

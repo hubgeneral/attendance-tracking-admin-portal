@@ -3,13 +3,13 @@ import data from "../Mockdata/BarChartData";
 import CustomizedLegent from "./CustomizeLegent";
 
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
+  BarChart,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 const EmployerBarChart = () => {

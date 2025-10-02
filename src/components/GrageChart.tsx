@@ -1,4 +1,4 @@
-import { Stack, Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 
 export default function BasicGauges() {
