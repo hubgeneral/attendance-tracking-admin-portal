@@ -2,14 +2,11 @@ name: Cypress E2E Tests
 
 on:
   pull_request:
-    branches: ["main"]
-
-  push:
-    branches: ["main"]
+    branches: ["master"]
 
 jobs:
   cypress-run:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,8 +22,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          #build: npm run build
-          start: npm run dev
+          build: npm run build
+          start: npm run preview
           wait-on: "http://localhost:4173"
+          wait-on-timeout: 360
           browser: chrome
           spec: cypress/e2e/pages/**/*.cy.js
