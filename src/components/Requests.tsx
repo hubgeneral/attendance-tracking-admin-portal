@@ -7,8 +7,6 @@ const Requests = () => {
                   <h3 className="text-lg font-semibold mb-2 text-[#758DA3]">
                     Requests
                   </h3>
-                  
-                  <div className="sm:max-h-[250px] sm:overflow-y-auto">
                   {new Array(3).fill(0).map((_, i) => (
                     <div
                       key={i}
@@ -24,9 +22,7 @@ const Requests = () => {
                         Take Action
                       </button>
                     </div>
-                    
                   ))}
-                  </div>
                 </CardContent>
               </Card>
   )
