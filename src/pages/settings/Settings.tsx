@@ -14,7 +14,7 @@ export default function Settings() {
           className="bg-white border border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-gray-300"
         >
           <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
-            <ManageAccountsIcon style={{ fontSize: 40, color: "#16a34a" }} />
+            <ManageAccountsIcon style={{ fontSize: 38, color: "#16a34a" }} />
           </div>
 
           <span className="text-base font-medium text-gray-800 mt-3">
