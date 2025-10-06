@@ -44,6 +44,7 @@ export default function LogHistory() {
 
           <Box
             className="flex items-center gap-3 "
+            sx={{ maxWidth: 600, borderRadius: "5px", boxShadow: "none" ,}}
             sx={{ maxWidth: 600, borderRadius: "5px", boxShadow: "none" }}
           >
             <TextField
