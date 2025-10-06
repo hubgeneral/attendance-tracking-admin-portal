@@ -1,16 +1,10 @@
-import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Card,
   CardContent,
-  Chip,
-  FormControl,
   InputAdornment,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -21,12 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useMemo, useState } from "react";
-import {
-  getDepartments,
-  getStatuses,
-  logHistory,
-  type AttendanceRecord,
-} from "../services/mockData";
+import { DateRangePicker } from "rsuite";
+import { logHistory, type LogRecord } from "../Mockdata/LogHistoryData";
 export default function LogHistory() {
   const [query, setQuery] = useState("");
   const rows = useMemo(() => {
@@ -54,7 +44,7 @@ export default function LogHistory() {
 
           <Box
             className="flex items-center gap-3 "
-            sx={{ maxWidth: 600, borderRadius: "5px", boxShadow: "none" ,}}
+            sx={{ maxWidth: 600, borderRadius: "5px", boxShadow: "none" }}
           >
             <TextField
               placeholder="Search employee name"
@@ -72,8 +62,8 @@ export default function LogHistory() {
                   height: 40,
                   fontSize: 14,
                   fontFamily: "inherit",
-                  paddingX: 1, 
-                  borderColor:'#E8ECF0',
+                  paddingX: 1,
+                  borderColor: "#E8ECF0",
                 },
               }}
               sx={{
@@ -81,14 +71,11 @@ export default function LogHistory() {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "8px",
                   fontSize: 14,
-                  height: 38, 
+                  height: 38,
                   color: "#52667A",
-
-                  
-                  
                 },
                 "& .MuiInputBase-input": {
-                  padding: "8px 12px", 
+                  padding: "8px 12px",
                 },
               }}
             />
@@ -101,16 +88,20 @@ export default function LogHistory() {
                 className="w-full sm:w-auto"
               />
             </div>
-            
           </Box>
         </Box>
 
         {/* Table */}
         <TableContainer component={Paper}>
-          
           <Table>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#F0F2F5", height: "5px", border: "1px solid #E8ECF0" }}>
+              <TableRow
+                sx={{
+                  backgroundColor: "#F0F2F5",
+                  height: "5px",
+                  border: "1px solid #E8ECF0",
+                }}
+              >
                 <TableCell
                   sx={{
                     fontWeight: 600,
@@ -118,7 +109,6 @@ export default function LogHistory() {
                     py: 1,
                     color: "#52667A",
                     whiteSpace: "nowrap",
-                    
                   }}
                 >
                   Employee
@@ -138,7 +128,7 @@ export default function LogHistory() {
                     fontWeight: 500,
                     fontSize: 14,
                     py: 1,
-                    
+
                     color: "#52667A",
                   }}
                 >
@@ -195,37 +185,45 @@ export default function LogHistory() {
                     </TableCell>
 
                     {/* Clock In */}
-                    <TableCell>
-                      {row.clockIn === "N/A" ? (
+                    <TableCell
+                      sx={{
+                        whiteSpace: "nowrap",
+                        color: "#29333D",
+                      }}
+                    >
+                      {row.oldClockIn ? (
                         <span
                           style={{
                             textDecoration: "line-through",
-                            color: "#9ca3af",
-                            whiteSpace: "nowrap",
+                            color: "#A4A4A4",
+                            marginRight: 6,
                           }}
                         >
-                          N/A
+                          {row.oldClockIn}
                         </span>
-                      ) : (
-                        row.clockIn
-                      )}
+                      ) : null}
+                      {row.clockIn}
                     </TableCell>
 
                     {/* Clock Out */}
-                    <TableCell>
-                      {row.clockOut === "N/A" ? (
+                    <TableCell
+                      sx={{
+                        whiteSpace: "nowrap",
+                        color: "#29333D",
+                      }}
+                    >
+                      {row.oldClockOut ? (
                         <span
                           style={{
                             textDecoration: "line-through",
-                            color: "#9ca3af",
-                            whiteSpace: "nowrap",
+                            color: "#A4A4A4",
+                            marginRight: 6,
                           }}
                         >
-                          N/A
+                          {row.oldClockOut}
                         </span>
-                      ) : (
-                        row.clockOut
-                      )}
+                      ) : null}
+                      {row.clockOut}
                     </TableCell>
 
                     {/* Action By */}
