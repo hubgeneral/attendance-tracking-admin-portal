@@ -7,13 +7,10 @@ import {
   Box,
   IconButton,
   InputAdornment,
-  Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
 import { useState } from "react";
 
 interface ManualAttendanceModalProps {
@@ -34,8 +31,6 @@ export default function ManualAttendanceModal({
     reason: "",
     clockIn: "",
     clockOut: "",
-    actionBy: "Admin user",
-    actionDate: new Date().toLocaleString(),
   });
 
   const handleChange = (field: string, value: string) => {
@@ -46,33 +41,12 @@ export default function ManualAttendanceModal({
 
   const handleSubmit = () => {
     if (isValid) {
-      setForm({
-        employeeName: "",
-        reason: "",
-        clockIn: "",
-        clockOut: "",
-        actionBy: "Admin User",
-        actionDate: new Date().toLocaleString(),
-      });
+      onSuccess("Manual attendance set successfully.");
+      onClose();
+    } else {
+      onError("Sorry, we couldn’t set manual attendance. Try again."); // ❌ error alert
       onClose();
     }
-  };
-
-  const inputStyle = {
-    "& .MuiInputBase-input": {
-      fontSize: "15px",
-      color: "#29333D",
-      fontFamily: "Inter, sans-serif",
-      "::placeholder": {
-        color: "#29333D",
-        opacity: 1,
-        fontSize: "15px",
-      },
-    },
-    "& .MuiInputLabel-root": {
-      fontSize: "15px",
-      color: "#29333D",
-    },
   };
 
   return (
@@ -120,7 +94,6 @@ export default function ManualAttendanceModal({
                 </InputAdornment>
               ),
             }}
-            sx={inputStyle}
           />
 
           <TextField
@@ -131,7 +104,6 @@ export default function ManualAttendanceModal({
             multiline
             minRows={3}
             size="small"
-            sx={inputStyle}
           />
 
           <TextField
@@ -141,10 +113,9 @@ export default function ManualAttendanceModal({
             onChange={(e) => handleChange("clockIn", e.target.value)}
             fullWidth
             size="small"
-            inputProps={{
+            InputProps={{
               style: { color: form.clockIn ? "#000" : "transparent" },
             }}
-            sx={inputStyle}
           />
 
           <TextField
@@ -154,10 +125,9 @@ export default function ManualAttendanceModal({
             onChange={(e) => handleChange("clockOut", e.target.value)}
             fullWidth
             size="small"
-            inputProps={{
+            InputProps={{
               style: { color: form.clockIn ? "#000" : "transparent" },
             }}
-            sx={inputStyle}
           />
 
           <Button
