@@ -29,144 +29,226 @@ import {
 } from "../services/mockData";
 export default function LogHistory() {
   const [query, setQuery] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
   const rows = useMemo(() => {
     let filtered = logHistory;
     if (query) {
       const q = query.toLowerCase();
       filtered = filtered.filter(
-        (r: AttendanceRecord) =>
+        (r: LogRecord) =>
           r.employeeName.toLowerCase().includes(q) ||
-          r.employeeId.toLowerCase().includes(q) ||
-          r.email.toLowerCase().includes(q) ||
-          r.department.toLowerCase().includes(q)
+          r.reason.toLowerCase().includes(q) ||
+          r.clockIn.toLowerCase().includes(q) ||
+          r.clockOut.toLowerCase().includes(q) ||
+          r.actionBy.toLowerCase().includes(q)
       );
     }
-    if (departmentFilter !== "All") {
-      filtered = filtered.filter((r) => r.department === departmentFilter);
-    }
-    if (statusFilter !== "All") {
-      filtered = filtered.filter((r) => r.status === statusFilter);
-    }
     return filtered;
-  }, [query, departmentFilter, statusFilter]);
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Active":
-        return { backgroundColor: "#dcfce7", color: "#16a34a" };
-      case "On Leave":
-        return { backgroundColor: "#fef3c7", color: "#d97706" };
-      default:
-        return { backgroundColor: "#f3f4f6", color: "#374151" };
-    }
-  };
-  const departments = getDepartments();
-  const statuses = getStatuses();
-
-
+  }, [query]);
   return (
-    <Card elevation={1}>
+    <Card className="mb-6" elevation={1}>
       <CardContent>
-        {/* ========= Search + Filters ========== */}
-          <Box className="flex items-center justify-between mb-6">
-            <Typography variant="h6" component="h6" className="font-bold">
-              Logs History
-            </Typography>
+        <Box className="flex items-center justify-between mb-6">
+          <Typography variant="h6" component="h6" className="font-bold">
+            Logs History
+          </Typography>
 
-            {/* Right: Search + Filters */}
-            <Box className="flex items-center gap-3" sx={{ maxWidth: 600 }}>
-              <TextField
-                placeholder="Search employee name or id ..."
-                variant="outlined"
-                size="small"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon className="text-gray-400" />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  minWidth: 200,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                  },
-                }}
+          <Box
+            className="flex items-center gap-3 "
+            sx={{ maxWidth: 600, borderRadius: "5px", boxShadow: "none" ,}}
+          >
+            <TextField
+              placeholder="Search employee name"
+              variant="outlined"
+              size="small"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#52667A", fontSize: 20 }} />
+                  </InputAdornment>
+                ),
+                sx: {
+                  height: 40,
+                  fontSize: 14,
+                  fontFamily: "inherit",
+                  paddingX: 1, 
+                  borderColor:'#E8ECF0',
+                },
+              }}
+              sx={{
+                minWidth: 220,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  fontSize: 14,
+                  height: 38, 
+                  color: "#52667A",
+
+                  
+                  
+                },
+                "& .MuiInputBase-input": {
+                  padding: "8px 12px", 
+                },
+              }}
+            />
+
+            <div className="flex-shrink-0 w-full sm:w-auto">
+              <DateRangePicker
+                size="md"
+                placeholder="Select Date"
+                placement="bottomEnd"
+                className="w-full sm:w-auto"
               />
-
-              <FormControl size="small" sx={{ minWidth: 150 }}>
-                <InputLabel>Departments</InputLabel>
-                <Select
-                  value={departmentFilter}
-                  label="Departments"
-                  onChange={(e) => setDepartmentFilter(e.target.value)}
-                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
-                >
-                  {departments.map((dept) => (
-                    <MenuItem key={dept} value={dept}>
-                      {dept}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl size="small" sx={{ minWidth: 120 }}>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={statusFilter}
-                  label="Status"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
-                >
-                  {statuses.map((status) => (
-                    <MenuItem key={status} value={status}>
-                      {status}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+            </div>
+            
           </Box>
+        </Box>
 
         {/* Table */}
-        <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+        <TableContainer component={Paper}>
+          
           <Table>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                <TableCell sx={{ fontWeight: 600 }}>Employee</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Employee ID</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Department</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600 }}>
-                  Status
+              <TableRow sx={{ backgroundColor: "#F0F2F5", height: "5px", border: "1px solid #E8ECF0" }}>
+                <TableCell
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                    py: 1,
+                    color: "#52667A",
+                    whiteSpace: "nowrap",
+                    
+                  }}
+                >
+                  Employee
                 </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: 14,
+                    py: 1,
+                    color: "#52667A",
+                  }}
+                >
+                  Reason
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: 14,
+                    py: 1,
+                    
+                    color: "#52667A",
+                  }}
+                >
+                  Clock In
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: 14,
+                    py: 1,
+                    color: "#52667A",
+                  }}
+                >
+                  Clock Out
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: 14,
+                    py: 1,
+                    color: "#52667A",
+                  }}
+                >
+                  Action By
+                </TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {rows.map((row) => {
-                  return (
-                      <TableRow key={row.id} hover>
-                          <TableCell sx={{ fontWeight: 500 }}>{row.employeeName}</TableCell>
-                          <TableCell>{row.employeeId}</TableCell>
-                          <TableCell>{row.email}</TableCell>
-                          <TableCell>{row.department}</TableCell>
-                          <TableCell>{row.role}</TableCell>
-                          <TableCell align="center">
-                              <Chip
-                                  label={row.status}
-                                  size="small"
-                                  sx={{
-                                      ...getStatusColor(row.status),
-                                      fontWeight: 500,
-                                      fontSize: "0.75rem",
-                                  }} />
-                          </TableCell>
-                      </TableRow>
-                  );
+              {rows.map((row: LogRecord) => {
+                return (
+                  <TableRow key={row.id} hover>
+                    {/* Employee */}
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {row.employeeName}
+                    </TableCell>
+
+                    <TableCell
+                      sx={{
+                        maxWidth: 300,
+                        overflow: "hidden",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
+                      {row.reason}
+                    </TableCell>
+
+                    {/* Clock In */}
+                    <TableCell>
+                      {row.clockIn === "N/A" ? (
+                        <span
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#9ca3af",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          N/A
+                        </span>
+                      ) : (
+                        row.clockIn
+                      )}
+                    </TableCell>
+
+                    {/* Clock Out */}
+                    <TableCell>
+                      {row.clockOut === "N/A" ? (
+                        <span
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#9ca3af",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          N/A
+                        </span>
+                      ) : (
+                        row.clockOut
+                      )}
+                    </TableCell>
+
+                    {/* Action By */}
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {row.actionBy}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: "#6b7280",
+                          display: "block",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {row.actionDate}
+                      </Typography>
+                    </TableCell>
+
+                    {/* Status with Chip */}
+                    <TableCell align="center"></TableCell>
+                  </TableRow>
+                );
               })}
             </TableBody>
           </Table>

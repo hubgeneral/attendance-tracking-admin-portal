@@ -6,10 +6,17 @@ import {
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import TimeClocker from "../assets/HmClockrLogo.svg";
-import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMLogo from "../assets/HMLogo.svg";
+import TimeClocker from "../assets/HMClockrgreen.svg";
+import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMlogowh from "../assets/HMLogowh.svg";
+import {
+  MdOutlineRemoveRedEye,
+  MdLogin,
+  MdOutlineWbSunny,
+} from "react-icons/md";
+import { GoEyeClosed } from "react-icons/go";
+import { IoMoonOutline } from "react-icons/io5";
 import Footer from "../components/Footer";
 import ThemeBtn from "../components/ThemeBtn";
 

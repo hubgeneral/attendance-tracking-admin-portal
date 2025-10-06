@@ -19,7 +19,7 @@ function NavItem({
         clsx(
           "flex items-center rounded-lg px-3 py-2 text-sm whitespace-nowrap",
           isActive
-            ? "text-[var(--primary-color)] font-bold"
+            ? "text-[#004E2B] font-bold"
             : "text-gray-600 hover:bg-gray-100"
         )
       }
@@ -36,7 +36,7 @@ export default function Header() {
       <div className="px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 gap-6">
           {/* ============ Left Section ================ */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 ml-2">
             <a href="/app/dashboard">
               <img
                 src={HM_Clockr_Logo}
