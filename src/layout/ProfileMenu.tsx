@@ -26,7 +26,7 @@ function ProfileMenu() {
   return (
     <>
       {/* Top-right profile icon */}
-      <IconButton onClick={handleClick} size="large" sx={{ ml: 2 }}>
+      <IconButton onClick={handleClick} size="large" sx={{ ml: 2, mr: 0.5 }}>
         <AccountCircleOutlined fontSize="inherit" />
       </IconButton>
 
