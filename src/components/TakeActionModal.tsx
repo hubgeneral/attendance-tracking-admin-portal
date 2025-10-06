@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useState } from "react";
 
 interface TakeActionModalProps {
@@ -39,6 +39,16 @@ export default function TakeActionModal({
 
   const handleChange = (field: string, value: string) => {
     setForm({ ...form, [field]: value });
+  };
+
+  const handleSubmit = () => {
+    if (isValid) {
+      onApprove();
+      onClose();
+    } else {
+      onReject();
+      onClose();
+    }
   };
 
   return (
@@ -113,7 +123,6 @@ export default function TakeActionModal({
             onChange={(e) => handleChange("clockOut", e.target.value)}
             fullWidth
             size="small"
-            
             sx={{
               "& .MuiInputLabel-root": {
                 color: "#29333D",
@@ -124,18 +133,17 @@ export default function TakeActionModal({
               },
             }}
             InputProps={{
-              style: { color: form.clockIn ? "#000" : "transparent" }, 
+              style: { color: form.clockIn ? "#000" : "transparent" },
               sx: {
-                height: 42, 
+                height: 42,
                 fontSize: "15px",
                 "& input": {
                   padding: "10px 12px",
                   color: "#29333D",
-                  textAlign: "center", 
+                  textAlign: "center",
                 },
               },
             }}
-            
           />
 
           <TextField
@@ -155,7 +163,6 @@ export default function TakeActionModal({
               },
             }}
             InputProps={{
-              
               sx: {
                 height: 42,
                 fontSize: "15px",
@@ -166,7 +173,6 @@ export default function TakeActionModal({
                 },
               },
             }}
-            
           />
 
           <Box className="flex justify-between gap-2 mt-2">
