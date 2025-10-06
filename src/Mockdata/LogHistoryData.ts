@@ -4,6 +4,8 @@ export interface LogRecord {
   id: string;
   employeeName: string;
   reason: string;
+  oldClockIn?: string;
+  oldClockOut?: string;
   clockIn: string;
   clockOut: string;
   actionBy: string;
@@ -17,6 +19,7 @@ export const logHistory: LogRecord[] = [
     reason:
       "Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Addo Kwamena Abeikoo Addo",
     clockIn: "9:50 AM",
+    oldClockIn: "10:00 AM",
     clockOut: "N/A",
     actionBy: "Abena Awusi Amina",
     actionDate: "02/20/2025 - 9:10 AM",
@@ -28,6 +31,7 @@ export const logHistory: LogRecord[] = [
       "Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Kwamena Abeikoo Addo Addo Kwamena Abeikoo Addo",
     clockIn: "N/A",
     clockOut: "3:50 PM",
+    oldClockOut: "2:00 PM",
     actionBy: "Abena Awusi Amina",
     actionDate: "02/20/2025 - 9:10 AM",
   },

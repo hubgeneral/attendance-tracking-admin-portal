@@ -1,14 +1,10 @@
 describe("template spec", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:5173/app/attendance");
+    cy.visit("/app/attendance");
   });
 
   it("passes", () => {
     cy.url("http://localhost:5173/app/attendance");
-    cy.get(".text-\\[var\\(--primary-color\\)\\]").should(
-      "have.text",
-      "Attendance"
-    );
   });
 
   it("displays  page title", () => {
