@@ -1,3 +1,4 @@
+
 {
   "name": "attendance-tracking-admin-portal",
   "private": true,
@@ -10,14 +11,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.6",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.6",
+    "@graphql-codegen/introspection": "^5.0.0",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@mui/x-charts": "^8.11.3",
     "@mui/x-date-pickers": "^8.11.3",
     "dayjs": "^1.11.18",
+    "graphql": "^16.11.0",
+    "jwt-decode": "^4.0.0",
     "react": "^19.1.1",
     "react-datetime-picker": "^7.0.1",
     "react-dom": "^19.1.1",
@@ -31,6 +36,10 @@
   "devDependencies": {
     "@cypress/react": "^9.0.1",
     "@eslint/js": "^9.33.0",
+    "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/typescript": "^5.0.2",
+    "@graphql-codegen/typescript-operations": "^5.0.2",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "@types/node": "^24.5.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
