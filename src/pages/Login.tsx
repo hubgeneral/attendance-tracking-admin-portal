@@ -104,10 +104,10 @@ const Login = () => {
 
             <div className="text-right">
               <a
-                href="/app/dashboard"
+                href="reset-password"
                 className="text-green-600 text-sm hover:underline dark:text-green-400"
               >
-                Reset password?
+                Forget password?
               </a>
             </div>
 

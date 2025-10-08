@@ -12,7 +12,7 @@ interface RecentRequestsProps {
 export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
   return (
     <Card className="mb-6" elevation={1}>
-      <CardContent>
+      <CardContent className="dark:bg-[#1A2D26]">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-semibold text-[#29333D]">
             Recent Requests
@@ -59,7 +59,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
               <Button
                 variant="outlined"
                 size="small"
-                className="whitespace-nowrap"
+                className="mt-3 md:mt-0 md:ml-4 whitespace-nowrap dark:bg-[#1A2D26] dark:text-[#F7F7F7] dark:border-[#315547] dark:hover:bg-[#315547]"
                 sx={{
                   fontWeight: "bold",
                   textTransform: "none",

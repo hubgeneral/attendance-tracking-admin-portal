@@ -9,15 +9,14 @@ function Layout() {
       <Header />
 
       {/* Main content */}
-      <main className="flex-1  overflow-y-auto p-7 bg-[#F0F2F5] pt-20 pb-12 scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500">
+      <main className="flex-1  overflow-y-auto p-7 dark:bg-[#131C18] bg-[#F0F2F5] pt-20 pb-12 scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500">
         <Outlet />
       </main>
 
       {/* Footer */}
       <Footer />
-
     </div>
   );
-};
+}
 
 export default Layout;
