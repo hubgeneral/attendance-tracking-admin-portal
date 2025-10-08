@@ -94,7 +94,7 @@ export default function ManualLogs() {
 
       {/* Page header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-2">
-        <h1 className="text-2xl sm:text-2xl font-semibold text-[#29333D]">
+        <h1 className="text-2xl sm:text-2xl font-semibold text-[#29333D] dark:text-[#E8EAE9]">
           Manual Logs
         </h1>
 

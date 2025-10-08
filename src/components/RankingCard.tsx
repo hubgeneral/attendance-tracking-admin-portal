@@ -9,9 +9,9 @@ import Rank4th from "../assets/Rank4th.svg?react";
 const RankingCard = ({ title, color, entries }: RankingIconProps) => {
   return (
     <Card data-testid="leaderboard-card" className="w-full shadow-sm shadow-gray-500 rounded-lg">
-      <CardContent className="p-4">
+      <CardContent className="p-4 dark:bg-[#1A2D26]">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="relative font-semibold pl-4 text-[#758DA3]">
+          <h2 className="relative font-semibold pl-4 text-[#758DA3] dark:text-[#C3C3C3]">
             <span
               className="absolute left-0 top-0 h-full w-1 rounded-full"
               style={{ backgroundColor: color }}
@@ -30,13 +30,17 @@ const RankingCard = ({ title, color, entries }: RankingIconProps) => {
                 {entry.icon === "rank4" && <Rank4th data-testid="rank4-icon"/>}
               </div>
               <div className="flex flex-col items-start">
-                <p className="text-md font-medium mb-1 text-gray-900">
+                <p className="text-md font-medium mb-1 text-gray-900 dark:text-[#E8EAE9]">
                   {entry.name}
                 </p>
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold ">{entry.stat}</p>
+                  <p className="text-sm font-bold dark:text-[#E8EAE9]">
+                    {entry.stat}
+                  </p>
                   {entry.label && (
-                    <p className="text-xs text-gray-400">{entry.label}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {entry.label}
+                    </p>
                   )}
                 </div>
               </div>

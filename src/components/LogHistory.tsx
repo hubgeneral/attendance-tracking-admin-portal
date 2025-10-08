@@ -36,9 +36,13 @@ export default function LogHistory() {
   }, [query]);
   return (
     <Card className="mb-6" elevation={1}>
-      <CardContent>
+      <CardContent className="dark:bg-[#14241D]">
         <Box className="flex items-center justify-between mb-6">
-          <Typography variant="h6" component="h6" className="font-bold">
+          <Typography
+            variant="h6"
+            component="h6"
+            className="font-bold dark:text-[#E8EAE9]"
+          >
             Logs History
           </Typography>
 
@@ -92,7 +96,7 @@ export default function LogHistory() {
         </Box>
 
         {/* Table */}
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="dark:bg-[#1A2D26]">
           <Table>
             <TableHead>
               <TableRow
@@ -101,6 +105,7 @@ export default function LogHistory() {
                   height: "5px",
                   border: "1px solid #E8ECF0",
                 }}
+                className="dark:bg-[#203d32] dark:border-none"
               >
                 <TableCell
                   sx={{
@@ -110,6 +115,7 @@ export default function LogHistory() {
                     color: "#52667A",
                     whiteSpace: "nowrap",
                   }}
+                  className="dark:text-[#E8EAE9] dark:border-none"
                 >
                   Employee
                 </TableCell>
@@ -120,6 +126,7 @@ export default function LogHistory() {
                     py: 1,
                     color: "#52667A",
                   }}
+                  className="dark:text-[#E8EAE9] dark:border-none"
                 >
                   Reason
                 </TableCell>
@@ -131,6 +138,7 @@ export default function LogHistory() {
 
                     color: "#52667A",
                   }}
+                  className="dark:text-[#E8EAE9] dark:border-none"
                 >
                   Clock In
                 </TableCell>
@@ -141,6 +149,7 @@ export default function LogHistory() {
                     py: 1,
                     color: "#52667A",
                   }}
+                  className="dark:text-[#E8EAE9] dark:border-none"
                 >
                   Clock Out
                 </TableCell>
@@ -151,10 +160,14 @@ export default function LogHistory() {
                     py: 1,
                     color: "#52667A",
                   }}
+                  className="dark:text-[#E8EAE9] dark:border-none"
                 >
                   Action By
                 </TableCell>
-                <TableCell align="center"></TableCell>
+                <TableCell
+                  align="center"
+                  className="dark:border-none"
+                ></TableCell>
               </TableRow>
             </TableHead>
 
@@ -169,6 +182,7 @@ export default function LogHistory() {
                         fontSize: 14,
                         whiteSpace: "nowrap",
                       }}
+                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
                     >
                       {row.employeeName}
                     </TableCell>
@@ -180,6 +194,7 @@ export default function LogHistory() {
                         WebkitLineClamp: 3,
                         WebkitBoxOrient: "vertical",
                       }}
+                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
                     >
                       {row.reason}
                     </TableCell>
@@ -190,6 +205,7 @@ export default function LogHistory() {
                         whiteSpace: "nowrap",
                         color: "#29333D",
                       }}
+                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
                     >
                       {row.oldClockIn ? (
                         <span
@@ -211,6 +227,7 @@ export default function LogHistory() {
                         whiteSpace: "nowrap",
                         color: "#29333D",
                       }}
+                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
                     >
                       {row.oldClockOut ? (
                         <span
@@ -227,8 +244,12 @@ export default function LogHistory() {
                     </TableCell>
 
                     {/* Action By */}
-                    <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    <TableCell className="dark:border-[#263b34]">
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500 }}
+                        className="dark:text-[#E7E9E8]"
+                      >
                         {row.actionBy}
                       </Typography>
                       <Typography
@@ -238,13 +259,17 @@ export default function LogHistory() {
                           display: "block",
                           whiteSpace: "nowrap",
                         }}
+                        className="dark:text-[#707274]"
                       >
                         {row.actionDate}
                       </Typography>
                     </TableCell>
 
                     {/* Status with Chip */}
-                    <TableCell align="center"></TableCell>
+                    <TableCell
+                      align="center"
+                      className="dark:border-[#263b34]"
+                    ></TableCell>
                   </TableRow>
                 );
               })}

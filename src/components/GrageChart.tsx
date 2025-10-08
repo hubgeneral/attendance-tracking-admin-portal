@@ -38,6 +38,9 @@ export default function BasicGauges() {
           [`& .${gaugeClasses.referenceArc}`]: {
             fill: "#EAEAEA",
           },
+          [`& .${gaugeClasses.valueText}`]: {
+            fill: "#C3C3C3",
+          },
         }}
       />
 
@@ -52,7 +55,9 @@ export default function BasicGauges() {
               borderRadius: "50%",
             }}
           />
-          <Typography variant="body2">Total Hour Worked </Typography>
+          <Typography variant="body2" className="dark:text-[#C3C3C3]">
+            Total Hours Worked
+          </Typography>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={1}>
           <Box
@@ -64,7 +69,9 @@ export default function BasicGauges() {
               border: "",
             }}
           />
-          <Typography variant="body2">Total Off Hours </Typography>
+          <Typography variant="body2" className="dark:text-[#C3C3C3]">
+            Total Off Hours
+          </Typography>
         </Stack>
       </Box>
     </Stack>

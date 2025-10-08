@@ -180,7 +180,7 @@ export default function Users() {
   };
 
   return (
-    <div className="px-6  min-h-screen">
+    <div className="p-8 bg-gray-50 min-h-screen dark:bg-[#1A2D26] text-gray-900 dark:text-gray-100">
       {/* Header with Back + Add Intern */}
       <Box className="flex items-center justify-between mb-4">
         <Box>
@@ -197,10 +197,16 @@ export default function Users() {
 
               "&:hover": { backgroundColor: "transparent", color: "#111827" },
             }}
+            className="dark:text-[#E8EAE9]"
           >
             Back to Settings
           </Button>
-          <Typography variant="h6" fontWeight="bold" marginLeft={2.6}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            marginLeft={2.6}
+            className="dark:text-[#E8EAE9]"
+          >
             Users
           </Typography>
         </Box>
@@ -222,12 +228,20 @@ export default function Users() {
       </Box>
 
       {/* All Users Card */}
-      <Card elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+      <Card
+        elevation={0}
+        sx={{ border: "1px solid #e5e7eb" }}
+        className="dark:bg-[#1A2D26] dark:border-[#253F35]"
+      >
         <CardContent>
           {/* Header Row: All Users + Search/Filters */}
           <Box className="flex items-center justify-between mb-6">
             {/* Left: Title */}
-            <Typography variant="h5" fontWeight="semi-bold">
+            <Typography
+              variant="h5"
+              fontWeight="semi-bold"
+              className="dark:text-[#E8EAE9]"
+            >
               All Users
             </Typography>
 
@@ -242,7 +256,7 @@ export default function Users() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon className="text-gray-400" />
+                      <SearchIcon className="text-gray-400 dark:text-white" />
                     </InputAdornment>
                   ),
                 }}
@@ -252,10 +266,13 @@ export default function Users() {
                     borderRadius: "8px",
                   },
                 }}
+                className="[&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-[#1A2D26]
+             [&_.MuiOutlinedInput-input]:text-gray-900 [&_.MuiOutlinedInput-input]:dark:text-white
+             [&_.MuiOutlinedInput-notchedOutline]:border-gray-300 [&_.MuiOutlinedInput-notchedOutline]:dark:border-[#204335]"
               />
 
               <FormControl size="small" sx={{ minWidth: 150 }}>
-                <InputLabel>Roles</InputLabel>
+                <InputLabel className="dark:text-[#E8EAE9]">Roles</InputLabel>
                 <Select
                   value={RoleFilter}
                   label="Roles"
@@ -273,14 +290,28 @@ export default function Users() {
               </FormControl>
 
               <FormControl size="small" sx={{ minWidth: 120 }}>
-                <InputLabel>Status</InputLabel>
+                <InputLabel className="dark:text-[#E8EAE9]">Status</InputLabel>
                 <Select
                   value={statusFilter}
                   label="Status"
                   onChange={(e) => setStatusFilter(e.target.value)}
                   startAdornment={
-                    <FilterListIcon className="text-gray-400 mr-2" />
+                    <FilterListIcon className="text-gray-400 mr-2 dark:text-[#E8EAE9]" />
                   }
+                  className="dark:text-[#E8EAE9]"
+                  MenuProps={{
+                    sx: {
+                      "& .dark & .MuiMenu-paper": {
+                        backgroundColor: "#1A2D26",
+                        color: "white",
+                        "& .MuiMenuItem-root": {
+                          "&:hover, &.Mui-selected": {
+                            backgroundColor: "red",
+                          },
+                        },
+                      },
+                    },
+                  }}
                 >
                   {getStatuses().map((status) => (
                     <MenuItem key={status} value={status}>
@@ -293,10 +324,15 @@ export default function Users() {
           </Box>
 
           {/* Users Table */}
-          <TableContainer component={Paper} elevation={0}>
+          <TableContainer
+            component={Paper}
+            elevation={0}
+            className="dark:bg-[#1A2D26]"
+          >
             <Table>
               <TableHead>
                 <TableRow
+                className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                   sx={{
                     backgroundColor: "#F0F2F5",
 
@@ -312,6 +348,7 @@ export default function Users() {
                     Employee ID
                   </TableCell>
                   <TableCell
+                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Employee
@@ -322,35 +359,47 @@ export default function Users() {
                     Email
                   </TableCell>
                   <TableCell
+                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Role
                   </TableCell>
                   <TableCell
+                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Status
                   </TableCell>
                   <TableCell
+                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Employment Type
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" className="dark:border-[#253F35]">
                     {/* Actions column header, no menu in TableHead */}
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredRows.map((row) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>{row.employeeId}</TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
+                  <TableRow key={row.id} hover className="dark:bg-[][#1A2D26]">
+                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                      {row.employeeId}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 500 }}
+                      className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                    >
                       {row.employeeName}
                     </TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.role}</TableCell>
-                    <TableCell>
+                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                      {row.email}
+                    </TableCell>
+                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                      {row.role}
+                    </TableCell>
+                    <TableCell className="dark:border-[#253F35]">
                       <Chip
                         label={row.status}
                         size="small"
@@ -361,10 +410,10 @@ export default function Users() {
                         }}
                       />
                     </TableCell>
-                    <TableCell>{row.employmentType}</TableCell>
+                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">{row.employmentType}</TableCell>
                     <TableCell align="right">
                       <IconButton onClick={(e) => handleMenuOpen(e, row)}>
-                        <MoreVertIcon />
+                        <MoreVertIcon className="dark:text-[#E8EAE9]"/>
                       </IconButton>
 
                       <Menu
@@ -448,8 +497,12 @@ export default function Users() {
           </TableContainer>
 
           {filteredRows.length === 0 && (
-            <Box className="text-center py-8">
-              <Typography variant="body1" color="textSecondary">
+            <Box className="text-center py-8 dark:bg-gray-900">
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                className="dark:text-white"
+              >
                 No records found matching your search criteria.
               </Typography>
             </Box>
