@@ -26,8 +26,8 @@ function ProfileMenu() {
   return (
     <>
       {/* Top-right profile icon */}
-      <IconButton onClick={handleClick} size="large" sx={{ ml: 2, mr: 0.5 }}>
-        <AccountCircleOutlined fontSize="inherit" />
+      <IconButton onClick={handleClick} size="large" sx={{ ml: 2 }}>
+        <AccountCircleOutlined fontSize="large" className="dark:text-white" />
       </IconButton>
 
       {/* Dropdown Menu */}
@@ -41,17 +41,34 @@ function ProfileMenu() {
             borderRadius: 2,
             mt: 1.5,
           },
+          className: "dark:bg-gray-800",
         }}
       >
         {/* ============ Profile Info Section =========== */}
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            p: 2,
+          }}
+          className="dark:bg-gray-800"
+        >
           <Avatar sx={{ bgcolor: "teal", width: 56, height: 56, mb: 1 }}>
             EO
           </Avatar>
-          <Typography variant="subtitle1" fontWeight="bold">
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            className="dark:text-white"
+          >
             Eric Joel Odoi
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            className="dark:text-white"
+          >
             ericodoi@heidelbergcement.com
           </Typography>
         </Box>
@@ -59,12 +76,20 @@ function ProfileMenu() {
         <Divider />
 
         {/* ============ Logout Row =========== */}
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={handleClose}
+          className="dark:bg-gray-800 dark:hover:bg-gray-500"
+        >
           <ListItemIcon>
-            {/* <Logout fontSize="small" sx={{ color: "#00274D" }} /> */}
+            {/* <Logout fontSize="small" sx={{ color: "#00274D" }} /> hover*/}
             <Logout fontSize="small" color="error" />
           </ListItemIcon>
-          <Typography sx={{ color: "#00274D", fontWeight: 500 }}>Log out</Typography>
+          <Typography
+            sx={{ color: "#00274D", fontWeight: 500 }}
+            className="dark:text-white"
+          >
+            Log out
+          </Typography>
           {/* <Typography color="error">Log out</Typography> */}
         </MenuItem>
       </Menu>

@@ -13,7 +13,9 @@ const Dashboard = () => {
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-2 ">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-[#29333D]">Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#29333D] dark:text-white">
+          Dashboard
+        </h1>
         <div className="flex-shrink-0 w-full sm:w-auto">
           <DateRangePicker
             size="md"
@@ -47,9 +49,13 @@ const Dashboard = () => {
             {/* Left Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
               <Card data-testid="avg-clockin-card" className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
-                <CardContent className="text-start">
-                  <p className="text-[#758DA3] mb-2">Average Clock-In Time</p>
-                  <h2 className="text-2xl font-bold">08:30 AM</h2>
+                <CardContent className="text-start dark:bg-[#1A2D26]">
+                  <p className="text-[#758DA3] dark:text-[#C3C3C3] mb-2">
+                    Average Clock-In Time
+                  </p>
+                  <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
+                    08:30 AM
+                  </h2>
                 </CardContent>
               </Card>
 
@@ -61,14 +67,18 @@ const Dashboard = () => {
             {/* Right Column */}
             <div className="w-full md:w-1/2 flex flex-col gap-3">
               <Card data-testid="avg-clockout-card" className="shadow-sm shadow-gray-500 rounded-lg h-[100px]">
-                <CardContent className="text-start">
-                  <p className="text-[#758DA3] mb-2">Average Clock-Out Time</p>
-                  <h2 className="text-2xl font-bold">08:30 AM</h2>
+                <CardContent className="text-start dark:bg-[#1A2D26]">
+                  <p className="text-[#758DA3] mb-2 dark:text-[#C3C3C3]">
+                    Average Clock-Out Time
+                  </p>
+                  <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
+                    08:30 AM
+                  </h2>
                 </CardContent>
               </Card>
-               
-               <div className="flex-1">
-              <Requests/>
+
+              <div className="flex-1">
+                <Requests />
               </div>
             </div>
           </div>

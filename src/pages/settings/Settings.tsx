@@ -12,7 +12,7 @@ export default function Settings() {
         <div className="max-w-xs">
           <div
             onClick={() => navigate("users")}
-            className="bg-white border border-gray-200 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-gray-300"
+            className="bg-white border dark:bg-[#1A2D26] dark:border-[#315547] border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-gray-300"
           >
             <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
               {/* <ManageAccountsIcon className="w-10 h-10 text-green-600" /> */}
