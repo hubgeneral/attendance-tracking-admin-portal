@@ -28,7 +28,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
-
 import {
   getDepartments,
   getStatuses,
@@ -36,7 +35,6 @@ import {
 } from "../../services/mockData";
 
 import AddInternModal from "../../components/AddInternModal";
-
 
 export default function Users() {
   const navigate = useNavigate();
@@ -168,7 +166,9 @@ export default function Users() {
                   value={departmentFilter}
                   label="Departments"
                   onChange={(e) => setDepartmentFilter(e.target.value)}
-                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
+                  startAdornment={
+                    <FilterListIcon className="text-gray-400 mr-2" />
+                  }
                 >
                   {getDepartments().map((dept) => (
                     <MenuItem key={dept} value={dept}>
@@ -184,7 +184,9 @@ export default function Users() {
                   value={statusFilter}
                   label="Status"
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  startAdornment={<FilterListIcon className="text-gray-400 mr-2" />}
+                  startAdornment={
+                    <FilterListIcon className="text-gray-400 mr-2" />
+                  }
                 >
                   {getStatuses().map((status) => (
                     <MenuItem key={status} value={status}>
