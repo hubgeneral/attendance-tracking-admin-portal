@@ -6,3 +6,12 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [svgr(), react()],
 });
+interface ImportMetaEnv {
+  readonly VITE_API_URL1: string;
+  readonly VITE_GRAPHQL_ENDPOINT?: string;
+  // add any other variables starting with VITE_ here
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
