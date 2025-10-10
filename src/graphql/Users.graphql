@@ -1,0 +1,9 @@
+query GetUsers{
+  users{
+    staffId
+    employeeName
+    email
+    status
+    employeeType
+  }
+}`;
