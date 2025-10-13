@@ -5,7 +5,7 @@ import "rsuite/dist/rsuite-no-reset.min.css";
 import "./index.css";
 import { ApolloProvider } from "@apollo/client/react";
 import App from "./App.tsx";
-import client from "./apolloClient.ts";
+import client from "./ApolloClient.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

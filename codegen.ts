@@ -17,7 +17,7 @@ const config: CodegenConfig = {
     },
   },
   // pick up .graphql files and gql tagged templates in .ts/.tsx
-  documents: "src/**/*.{graphql,gql,ts,tsx}",
+  documents: "src/**/*.{graphql,gql}",
   generates: {
     // single file with types + (optionally) hooks
     "src/generated/graphql.tsx": {
