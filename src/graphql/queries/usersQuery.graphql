@@ -1,0 +1,19 @@
+query getUsers {
+  users {
+    staffId
+    employeeName
+    email
+    status
+    employeeType
+  }
+}
+
+query getUserById($id: Int!) {
+  userById(id: $id) {
+    staffId
+    userName
+    email
+    status
+    phoneNumber
+  }
+}
