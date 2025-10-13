@@ -74,3 +74,14 @@ main {
 .dark .rs-picker-toggle.rs-picker-focused {
   @apply border-[#204335] ring-1 ring-[#204335];
 }
+
+.dark .rs-input-group.rs-input-group-inside {
+  @apply bg-[#1A2D26] text-[#E8EAE9];
+  @apply w-full;
+}
+
+.dark .rs-picker-daterange>.rs-input-group.rs-input-group-inside .rs-input {
+  @apply pr-0;
+  @apply bg-[#1A2D26] text-[#E8EAE9];
+
+}
