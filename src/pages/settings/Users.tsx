@@ -22,7 +22,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -33,11 +33,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import GeneratedPasswordModal from "../../components/GeneratePasswordModal";
 import ResetAccountModal from "../../components/ResetAccountModal";
 import EditInternModal from "../../components/EditInternModal";
-// import { gql } from "@apollo/client";
-// import { useQuery } from "@apollo/client/react";
-// import { GetUsersDocument } from "../../generated/graphql";
-
-import { getRoles, getStatuses, logHistory } from "../../services/mockData";
+import { useGetUsersQuery } from "../../generated/graphql";
+import { getRoles, getStatuses } from "../../services/mockData";
 
 import AddInternModal from "../../components/AddInternModal";
 
@@ -48,7 +45,7 @@ export default function Users() {
   const [RoleFilter, setRoleFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
 
-  const [rows, setRows] = useState(logHistory);
+  //const [rows, setRows] = useState<any>(() => () => {});
   const [open, setOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -57,24 +54,17 @@ export default function Users() {
   const [showResetModal, setShowResetModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   type User = {
+    staffId: string;
     id: string;
     employeeId: string;
     employeeName: string;
     email: string;
-    role: string;
+    //role: string;
+    userRoles: { role: { name: string } }[];
     status: string;
     employmentType: string;
     department: string;
   };
-
-  // function App() {
-  //   const { data, loading, error } = useQuery(GetUsersDocument);
-
-  //   if (loading) return <p>Loading...</p>;
-  //   if (error) return <p>Error: {error.message}</p>;
-
-  //   return (
-  //   }
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [generatedPassword, setGeneratedPassword] = useState("");
@@ -103,12 +93,34 @@ export default function Users() {
     setShowPasswordModal(true);
   };
 
-  // Filtering logic
+  const { data: userData, loading, error } = useGetUsersQuery();
+
+  const [rows, setRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (userData?.users) {
+      const UserInfo = userData.users.map((user) => ({
+        ...user,
+        role:
+          user.userRoles?.map((r) => r.role.name).join(", ") || "Unassigned",
+      }));
+      setRows(UserInfo);
+      console.log("User Info:", UserInfo);
+    }
+  }, [userData]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   const filteredRows = rows.filter(
-    (row) =>
-      (row.employeeName.toLowerCase().includes(query.toLowerCase()) ||
-        row.employeeId.toLowerCase().includes(query.toLowerCase())) &&
-      (RoleFilter === "All" || row.role === RoleFilter) &&
+    (row: {
+      employeeName: string;
+      staffId: string;
+      employeeType: string;
+      status: string;
+    }) =>
+      (row.employeeName || row.staffId) &&
+      (RoleFilter === "All" || row.employeeType === RoleFilter) &&
       (statusFilter === "All" || row.status === statusFilter)
   );
 
@@ -142,7 +154,7 @@ export default function Users() {
       employmentType: "Intern",
       department: "General",
     };
-    setRows((prev) => [...prev, newIntern]);
+    setRows((prev: any) => [...prev, newIntern]);
   };
 
   const handleEditIntern = (intern: {
@@ -160,11 +172,11 @@ export default function Users() {
       employmentType: "Intern",
       department: "General",
     };
-    setRows((prev) => [...prev, newIntern]);
+    setRows((prev: any) => [...prev, newIntern]);
   };
 
   const handleEditSubmit = (updatedIntern: any) => {
-    setRows((prev) =>
+    setRows((prev: any[]) =>
       prev.map((row) =>
         row.id === editingIntern?.id
           ? {
@@ -180,7 +192,7 @@ export default function Users() {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen dark:bg-[#1A2D26] text-gray-900 dark:text-gray-100">
+    <div className="px-6  min-h-screen">
       {/* Header with Back + Add Intern */}
       <Box className="flex items-center justify-between mb-4">
         <Box>
@@ -403,6 +415,37 @@ export default function Users() {
                       {row.role}
                     </TableCell>
                     <TableCell className="dark:border-[#253F35]">
+=======
+                {filteredRows.map((row: User) => (
+                  <TableRow key={row.id} hover>
+                    <TableCell>{row.staffId}</TableCell>
+                    <TableCell sx={{ fontWeight: 500 }}>
+                      {row.employeeName}
+                    </TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    {/* <TableCell>{row.role}</TableCell> */}
+                    <TableCell>
+                      {row.userRoles && Array.isArray(row.userRoles)
+                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+                      {row.userRoles && Array.isArray(row.userRoles)
+                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+                      {row.userRoles && Array.isArray(row.userRoles)
+                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+                      {row.userRoles && Array.isArray(row.userRoles)
+                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+>>>>>>> Stashed changes
                       <Chip
                         label={row.status}
                         size="small"
