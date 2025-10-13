@@ -6,16 +6,7 @@ import "../App.css";
 import TimeClocker from "../assets/HMClockrgreen.svg";
 import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMLogo from "../assets/HMLogo.svg";
-import TimeClocker from "../assets/HMClockrgreen.svg";
-import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMlogowh from "../assets/HMLogowh.svg";
-import {
-  MdOutlineRemoveRedEye,
-  MdLogin,
-  MdOutlineWbSunny,
-} from "react-icons/md";
-import { GoEyeClosed } from "react-icons/go";
-import { IoMoonOutline } from "react-icons/io5";
 import Footer from "../components/Footer";
 import ThemeBtn from "../components/ThemeBtn";
 
@@ -69,10 +60,11 @@ const Login = () => {
             </>
           </div>
 
-          <h1 className="text-center text-2xl font-semibold text-gray-900 dark:text-white mb-5">
-            Digital Hub Ghana Clocking System
+          <h1 className="text-center text-xl font-semibold text-[#00274D] dark:text-white mb-5">
+            Digital Hub Ghana Clocking
+            <br /> System
           </h1>
-          <p className="text-center text-lg text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-center text-lg text-[#00274D] dark:text-gray-300 mb-6">
             Sign in
           </p>
 
