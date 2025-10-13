@@ -7,8 +7,8 @@ export default function Settings() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-5">Settings</h1>
-      <div className="p-8  bg-white min-h-screen">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-3">Settings</h1>
+      <div className="p-8  bg-white min-h-[70vh] ">
         <div className="max-w-xs">
           <div
             onClick={() => navigate("users")}

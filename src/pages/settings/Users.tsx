@@ -4,10 +4,12 @@ import {
   Card,
   CardContent,
   Chip,
+  Divider,
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
+  Menu,
   MenuItem,
   Paper,
   Select,
@@ -20,38 +22,93 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  getDepartments,
-  getStatuses,
-  logHistory,
-} from "../../services/mockData";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import GeneratedPasswordModal from "../../components/GeneratePasswordModal";
+import ResetAccountModal from "../../components/ResetAccountModal";
+import EditInternModal from "../../components/EditInternModal";
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
+import { GetUsersDocument } from "../../generated/graphql";
+
+import { getRoles, getStatuses, logHistory } from "../../services/mockData";
 
 import AddInternModal from "../../components/AddInternModal";
 
 export default function Users() {
   const navigate = useNavigate();
 
-  const [query, setQuery] = React.useState("");
-  const [departmentFilter, setDepartmentFilter] = React.useState("All");
-  const [statusFilter, setStatusFilter] = React.useState("All");
+  const [query, setQuery] = useState("");
+  const [RoleFilter, setRoleFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
 
-  const [rows, setRows] = React.useState(logHistory);
-  const [open, setOpen] = React.useState(false);
+  const [rows, setRows] = useState(logHistory);
+  const [open, setOpen] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  type User = {
+    id: string;
+    employeeId: string;
+    employeeName: string;
+    email: string;
+    role: string;
+    status: string;
+    employmentType: string;
+    department: string;
+  };
+
+  // function App() {
+  //   const { data, loading, error } = useQuery(GetUsersDocument);
+
+  //   if (loading) return <p>Loading...</p>;
+  //   if (error) return <p>Error: {error.message}</p>;
+
+  //   return (
+  //   }
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [generatedPassword, setGeneratedPassword] = useState("");
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingIntern, setEditingIntern] = useState<User | null>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, row: any) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRowId(row.id);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRowId(null);
+  };
+
+  const handleResetClick = (user: any) => {
+    setSelectedUser(user);
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
+    const newPass = "HDKEBURJ484";
+    setGeneratedPassword(newPass);
+    setShowResetModal(false);
+    setShowPasswordModal(true);
+  };
 
   // Filtering logic
   const filteredRows = rows.filter(
     (row) =>
       (row.employeeName.toLowerCase().includes(query.toLowerCase()) ||
         row.employeeId.toLowerCase().includes(query.toLowerCase())) &&
-      (departmentFilter === "All" || row.department === departmentFilter) &&
+      (RoleFilter === "All" || row.role === RoleFilter) &&
       (statusFilter === "All" || row.status === statusFilter)
   );
 
@@ -88,26 +145,62 @@ export default function Users() {
     setRows((prev) => [...prev, newIntern]);
   };
 
+  const handleEditIntern = (intern: {
+    employeeId: string;
+    employeeName: string;
+    email: string;
+  }) => {
+    const newIntern = {
+      id: Date.now().toString(),
+      employeeId: intern.employeeId,
+      employeeName: intern.employeeName,
+      email: intern.email,
+      role: "Intern",
+      status: "Active",
+      employmentType: "Intern",
+      department: "General",
+    };
+    setRows((prev) => [...prev, newIntern]);
+  };
+
+  const handleEditSubmit = (updatedIntern: any) => {
+    setRows((prev) =>
+      prev.map((row) =>
+        row.id === editingIntern?.id
+          ? {
+              ...row,
+              employeeId: updatedIntern.employeeId,
+              employeeName: updatedIntern.employeeName,
+              email: updatedIntern.email,
+            }
+          : row
+      )
+    );
+    setShowEditModal(false);
+  };
+
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="px-6  min-h-screen">
       {/* Header with Back + Add Intern */}
-      <Box className="flex items-center justify-between mb-6">
+      <Box className="flex items-center justify-between mb-4">
         <Box>
           <Button
-            startIcon={<ArrowBackIcon />}
+            startIcon={
+              <ArrowBackIosIcon style={{ fontSize: "14px", marginLeft: 3 }} />
+            }
             onClick={() => navigate("/app/settings")}
             sx={{
               textTransform: "none",
-              color: "#4b5563",
+              color: "#004E2B",
               fontSize: "0.875rem",
               p: 0,
-              mb: 1,
+
               "&:hover": { backgroundColor: "transparent", color: "#111827" },
             }}
           >
             Back to Settings
           </Button>
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant="h6" fontWeight="bold" marginLeft={2.6}>
             Users
           </Typography>
         </Box>
@@ -116,9 +209,10 @@ export default function Users() {
           variant="contained"
           startIcon={<AddIcon />}
           sx={{
-            borderRadius: "8px",
+            borderRadius: "5px",
             textTransform: "none",
             backgroundColor: "#004E2B",
+            px: 3,
             "&:hover": { backgroundColor: "#008d4dff" },
           }}
           onClick={() => setOpen(true)}
@@ -161,16 +255,16 @@ export default function Users() {
               />
 
               <FormControl size="small" sx={{ minWidth: 150 }}>
-                <InputLabel>Departments</InputLabel>
+                <InputLabel>Roles</InputLabel>
                 <Select
-                  value={departmentFilter}
-                  label="Departments"
-                  onChange={(e) => setDepartmentFilter(e.target.value)}
+                  value={RoleFilter}
+                  label="Roles"
+                  onChange={(e) => setRoleFilter(e.target.value)}
                   startAdornment={
                     <FilterListIcon className="text-gray-400 mr-2" />
                   }
                 >
-                  {getDepartments().map((dept) => (
+                  {getRoles().map((dept) => (
                     <MenuItem key={dept} value={dept}>
                       {dept}
                     </MenuItem>
@@ -202,16 +296,49 @@ export default function Users() {
           <TableContainer component={Paper} elevation={0}>
             <Table>
               <TableHead>
-                <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                  <TableCell sx={{ fontWeight: 600 }}>Employee ID</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Employee</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
+                <TableRow
+                  sx={{
+                    backgroundColor: "#F0F2F5",
+
+                    "& > *": {
+                      py: 1.5,
+                      lineHeight: "1rem",
+                    },
+                  }}
+                >
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
+                    Employee ID
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
+                    Employee
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
+                    Role
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
+                  >
                     Employment Type
                   </TableCell>
-                  <TableCell align="right"></TableCell>
+                  <TableCell align="right">
+                    {/* Actions column header, no menu in TableHead */}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -236,9 +363,83 @@ export default function Users() {
                     </TableCell>
                     <TableCell>{row.employmentType}</TableCell>
                     <TableCell align="right">
-                      <IconButton>
+                      <IconButton onClick={(e) => handleMenuOpen(e, row)}>
                         <MoreVertIcon />
                       </IconButton>
+
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl) && selectedRowId === row.id}
+                        onClose={handleMenuClose}
+                        PaperProps={{
+                          elevation: 3,
+                          sx: {
+                            borderRadius: "10px",
+                            p: 1,
+                            minWidth: 180,
+                            boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
+                          },
+                        }}
+                        MenuListProps={{
+                          disablePadding: true,
+                        }}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            setSelectedUser(row);
+                            setGeneratedPassword("AUTO-GEN123");
+                            setShowPasswordModal(true);
+                            handleMenuClose();
+                          }}
+                          sx={{
+                            borderRadius: "6px",
+                            py: 1,
+                            fontSize: "0.875rem",
+                            "&:hover": { backgroundColor: "#eff1f4ff" },
+                          }}
+                        >
+                          Generate Password
+                        </MenuItem>
+
+                        <Divider sx={{ my: 0.5 }} />
+
+                        {/* Reset Account */}
+                        <MenuItem
+                          onClick={() => {
+                            handleResetClick(row);
+                            handleMenuClose();
+                          }}
+                          sx={{
+                            borderRadius: "6px",
+                            py: 1,
+                            fontSize: "0.875rem",
+                            "&:hover": { backgroundColor: "#eff1f4ff" },
+                          }}
+                        >
+                          Reset Account
+                        </MenuItem>
+
+                        {row.employmentType === "Intern" && (
+                          <>
+                            <Divider sx={{ my: 0.5 }} />
+                            <MenuItem
+                              onClick={() => {
+                                setEditingIntern(row);
+                                setShowEditModal(true);
+                                handleMenuClose();
+                              }}
+                              sx={{
+                                borderRadius: "6px",
+                                py: 1,
+                                fontSize: "0.875rem",
+                                "&:hover": { backgroundColor: "#eff1f4ff" },
+                              }}
+                            >
+                              Edit
+                            </MenuItem>
+                          </>
+                        )}
+                      </Menu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -261,6 +462,33 @@ export default function Users() {
         open={open}
         onClose={() => setOpen(false)}
         onAdd={handleAddIntern}
+      />
+
+      <ResetAccountModal
+        isOpen={showResetModal}
+        onClose={() => setShowResetModal(false)}
+        onConfirm={handleConfirmReset}
+        user={
+          selectedUser
+            ? {
+                name: selectedUser.employeeName,
+                employeeId: selectedUser.employeeId,
+              }
+            : undefined
+        }
+      />
+
+      <GeneratedPasswordModal
+        open={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        password={generatedPassword}
+        employeeId={selectedUser?.employeeId || ""}
+      />
+
+      <EditInternModal
+        open={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onAdd={handleEditSubmit}
       />
     </div>
   );
