@@ -35,6 +35,7 @@ const EmployerBarChart = () => {
               />
               {attendanceMetric.map((metric) => (
                 <Bar
+                  key={metric.dataKey}
                   dataKey={metric.dataKey}
                   fill={metric.color}
                   name={metric.value}

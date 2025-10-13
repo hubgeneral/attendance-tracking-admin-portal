@@ -3,6 +3,11 @@ query getUsers {
     staffId
     employeeName
     email
+    userRoles {
+      role {
+        name
+      }
+    }
     status
     employeeType
   }

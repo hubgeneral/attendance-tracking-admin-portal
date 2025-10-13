@@ -22,6 +22,12 @@ const config: CodegenConfig = {
     // single file with types + (optionally) hooks
     "src/generated/graphql.tsx": {
       plugins: [
+        {
+          add: {
+          content: 'import * as Apollo from "@apollo/client/react";',
+        },
+
+        },
         "typescript",
         "typescript-operations",
         "typescript-react-apollo",

@@ -6,8 +6,8 @@ export default function Settings() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-5 dark:dark:text-[#E8EAE9]">
+    <div className="h-[90%]">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-5 dark:text-[#E8EAE9]">
         Settings
       </h1>
       <div className="p-8  bg-white min-h-screen dark:bg-[#1A2D26] rounded-lg">
