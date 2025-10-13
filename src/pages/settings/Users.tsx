@@ -33,9 +33,9 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import GeneratedPasswordModal from "../../components/GeneratePasswordModal";
 import ResetAccountModal from "../../components/ResetAccountModal";
 import EditInternModal from "../../components/EditInternModal";
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
-import { GetUsersDocument } from "../../generated/graphql";
+// import { gql } from "@apollo/client";
+// import { useQuery } from "@apollo/client/react";
+// import { GetUsersDocument } from "../../generated/graphql";
 
 import { getRoles, getStatuses, logHistory } from "../../services/mockData";
 
