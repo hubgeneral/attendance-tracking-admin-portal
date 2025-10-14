@@ -59,7 +59,10 @@ export default function LogHistory() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#52667A", fontSize: 20 }} />
+                    <SearchIcon
+                      sx={{ color: "#52667A", fontSize: 20 }}
+                      className="dark:text-[#E8EAE9]"
+                    />
                   </InputAdornment>
                 ),
                 sx: {
@@ -82,6 +85,9 @@ export default function LogHistory() {
                   padding: "8px 12px",
                 },
               }}
+              className="[&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-[#1A2D26]
+             [&_.MuiOutlinedInput-input]:text-gray-900 [&_.MuiOutlinedInput-input]:dark:text-white
+             [&_.MuiOutlinedInput-notchedOutline]:border-gray-300 [&_.MuiOutlinedInput-notchedOutline]:dark:border-[#204335]"
             />
 
             <div className="flex-shrink-0 w-full sm:w-auto">

@@ -20,63 +20,63 @@ main {
 /* dark mode css for date range picker */
 /* dark mode css for date range picker */
 
+
+/* .dark .rs-picker-daterange-cell {
+  @apply hover:bg-gray-700;
+} */
+
+/* Selected cell styling */
+/* .rs-picker-daterange-cell-selected {
+  @apply bg-[#204335];
+} */
+
+/* Active/clicked selected cell */
+/* .dark .rs-picker-daterange-cell-selected:hover {
+  @apply bg-[#204335];
+} */
+
+/* Ensure selected cell stays #204335 when active */
+/* .dark .rs-picker-daterange-cell.rs-picker-daterange-cell-selected {
+  @apply bg-[#204335];
+} */
+
+/* INPUT FIELD STYLING */
+/* Main input container */
+/* .dark .rs-picker-toggle {
+  @apply bg-[#121F1A] border-gray-700 text-gray-100;
+} */
+
+/* Input field itself */
+/* .dark .rs-picker-toggle-textbox {
+  @apply bg-[#121F1A] text-gray-100;
+} */
+
+/* Placeholder text */
+/* .dark .rs-picker-toggle-placeholder {
+  @apply text-gray-400;
+} */
+
+/* Calendar icon */
+/* .dark .rs-picker-toggle-caret {
+  @apply text-gray-400;
+} */
+
+/* Hover state for input */
+/* .dark .rs-picker-toggle:hover {
+  @apply border-gray-600;
+} */
+
+/* Focus state for input */
+/* .dark .rs-picker-toggle.rs-picker-focused {
+  @apply border-[#204335] ring-1 ring-[#204335];
+} */
+
 /* Dropdown panel */
 .dark .rs-picker-daterange-panel {
   @apply bg-[#121F1A] text-gray-100;
 }
-
-.dark .rs-picker-daterange-cell {
-  @apply hover:bg-gray-700;
-}
-
-/* Selected cell styling */
-.rs-picker-daterange-cell-selected {
-  @apply bg-[#204335];
-}
-
-/* Active/clicked selected cell */
-.dark .rs-picker-daterange-cell-selected:hover {
-  @apply bg-[#204335];
-}
-
-/* Ensure selected cell stays #204335 when active */
-.dark .rs-picker-daterange-cell.rs-picker-daterange-cell-selected {
-  @apply bg-[#204335];
-}
-
-/* INPUT FIELD STYLING */
-/* Main input container */
-.dark .rs-picker-toggle {
-  @apply bg-[#121F1A] border-gray-700 text-gray-100;
-}
-
-/* Input field itself */
-.dark .rs-picker-toggle-textbox {
-  @apply bg-[#121F1A] text-gray-100;
-}
-
-/* Placeholder text */
-.dark .rs-picker-toggle-placeholder {
-  @apply text-gray-400;
-}
-
-/* Calendar icon */
-.dark .rs-picker-toggle-caret {
-  @apply text-gray-400;
-}
-
-/* Hover state for input */
-.dark .rs-picker-toggle:hover {
-  @apply border-gray-600;
-}
-
-/* Focus state for input */
-.dark .rs-picker-toggle.rs-picker-focused {
-  @apply border-[#204335] ring-1 ring-[#204335];
-}
-
 .dark .rs-input-group.rs-input-group-inside {
-  @apply bg-[#1A2D26] text-[#E8EAE9];
+  @apply bg-[#1A2D26] border border-[#2A3B32];
   @apply w-full;
 }
 
