@@ -7,8 +7,10 @@ export default function Settings() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-3">Settings</h1>
-      <div className="p-8  bg-white min-h-[70vh] ">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-5 dark:dark:text-[#E8EAE9]">
+        Settings
+      </h1>
+      <div className="p-8  bg-white min-h-screen dark:bg-[#1A2D26] rounded-lg">
         <div className="max-w-xs">
           <div
             onClick={() => navigate("users")}
@@ -19,7 +21,7 @@ export default function Settings() {
               <img src={ManageAccounts} alt="User Icon" className="w-8 h-8" />
             </div>
 
-            <span className="text-base font-semibold text-gray-800 mt-3">
+            <span className="text-base font-semibold text-gray-800 mt-3 dark:text-[#E8EAE9]">
               Users
             </span>
           </div>

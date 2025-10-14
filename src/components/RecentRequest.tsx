@@ -12,9 +12,9 @@ interface RecentRequestsProps {
 export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
   return (
     <Card className="mb-6" elevation={1}>
-      <CardContent className="dark:bg-[#1A2D26]">
+      <CardContent className="dark:bg-[#14241D]">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold text-[#29333D]">
+          <h1 className="text-xl font-semibold text-[#29333D] dark:text-[#E8EAE9]">
             Recent Requests
           </h1>
         </div>
@@ -23,7 +23,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
           {recentRequests.map((request) => (
             <div
               key={request.id}
-              className="flex items-center justify-between py-6 px-6 bg-[#F7F7F7] rounded-[5px] gap-24"
+              className="flex items-center justify-between py-6 px-6 bg-[#F7F7F7] rounded-[5px] gap-24 dark:bg-[#172C24]"
             >
               <div className="flex flex-col">
                 <Typography
@@ -37,13 +37,14 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                     overflow: "hidden",
                     maxWidth: "200px",
                   }}
+                  className="dark:text-[#E8EAE9]"
                 >
                   {request.employeeName}
                 </Typography>
 
                 <Typography
                   variant="caption"
-                  className="text-[#758DA3] whitespace-nowrap"
+                  className="text-[#758DA3] whitespace-nowrap dark:text-[#C3C3C3]"
                 >
                   {request.date}
                 </Typography>
@@ -51,7 +52,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
 
               <Typography
                 variant="body2"
-                className="text-[#29333D] flex-1 text-left mr-4"
+                className="text-[#29333D] flex-1 text-left mr-4 dark:text-[#E8EAE9]"
               >
                 {request.reason}
               </Typography>

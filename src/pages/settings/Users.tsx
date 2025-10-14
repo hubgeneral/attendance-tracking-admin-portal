@@ -278,8 +278,9 @@ export default function Users() {
                   label="Roles"
                   onChange={(e) => setRoleFilter(e.target.value)}
                   startAdornment={
-                    <FilterListIcon className="text-gray-400 mr-2" />
+                    <FilterListIcon className="text-gray-400 mr-2 dark:text-[#E8EAE9]" />
                   }
+                  className="dark:text-[#E8EAE9]"
                 >
                   {getRoles().map((dept) => (
                     <MenuItem key={dept} value={dept}>
@@ -332,7 +333,7 @@ export default function Users() {
             <Table>
               <TableHead>
                 <TableRow
-                className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                  className="dark:text-[#E8EAE9] dark:border-[#253F35] dark:bg-[#243e35]"
                   sx={{
                     backgroundColor: "#F0F2F5",
 
@@ -343,35 +344,37 @@ export default function Users() {
                   }}
                 >
                   <TableCell
+                    className="dark:border-[#253F35] dark:text-[#E8EAE9]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Employee ID
                   </TableCell>
                   <TableCell
-                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Employee
                   </TableCell>
                   <TableCell
+                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Email
                   </TableCell>
                   <TableCell
-                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Role
                   </TableCell>
                   <TableCell
-                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Status
                   </TableCell>
                   <TableCell
-                  className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
                     sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
                   >
                     Employment Type
@@ -410,10 +413,12 @@ export default function Users() {
                         }}
                       />
                     </TableCell>
-                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">{row.employmentType}</TableCell>
-                    <TableCell align="right">
+                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                      {row.employmentType}
+                    </TableCell>
+                    <TableCell align="right" className="dark:border-[#253F35]">
                       <IconButton onClick={(e) => handleMenuOpen(e, row)}>
-                        <MoreVertIcon className="dark:text-[#E8EAE9]"/>
+                        <MoreVertIcon className="dark:text-[#E8EAE9]" />
                       </IconButton>
 
                       <Menu
