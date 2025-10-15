@@ -203,7 +203,7 @@ export default function Users() {
   return (
     <div className="px-6 min-h-screen">
       {/* Header with Back + Add Intern */}
-      <Box className="flex items-center justify-between mb-4">
+      <Box className="flex items-center justify-between mb-4 flex-shrink-0">
         <Box>
           <Button
             startIcon={
@@ -331,128 +331,36 @@ export default function Users() {
           </Box>
 
           {/* Users Table */}
-          <TableContainer
-            component={Paper}
-            elevation={0}
-            className="dark:bg-[#1A2D26]"
-          >
-            <Table>
-              <TableHead>
-                <TableRow
-                  className="dark:text-[#E8EAE9] dark:border-[#253F35] dark:bg-[#243e35]"
-                  sx={{
-                    backgroundColor: "#F0F2F5",
-                    "& > *": { py: 1.5, lineHeight: "1rem" },
-                  }}
-                >
-                  <TableCell
-                    className="dark:border-[#253F35] dark:text-[#E8EAE9]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Employee ID
-                  </TableCell>
-                  <TableCell
-                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Employee
-                  </TableCell>
-                  <TableCell
-                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Email
-                  </TableCell>
-                  <TableCell
-                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Role
-                  </TableCell>
-                  <TableCell
-                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Status
-                  </TableCell>
-                  <TableCell
-                    className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    sx={{ fontWeight: 600, lineHeight: "1rem", py: 1.5 }}
-                  >
-                    Employment Type
-                  </TableCell>
-                  <TableCell align="right" className="dark:border-[#253F35]" />
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {filteredRows.map((row: User) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.staffId}
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500 }}
-                      className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                    >
-                      {row.employeeName}
-                    </TableCell>
-                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.email}
-                    </TableCell>
-                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.userRoles && Array.isArray(row.userRoles)
-                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
-                        : ""}
-                    </TableCell>
-
-                    <TableCell className="dark:border-[#253F35]">
-                      <Chip
-                        label={
-                          Array.from(
-                            getLeaveStatusToday(rows).todaysLeaveIds
-                          ).some((u: any) => u.staffId === row.staffId)
-                            ? "On Leave"
-                            : "Present"
-                        }
-                        size="small"
+          <div className="max-h-[350px] overflow-y-auto">
+            <TableContainer
+              component={Paper}
+              elevation={0}
+              className="dark:bg-[#1A2D26]"
+              sx={{ maxHeight: 350 }}
+            >
+              <Table stickyHeader aria-label="users table">
+                <TableHead>
+                  <TableRow>
+                    {[
+                      "Employee ID",
+                      "Employee",
+                      "Email",
+                      "Role",
+                      "Status",
+                      "Employment Type",
+                    ].map((header) => (
+                      <TableCell
+                        key={header}
                         sx={{
-                          ...getStatusColor(
-                            Array.from(
-                              getLeaveStatusToday(rows).todaysLeaveIds
-                            ).some((u: any) => u.staffId === row.staffId)
-                              ? "On Leave"
-                              : "Present"
-                          ),
-                          fontWeight: 500,
-                          fontSize: "0.75rem",
+                          backgroundColor: "#F0F2F5",
+                          color: "#000",
+                          fontWeight: 600,
+                          position: "sticky",
+                          top: 0,
+                          zIndex: 2,
+                          lineHeight: 1,
                         }}
-                      />
-                    </TableCell>
-                    <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.employmentType}
-                    </TableCell>
-                    <TableCell align="right" className="dark:border-[#253F35]">
-                      <IconButton onClick={(e) => handleMenuOpen(e, row)}>
-                        <MoreVertIcon className="dark:text-[#E8EAE9]" />
-                      </IconButton>
-
-                      <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && selectedRowId === row.id}
-                        onClose={handleMenuClose}
-                        PaperProps={{
-                          elevation: 3,
-                          sx: {
-                            borderRadius: "10px",
-                            p: 1,
-                            minWidth: 180,
-                            boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
-                          },
-                        }}
-                        MenuListProps={{
-                          disablePadding: true,
-                        }}
+                        className="dark:bg-[#243e35] dark:text-[#E8EAE9] dark:border-[#253F35]"
                       >
                         <MenuItem
                           onClick={() => {
@@ -492,11 +400,140 @@ export default function Users() {
                         )}
                       </Menu>
                     </TableCell>
+                        {header}
+                      </TableCell>
+                    ))}
+                    <TableCell
+                      align="right"
+                      sx={{
+                        backgroundColor: "#F0F2F5",
+                        position: "sticky",
+                        top: 0,
+                        zIndex: 2,
+                      }}
+                      className="dark:bg-[#243e35] dark:border-[#253F35]"
+                    />
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+
+                <TableBody>
+                  {filteredRows.map((row: User) => (
+                    <TableRow key={row.id} hover>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.staffId}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 500 }}
+                        className="dark:text-[#E8EAE9] dark:border-[#253F35]"
+                      >
+                        {row.employeeName}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.email}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.userRoles && Array.isArray(row.userRoles)
+                          ? row.userRoles
+                              .map((r: any) => r.role.name)
+                              .join(", ")
+                          : ""}
+                      </TableCell>
+
+                      <TableCell className="dark:border-[#253F35]">
+                        <Chip
+                          label={
+                            Array.from(
+                              getLeaveStatusToday(rows).todaysLeaveIds
+                            ).some((u: any) => u.staffId === row.staffId)
+                              ? "On Leave"
+                              : "Present"
+                          }
+                          size="small"
+                          sx={{
+                            ...getStatusColor(
+                              Array.from(
+                                getLeaveStatusToday(rows).todaysLeaveIds
+                              ).some((u: any) => u.staffId === row.staffId)
+                                ? "On Leave"
+                                : "Present"
+                            ),
+                            fontWeight: 500,
+                            fontSize: "0.75rem",
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.employmentType}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        className="dark:border-[#253F35]"
+                      >
+                        <IconButton onClick={(e) => handleMenuOpen(e, row)}>
+                          <MoreVertIcon className="dark:text-[#E8EAE9]" />
+                        </IconButton>
+
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl) && selectedRowId === row.id}
+                          onClose={handleMenuClose}
+                          PaperProps={{
+                            elevation: 3,
+                            sx: {
+                              borderRadius: "10px",
+                              p: 1,
+                              minWidth: 180,
+                              boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
+                            },
+                          }}
+                          MenuListProps={{
+                            disablePadding: true,
+                          }}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              setSelectedUser(row);
+                              setGeneratedPassword("AUTO-GEN123");
+                              setShowPasswordModal(true);
+                              handleMenuClose();
+                            }}
+                          >
+                            Generate Password
+                          </MenuItem>
+
+                          <Divider sx={{ my: 0.5 }} />
+
+                          <MenuItem
+                            onClick={() => {
+                              handleResetClick(row);
+                              handleMenuClose();
+                            }}
+                          >
+                            Reset Account
+                          </MenuItem>
+
+                          {row.employmentType === "Intern" && (
+                            <>
+                              <Divider sx={{ my: 0.5 }} />
+                              <MenuItem
+                                onClick={() => {
+                                  setEditingIntern(row);
+                                  setShowEditModal(true);
+                                  handleMenuClose();
+                                }}
+                              >
+                                Edit
+                              </MenuItem>
+                            </>
+                          )}
+                        </Menu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
 
           {filteredRows.length === 0 && (
             <Box className="text-center py-8 dark:bg-gray-900">
