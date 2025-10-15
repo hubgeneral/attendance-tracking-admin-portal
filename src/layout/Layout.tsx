@@ -9,7 +9,7 @@ function Layout() {
       <Header />
 
       {/* Main content */}
-      <main className="flex-1 h-[80%] p-7 dark:bg-[#131C18] bg-[#F0F2F5] pt-20 pb-12 scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500">
+      <main className="flex-1 p-7 dark:bg-[#131C18] bg-[#F0F2F5] pt-20 pb-12 scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500">
         <Outlet />
       </main>
 
