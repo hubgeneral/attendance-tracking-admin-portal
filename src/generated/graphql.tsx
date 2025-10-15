@@ -39,6 +39,7 @@ export type ActivityLogger = {
   activityLog?: Maybe<Scalars["String"]["output"]>;
   appUserId: Scalars["Int"]["output"];
   id: Scalars["Int"]["output"];
+  timeOfDay: Scalars["DateTime"]["output"];
   user?: Maybe<AppUser>;
 };
 
@@ -49,6 +50,7 @@ export type ActivityLoggerFilterInput = {
   appUserId?: InputMaybe<IntOperationFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<ActivityLoggerFilterInput>>;
+  timeOfDay?: InputMaybe<DateTimeOperationFilterInput>;
   user?: InputMaybe<AppUserFilterInput>;
 };
 
@@ -74,13 +76,14 @@ export type AppRoleFilterInput = {
 export type AppUser = {
   __typename?: "AppUser";
   accessFailedCount: Scalars["Int"]["output"];
-  activityLogger?: Maybe<Array<ActivityLogger>>;
+  activityLoggers?: Maybe<Array<ActivityLogger>>;
   attendances?: Maybe<Array<Attendance>>;
   concurrencyStamp?: Maybe<Scalars["String"]["output"]>;
   email?: Maybe<Scalars["String"]["output"]>;
   emailConfirmed: Scalars["Boolean"]["output"];
   employeeName?: Maybe<Scalars["String"]["output"]>;
   employeeType?: Maybe<Scalars["String"]["output"]>;
+  exitLogs?: Maybe<Array<ExitLog>>;
   id: Scalars["Int"]["output"];
   isPasswordReset: Scalars["Boolean"]["output"];
   leaves?: Maybe<Array<Leave>>;
@@ -92,6 +95,7 @@ export type AppUser = {
   passwordHash?: Maybe<Scalars["String"]["output"]>;
   phoneNumber?: Maybe<Scalars["String"]["output"]>;
   phoneNumberConfirmed: Scalars["Boolean"]["output"];
+  refreshTokens: Array<RefreshToken>;
   requests?: Maybe<Array<Request>>;
   securityStamp?: Maybe<Scalars["String"]["output"]>;
   staffId?: Maybe<Scalars["String"]["output"]>;
@@ -103,7 +107,7 @@ export type AppUser = {
 
 export type AppUserFilterInput = {
   accessFailedCount?: InputMaybe<IntOperationFilterInput>;
-  activityLogger?: InputMaybe<ListFilterInputTypeOfActivityLoggerFilterInput>;
+  activityLoggers?: InputMaybe<ListFilterInputTypeOfActivityLoggerFilterInput>;
   and?: InputMaybe<Array<AppUserFilterInput>>;
   attendances?: InputMaybe<ListFilterInputTypeOfAttendanceFilterInput>;
   concurrencyStamp?: InputMaybe<StringOperationFilterInput>;
@@ -111,6 +115,7 @@ export type AppUserFilterInput = {
   emailConfirmed?: InputMaybe<BooleanOperationFilterInput>;
   employeeName?: InputMaybe<StringOperationFilterInput>;
   employeeType?: InputMaybe<StringOperationFilterInput>;
+  exitLogs?: InputMaybe<ListFilterInputTypeOfExitLogFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   isPasswordReset?: InputMaybe<BooleanOperationFilterInput>;
   leaves?: InputMaybe<ListFilterInputTypeOfLeaveFilterInput>;
@@ -123,6 +128,7 @@ export type AppUserFilterInput = {
   passwordHash?: InputMaybe<StringOperationFilterInput>;
   phoneNumber?: InputMaybe<StringOperationFilterInput>;
   phoneNumberConfirmed?: InputMaybe<BooleanOperationFilterInput>;
+  refreshTokens?: InputMaybe<ListFilterInputTypeOfRefreshTokenFilterInput>;
   requests?: InputMaybe<ListFilterInputTypeOfRequestFilterInput>;
   securityStamp?: InputMaybe<StringOperationFilterInput>;
   staffId?: InputMaybe<StringOperationFilterInput>;
@@ -176,9 +182,10 @@ export type AppUserSortInput = {
 export type Attendance = {
   __typename?: "Attendance";
   appUserId: Scalars["Int"]["output"];
-  clockIn: Scalars["DateTime"]["output"];
-  clockOut: Scalars["DateTime"]["output"];
-  currentDate: Scalars["LocalDate"]["output"];
+  clockIn?: Maybe<Scalars["DateTime"]["output"]>;
+  clockOut?: Maybe<Scalars["DateTime"]["output"]>;
+  clockingType: Scalars["Boolean"]["output"];
+  currentDate?: Maybe<Scalars["LocalDate"]["output"]>;
   id: Scalars["Int"]["output"];
   status?: Maybe<Scalars["String"]["output"]>;
   totalHoursWorked?: Maybe<Scalars["Decimal"]["output"]>;
@@ -190,6 +197,7 @@ export type AttendanceFilterInput = {
   appUserId?: InputMaybe<IntOperationFilterInput>;
   clockIn?: InputMaybe<DateTimeOperationFilterInput>;
   clockOut?: InputMaybe<DateTimeOperationFilterInput>;
+  clockingType?: InputMaybe<BooleanOperationFilterInput>;
   currentDate?: InputMaybe<LocalDateOperationFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<AttendanceFilterInput>>;
@@ -202,6 +210,7 @@ export type AttendanceSortInput = {
   appUserId?: InputMaybe<SortEnumType>;
   clockIn?: InputMaybe<SortEnumType>;
   clockOut?: InputMaybe<SortEnumType>;
+  clockingType?: InputMaybe<SortEnumType>;
   currentDate?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
@@ -242,6 +251,29 @@ export type DecimalOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars["Decimal"]["input"]>>>;
   nlt?: InputMaybe<Scalars["Decimal"]["input"]>;
   nlte?: InputMaybe<Scalars["Decimal"]["input"]>;
+};
+
+export type ExitLog = {
+  __typename?: "ExitLog";
+  appUserId: Scalars["Int"]["output"];
+  currentDate: Scalars["LocalDate"]["output"];
+  entryTime: Scalars["DateTime"]["output"];
+  exitTime: Scalars["DateTime"]["output"];
+  id: Scalars["Int"]["output"];
+  totalExitTime: Scalars["Int"]["output"];
+  user?: Maybe<AppUser>;
+};
+
+export type ExitLogFilterInput = {
+  and?: InputMaybe<Array<ExitLogFilterInput>>;
+  appUserId?: InputMaybe<IntOperationFilterInput>;
+  currentDate?: InputMaybe<LocalDateOperationFilterInput>;
+  entryTime?: InputMaybe<DateTimeOperationFilterInput>;
+  exitTime?: InputMaybe<DateTimeOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<ExitLogFilterInput>>;
+  totalExitTime?: InputMaybe<IntOperationFilterInput>;
+  user?: InputMaybe<AppUserFilterInput>;
 };
 
 export type IntOperationFilterInput = {
@@ -307,11 +339,25 @@ export type ListFilterInputTypeOfAttendanceFilterInput = {
   some?: InputMaybe<AttendanceFilterInput>;
 };
 
+export type ListFilterInputTypeOfExitLogFilterInput = {
+  all?: InputMaybe<ExitLogFilterInput>;
+  any?: InputMaybe<Scalars["Boolean"]["input"]>;
+  none?: InputMaybe<ExitLogFilterInput>;
+  some?: InputMaybe<ExitLogFilterInput>;
+};
+
 export type ListFilterInputTypeOfLeaveFilterInput = {
   all?: InputMaybe<LeaveFilterInput>;
   any?: InputMaybe<Scalars["Boolean"]["input"]>;
   none?: InputMaybe<LeaveFilterInput>;
   some?: InputMaybe<LeaveFilterInput>;
+};
+
+export type ListFilterInputTypeOfRefreshTokenFilterInput = {
+  all?: InputMaybe<RefreshTokenFilterInput>;
+  any?: InputMaybe<Scalars["Boolean"]["input"]>;
+  none?: InputMaybe<RefreshTokenFilterInput>;
+  some?: InputMaybe<RefreshTokenFilterInput>;
 };
 
 export type ListFilterInputTypeOfRequestFilterInput = {
@@ -336,20 +382,163 @@ export type LocalDateOperationFilterInput = {
   nlte?: InputMaybe<Scalars["LocalDate"]["input"]>;
 };
 
+export type Mutation = {
+  __typename?: "Mutation";
+  createAttendance: Attendance;
+  createUser: AppUser;
+  deleteAttendance: Scalars["Boolean"]["output"];
+  deleteUser: Scalars["Boolean"]["output"];
+  geoFenceClockIn: Scalars["String"]["output"];
+  geofenceClockOut: Scalars["String"]["output"];
+  login: UserLoginResponse;
+  loginForForgottenPassword: UserLoginResponse;
+  resetPassword: UserResetPasswordResponse;
+  updateAttendance?: Maybe<Attendance>;
+  updateUser?: Maybe<AppUser>;
+};
+
+export type MutationCreateAttendanceArgs = {
+  appuserid: Scalars["Int"]["input"];
+  clockin: Scalars["DateTime"]["input"];
+  clockout: Scalars["DateTime"]["input"];
+  currentdate: Scalars["LocalDate"]["input"];
+  status: Scalars["String"]["input"];
+  totalhoursworked: Scalars["Int"]["input"];
+};
+
+export type MutationCreateUserArgs = {
+  email: Scalars["String"]["input"];
+  employeeName: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+  role: Scalars["String"]["input"];
+  staffId: Scalars["String"]["input"];
+  status: Scalars["String"]["input"];
+};
+
+export type MutationDeleteAttendanceArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type MutationDeleteUserArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type MutationGeoFenceClockInArgs = {
+  clockin: Scalars["DateTime"]["input"];
+  username: Scalars["String"]["input"];
+};
+
+export type MutationGeofenceClockOutArgs = {
+  username: Scalars["String"]["input"];
+};
+
+export type MutationLoginArgs = {
+  password: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
+};
+
+export type MutationLoginForForgottenPasswordArgs = {
+  email: Scalars["String"]["input"];
+  phoneno: Scalars["String"]["input"];
+  staffid: Scalars["String"]["input"];
+};
+
+export type MutationResetPasswordArgs = {
+  password: Scalars["String"]["input"];
+  token: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
+};
+
+export type MutationUpdateAttendanceArgs = {
+  appuserid: Scalars["Int"]["input"];
+  clockin: Scalars["DateTime"]["input"];
+  clockout: Scalars["DateTime"]["input"];
+  currentdate: Scalars["LocalDate"]["input"];
+  status: Scalars["String"]["input"];
+  totalhoursworked: Scalars["Int"]["input"];
+};
+
+export type MutationUpdateUserArgs = {
+  email: Scalars["String"]["input"];
+  employeeName: Scalars["String"]["input"];
+  id: Scalars["Int"]["input"];
+  password: Scalars["String"]["input"];
+  role: Scalars["String"]["input"];
+  staffId: Scalars["String"]["input"];
+  status: Scalars["String"]["input"];
+};
+
+export type Query = {
+  __typename?: "Query";
+  attendanceByUserId: Array<Attendance>;
+  attendances: Array<Attendance>;
+  userById?: Maybe<AppUser>;
+  users: Array<AppUser>;
+  usersWithRoles: Array<UserWithRoleResponse>;
+};
+
+export type QueryAttendanceByUserIdArgs = {
+  username: Scalars["String"]["input"];
+};
+
+export type QueryAttendancesArgs = {
+  order?: InputMaybe<Array<AttendanceSortInput>>;
+  where?: InputMaybe<AttendanceFilterInput>;
+};
+
+export type QueryUserByIdArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type QueryUsersArgs = {
+  order?: InputMaybe<Array<AppUserSortInput>>;
+  where?: InputMaybe<AppUserFilterInput>;
+};
+
+export type QueryUsersWithRolesArgs = {
+  order?: InputMaybe<Array<UserWithRoleResponseSortInput>>;
+  where?: InputMaybe<UserWithRoleResponseFilterInput>;
+};
+
+export type RefreshToken = {
+  __typename?: "RefreshToken";
+  appUserId: Scalars["Int"]["output"];
+  expires: Scalars["DateTime"]["output"];
+  id: Scalars["Int"]["output"];
+  isRevoked: Scalars["Boolean"]["output"];
+  isUsed: Scalars["Boolean"]["output"];
+  token: Scalars["String"]["output"];
+  user?: Maybe<AppUser>;
+};
+
+export type RefreshTokenFilterInput = {
+  and?: InputMaybe<Array<RefreshTokenFilterInput>>;
+  appUserId?: InputMaybe<IntOperationFilterInput>;
+  expires?: InputMaybe<DateTimeOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  isRevoked?: InputMaybe<BooleanOperationFilterInput>;
+  isUsed?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<RefreshTokenFilterInput>>;
+  token?: InputMaybe<StringOperationFilterInput>;
+  user?: InputMaybe<AppUserFilterInput>;
+};
+
 export type Request = {
   __typename?: "Request";
   appUserId: Scalars["Int"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["Int"]["output"];
-  requestDescription?: Maybe<Scalars["String"]["output"]>;
+  timeOfDay: Scalars["DateTime"]["output"];
   user?: Maybe<AppUser>;
 };
 
 export type RequestFilterInput = {
   and?: InputMaybe<Array<RequestFilterInput>>;
   appUserId?: InputMaybe<IntOperationFilterInput>;
+  description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<RequestFilterInput>>;
-  requestDescription?: InputMaybe<StringOperationFilterInput>;
+  timeOfDay?: InputMaybe<DateTimeOperationFilterInput>;
   user?: InputMaybe<AppUserFilterInput>;
 };
 
@@ -375,107 +564,18 @@ export type StringOperationFilterInput = {
 
 export type UserLoginResponse = {
   __typename?: "UserLoginResponse";
+  accessToken?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["String"]["output"]>;
   isPasswordReset: Scalars["Boolean"]["output"];
+  refreshToken?: Maybe<Scalars["String"]["output"]>;
   role?: Maybe<Scalars["String"]["output"]>;
-  token?: Maybe<Scalars["String"]["output"]>;
   userName?: Maybe<Scalars["String"]["output"]>;
 };
 
-export type UserMutation = {
-  __typename?: "UserMutation";
-  createAttendance: Attendance;
-  createUser: AppUser;
-  deleteAttendance: Scalars["Boolean"]["output"];
-  deleteUser: Scalars["Boolean"]["output"];
-  login: UserLoginResponse;
-  loginForForgottenPassword: UserLoginResponse;
-  resetPassword: Scalars["String"]["output"];
-  updateAttendance?: Maybe<Attendance>;
-  updateUser?: Maybe<AppUser>;
-};
-
-export type UserMutationCreateAttendanceArgs = {
-  appuserid: Scalars["Int"]["input"];
-  clockin: Scalars["DateTime"]["input"];
-  clockout: Scalars["DateTime"]["input"];
-  currentdate: Scalars["LocalDate"]["input"];
-  status: Scalars["String"]["input"];
-  totalhoursworked: Scalars["Int"]["input"];
-};
-
-export type UserMutationCreateUserArgs = {
-  email: Scalars["String"]["input"];
-  employeeName: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
-  role: Scalars["String"]["input"];
-  staffId: Scalars["String"]["input"];
-  status: Scalars["String"]["input"];
-};
-
-export type UserMutationDeleteAttendanceArgs = {
-  id: Scalars["Int"]["input"];
-};
-
-export type UserMutationDeleteUserArgs = {
-  id: Scalars["Int"]["input"];
-};
-
-export type UserMutationLoginArgs = {
-  password: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
-};
-
-export type UserMutationLoginForForgottenPasswordArgs = {
-  email: Scalars["String"]["input"];
-  phoneno: Scalars["String"]["input"];
-  staffid: Scalars["String"]["input"];
-};
-
-export type UserMutationResetPasswordArgs = {
-  password: Scalars["String"]["input"];
-  token: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
-};
-
-export type UserMutationUpdateAttendanceArgs = {
-  appuserid: Scalars["Int"]["input"];
-  clockin: Scalars["DateTime"]["input"];
-  clockout: Scalars["DateTime"]["input"];
-  currentdate: Scalars["LocalDate"]["input"];
-  status: Scalars["String"]["input"];
-  totalhoursworked: Scalars["Int"]["input"];
-};
-
-export type UserMutationUpdateUserArgs = {
-  email: Scalars["String"]["input"];
-  employeeName: Scalars["String"]["input"];
-  id: Scalars["Int"]["input"];
-  password: Scalars["String"]["input"];
-  role: Scalars["String"]["input"];
-  staffId: Scalars["String"]["input"];
-  status: Scalars["String"]["input"];
-};
-
-export type UserQuery = {
-  __typename?: "UserQuery";
-  userById?: Maybe<AppUser>;
-  users: Array<AppUser>;
-  usersWithRoles: Array<UserWithRoleResponse>;
-};
-
-export type UserQueryUserByIdArgs = {
-  id: Scalars["Int"]["input"];
-};
-
-export type UserQueryUsersArgs = {
-  order?: InputMaybe<Array<AppUserSortInput>>;
-  where?: InputMaybe<AppUserFilterInput>;
-};
-
-export type UserQueryUsersWithRolesArgs = {
-  order?: InputMaybe<Array<UserWithRoleResponseSortInput>>;
-  where?: InputMaybe<UserWithRoleResponseFilterInput>;
+export type UserResetPasswordResponse = {
+  __typename?: "UserResetPasswordResponse";
+  isPasswordReset?: Maybe<Scalars["Boolean"]["output"]>;
+  message?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type UserWithRoleResponse = {
@@ -517,82 +617,10 @@ export type UserWithRoleResponseSortInput = {
   userName?: InputMaybe<SortEnumType>;
 };
 
-export type LoginMutationVariables = Exact<{
-  username: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
-}>;
-
-export type LoginMutation = {
-  __typename?: "UserMutation";
-  login: {
-    __typename?: "UserLoginResponse";
-    id?: string | null;
-    userName?: string | null;
-    token?: string | null;
-    role?: string | null;
-  };
-};
-
-export type LoginForForgottenPasswordMutationVariables = Exact<{
-  email: Scalars["String"]["input"];
-  staffId: Scalars["String"]["input"];
-  phoneno: Scalars["String"]["input"];
-}>;
-
-export type LoginForForgottenPasswordMutation = {
-  __typename?: "UserMutation";
-  loginForForgottenPassword: {
-    __typename?: "UserLoginResponse";
-    id?: string | null;
-    userName?: string | null;
-    token?: string | null;
-    role?: string | null;
-  };
-};
-
-export type ResetPasswordMutationVariables = Exact<{
-  token: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
-}>;
-
-export type ResetPasswordMutation = {
-  __typename?: "UserMutation";
-  resetPassword: string;
-};
-
-export type GetRecentRequestsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetRecentRequestsQuery = {
-  __typename?: "UserQuery";
-  users: Array<{
-    __typename?: "AppUser";
-    employeeName?: string | null;
-    requests?: Array<{
-      __typename?: "Request";
-      requestDescription?: string | null;
-    }> | null;
-  }>;
-};
-
-export type GetLogHistoryQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetLogHistoryQuery = {
-  __typename?: "UserQuery";
-  users: Array<{
-    __typename?: "AppUser";
-    employeeName?: string | null;
-    requests?: Array<{
-      __typename?: "Request";
-      requestDescription?: string | null;
-    }> | null;
-  }>;
-};
-
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUsersQuery = {
-  __typename?: "UserQuery";
+  __typename?: "Query";
   users: Array<{
     __typename?: "AppUser";
     staffId?: string | null;
@@ -604,6 +632,10 @@ export type GetUsersQuery = {
       __typename?: "AppUserRole";
       role: { __typename?: "AppRole"; name?: string | null };
     }>;
+    leaves?: Array<{
+      __typename?: "Leave";
+      approvalStatus?: string | null;
+    }> | null;
   }>;
 };
 
@@ -612,7 +644,7 @@ export type GetUserByIdQueryVariables = Exact<{
 }>;
 
 export type GetUserByIdQuery = {
-  __typename?: "UserQuery";
+  __typename?: "Query";
   userById?: {
     __typename?: "AppUser";
     staffId?: string | null;
@@ -623,335 +655,6 @@ export type GetUserByIdQuery = {
   } | null;
 };
 
-export const LoginDocument = gql`
-  mutation Login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      id
-      userName
-      token
-      role
-    }
-  }
-`;
-export type LoginMutationFn = Apollo.MutationFunction<
-  LoginMutation,
-  LoginMutationVariables
->;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      username: // value for 'username'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginMutation,
-    LoginMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    options
-  );
-}
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<
-  LoginMutation,
-  LoginMutationVariables
->;
-export const LoginForForgottenPasswordDocument = gql`
-  mutation LoginForForgottenPassword(
-    $email: String!
-    $staffId: String!
-    $phoneno: String!
-  ) {
-    loginForForgottenPassword(
-      email: $email
-      staffid: $staffId
-      phoneno: $phoneno
-    ) {
-      id
-      userName
-      token
-      role
-    }
-  }
-`;
-export type LoginForForgottenPasswordMutationFn = Apollo.MutationFunction<
-  LoginForForgottenPasswordMutation,
-  LoginForForgottenPasswordMutationVariables
->;
-
-/**
- * __useLoginForForgottenPasswordMutation__
- *
- * To run a mutation, you first call `useLoginForForgottenPasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginForForgottenPasswordMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginForForgottenPasswordMutation, { data, loading, error }] = useLoginForForgottenPasswordMutation({
- *   variables: {
- *      email: // value for 'email'
- *      staffId: // value for 'staffId'
- *      phoneno: // value for 'phoneno'
- *   },
- * });
- */
-export function useLoginForForgottenPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginForForgottenPasswordMutation,
-    LoginForForgottenPasswordMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    LoginForForgottenPasswordMutation,
-    LoginForForgottenPasswordMutationVariables
-  >(LoginForForgottenPasswordDocument, options);
-}
-export type LoginForForgottenPasswordMutationHookResult = ReturnType<
-  typeof useLoginForForgottenPasswordMutation
->;
-export type LoginForForgottenPasswordMutationResult =
-  Apollo.MutationResult<LoginForForgottenPasswordMutation>;
-export type LoginForForgottenPasswordMutationOptions =
-  Apollo.BaseMutationOptions<
-    LoginForForgottenPasswordMutation,
-    LoginForForgottenPasswordMutationVariables
-  >;
-export const ResetPasswordDocument = gql`
-  mutation ResetPassword(
-    $token: String!
-    $username: String!
-    $password: String!
-  ) {
-    resetPassword(token: $token, username: $username, password: $password)
-  }
-`;
-export type ResetPasswordMutationFn = Apollo.MutationFunction<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
->;
-
-/**
- * __useResetPasswordMutation__
- *
- * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
- *   variables: {
- *      token: // value for 'token'
- *      username: // value for 'username'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useResetPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ResetPasswordMutation,
-    ResetPasswordMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    ResetPasswordMutation,
-    ResetPasswordMutationVariables
-  >(ResetPasswordDocument, options);
-}
-export type ResetPasswordMutationHookResult = ReturnType<
-  typeof useResetPasswordMutation
->;
-export type ResetPasswordMutationResult =
-  Apollo.MutationResult<ResetPasswordMutation>;
-export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
->;
-export const GetRecentRequestsDocument = gql`
-  query GetRecentRequests {
-    users {
-      employeeName
-      requests {
-        requestDescription
-      }
-    }
-  }
-`;
-
-/**
- * __useGetRecentRequestsQuery__
- *
- * To run a query within a React component, call `useGetRecentRequestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetRecentRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetRecentRequestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetRecentRequestsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetRecentRequestsQuery,
-    GetRecentRequestsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetRecentRequestsQuery,
-    GetRecentRequestsQueryVariables
-  >(GetRecentRequestsDocument, options);
-}
-export function useGetRecentRequestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetRecentRequestsQuery,
-    GetRecentRequestsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetRecentRequestsQuery,
-    GetRecentRequestsQueryVariables
-  >(GetRecentRequestsDocument, options);
-}
-export function useGetRecentRequestsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetRecentRequestsQuery,
-        GetRecentRequestsQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetRecentRequestsQuery,
-    GetRecentRequestsQueryVariables
-  >(GetRecentRequestsDocument, options);
-}
-export type GetRecentRequestsQueryHookResult = ReturnType<
-  typeof useGetRecentRequestsQuery
->;
-export type GetRecentRequestsLazyQueryHookResult = ReturnType<
-  typeof useGetRecentRequestsLazyQuery
->;
-export type GetRecentRequestsSuspenseQueryHookResult = ReturnType<
-  typeof useGetRecentRequestsSuspenseQuery
->;
-export type GetRecentRequestsQueryResult = Apollo.QueryResult<
-  GetRecentRequestsQuery,
-  GetRecentRequestsQueryVariables
->;
-export const GetLogHistoryDocument = gql`
-  query GetLogHistory {
-    users {
-      employeeName
-      requests {
-        requestDescription
-      }
-    }
-  }
-`;
-
-/**
- * __useGetLogHistoryQuery__
- *
- * To run a query within a React component, call `useGetLogHistoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetLogHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetLogHistoryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetLogHistoryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetLogHistoryQuery,
-    GetLogHistoryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetLogHistoryQuery, GetLogHistoryQueryVariables>(
-    GetLogHistoryDocument,
-    options
-  );
-}
-export function useGetLogHistoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetLogHistoryQuery,
-    GetLogHistoryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetLogHistoryQuery, GetLogHistoryQueryVariables>(
-    GetLogHistoryDocument,
-    options
-  );
-}
-export function useGetLogHistorySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetLogHistoryQuery,
-        GetLogHistoryQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetLogHistoryQuery,
-    GetLogHistoryQueryVariables
-  >(GetLogHistoryDocument, options);
-}
-export type GetLogHistoryQueryHookResult = ReturnType<
-  typeof useGetLogHistoryQuery
->;
-export type GetLogHistoryLazyQueryHookResult = ReturnType<
-  typeof useGetLogHistoryLazyQuery
->;
-export type GetLogHistorySuspenseQueryHookResult = ReturnType<
-  typeof useGetLogHistorySuspenseQuery
->;
-export type GetLogHistoryQueryResult = Apollo.QueryResult<
-  GetLogHistoryQuery,
-  GetLogHistoryQueryVariables
->;
 export const GetUsersDocument = gql`
   query getUsers {
     users {
@@ -964,6 +667,9 @@ export const GetUsersDocument = gql`
         }
       }
       status
+      leaves {
+        approvalStatus
+      }
       employeeType
     }
   }
