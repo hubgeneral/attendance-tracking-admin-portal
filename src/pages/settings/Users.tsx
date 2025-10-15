@@ -30,13 +30,16 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+
 import GeneratedPasswordModal from "../../components/GeneratePasswordModal";
 import ResetAccountModal from "../../components/ResetAccountModal";
 import EditInternModal from "../../components/EditInternModal";
+import AddInternModal from "../../components/AddInternModal";
+
 import { useGetUsersQuery } from "../../generated/graphql";
 import { getRoles, getStatuses } from "../../services/mockData";
 
-import AddInternModal from "../../components/AddInternModal";
+import { getLeaveStatusToday } from "../../../misc";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -45,21 +48,19 @@ export default function Users() {
   const [RoleFilter, setRoleFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
 
-  //const [rows, setRows] = useState<any>(() => () => {});
   const [open, setOpen] = useState(false);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
   const [showResetModal, setShowResetModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
   type User = {
     staffId: string;
     id: string;
     employeeId: string;
     employeeName: string;
     email: string;
-    //role: string;
     userRoles: { role: { name: string } }[];
     status: string;
     employmentType: string;
@@ -68,7 +69,6 @@ export default function Users() {
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [generatedPassword, setGeneratedPassword] = useState("");
-
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingIntern, setEditingIntern] = useState<User | null>(null);
 
@@ -76,6 +76,7 @@ export default function Users() {
     setAnchorEl(event.currentTarget);
     setSelectedRowId(row.id);
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedRowId(null);
@@ -94,7 +95,6 @@ export default function Users() {
   };
 
   const { data: userData, loading, error } = useGetUsersQuery();
-
   const [rows, setRows] = useState<any[]>([]);
 
   useEffect(() => {
@@ -124,13 +124,23 @@ export default function Users() {
       (statusFilter === "All" || row.status === statusFilter)
   );
 
-  // Status colors
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Active":
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case "Active":
+  //       return { bgcolor: "#ecfdf5", color: "#16a34a" };
+  //     case "Inactive":
+  //       return { bgcolor: "#fef2f2", color: "#dc2626" };
+  //     case "On Leave":
+  //       return { bgcolor: "#fefce8", color: "#d97706" };
+  //     default:
+  //       return {};
+  //   }
+  // };
+
+  const getStatusColor = (approvalStatus: string) => {
+    switch (approvalStatus) {
+      case "Present":
         return { bgcolor: "#ecfdf5", color: "#16a34a" };
-      case "Inactive":
-        return { bgcolor: "#fef2f2", color: "#dc2626" };
       case "On Leave":
         return { bgcolor: "#fefce8", color: "#d97706" };
       default:
@@ -138,7 +148,6 @@ export default function Users() {
     }
   };
 
-  // Add Intern handler
   const handleAddIntern = (intern: {
     employeeId: string;
     employeeName: string;
@@ -192,7 +201,7 @@ export default function Users() {
   };
 
   return (
-    <div className="px-6  min-h-screen">
+    <div className="px-6 min-h-screen">
       {/* Header with Back + Add Intern */}
       <Box className="flex items-center justify-between mb-4">
         <Box>
@@ -206,13 +215,13 @@ export default function Users() {
               color: "#004E2B",
               fontSize: "0.875rem",
               p: 0,
-
               "&:hover": { backgroundColor: "transparent", color: "#111827" },
             }}
             className="dark:text-[#E8EAE9]"
           >
             Back to Settings
           </Button>
+
           <Typography
             variant="h6"
             fontWeight="bold"
@@ -248,7 +257,6 @@ export default function Users() {
         <CardContent>
           {/* Header Row: All Users + Search/Filters */}
           <Box className="flex items-center justify-between mb-6">
-            {/* Left: Title */}
             <Typography
               variant="h5"
               fontWeight="semi-bold"
@@ -257,7 +265,6 @@ export default function Users() {
               All Users
             </Typography>
 
-            {/* Right: Search + Filters */}
             <Box className="flex items-center gap-3" sx={{ maxWidth: 600 }}>
               <TextField
                 placeholder="Search employee name or id ..."
@@ -279,8 +286,8 @@ export default function Users() {
                   },
                 }}
                 className="[&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-[#1A2D26]
-             [&_.MuiOutlinedInput-input]:text-gray-900 [&_.MuiOutlinedInput-input]:dark:text-white
-             [&_.MuiOutlinedInput-notchedOutline]:border-gray-300 [&_.MuiOutlinedInput-notchedOutline]:dark:border-[#204335]"
+                [&_.MuiOutlinedInput-input]:text-gray-900 [&_.MuiOutlinedInput-input]:dark:text-white
+                [&_.MuiOutlinedInput-notchedOutline]:border-gray-300 [&_.MuiOutlinedInput-notchedOutline]:dark:border-[#204335]"
               />
 
               <FormControl size="small" sx={{ minWidth: 150 }}>
@@ -312,19 +319,6 @@ export default function Users() {
                     <FilterListIcon className="text-gray-400 mr-2 dark:text-[#E8EAE9]" />
                   }
                   className="dark:text-[#E8EAE9]"
-                  MenuProps={{
-                    sx: {
-                      "& .dark & .MuiMenu-paper": {
-                        backgroundColor: "#1A2D26",
-                        color: "white",
-                        "& .MuiMenuItem-root": {
-                          "&:hover, &.Mui-selected": {
-                            backgroundColor: "red",
-                          },
-                        },
-                      },
-                    },
-                  }}
                 >
                   {getStatuses().map((status) => (
                     <MenuItem key={status} value={status}>
@@ -348,11 +342,7 @@ export default function Users() {
                   className="dark:text-[#E8EAE9] dark:border-[#253F35] dark:bg-[#243e35]"
                   sx={{
                     backgroundColor: "#F0F2F5",
-
-                    "& > *": {
-                      py: 1.5,
-                      lineHeight: "1rem",
-                    },
+                    "& > *": { py: 1.5, lineHeight: "1rem" },
                   }}
                 >
                   <TableCell
@@ -391,16 +381,15 @@ export default function Users() {
                   >
                     Employment Type
                   </TableCell>
-                  <TableCell align="right" className="dark:border-[#253F35]">
-                    {/* Actions column header, no menu in TableHead */}
-                  </TableCell>
+                  <TableCell align="right" className="dark:border-[#253F35]" />
                 </TableRow>
               </TableHead>
+
               <TableBody>
-                {filteredRows.map((row) => (
-                  <TableRow key={row.id} hover className="dark:bg-[][#1A2D26]">
+                {filteredRows.map((row: User) => (
+                  <TableRow key={row.id} hover>
                     <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.employeeId}
+                      {row.staffId}
                     </TableCell>
                     <TableCell
                       sx={{ fontWeight: 500 }}
@@ -412,45 +401,29 @@ export default function Users() {
                       {row.email}
                     </TableCell>
                     <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                      {row.role}
+                      {row.userRoles && Array.isArray(row.userRoles)
+                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
+                        : ""}
                     </TableCell>
+
                     <TableCell className="dark:border-[#253F35]">
-=======
-                {filteredRows.map((row: User) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>{row.staffId}</TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      {row.employeeName}
-                    </TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    {/* <TableCell>{row.role}</TableCell> */}
-                    <TableCell>
-                      {row.userRoles && Array.isArray(row.userRoles)
-                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
-                        : ""}
-                    </TableCell>
-                    <TableCell>
-                      {row.userRoles && Array.isArray(row.userRoles)
-                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
-                        : ""}
-                    </TableCell>
-                    <TableCell>
-                      {row.userRoles && Array.isArray(row.userRoles)
-                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
-                        : ""}
-                    </TableCell>
-                    <TableCell>
-                      {row.userRoles && Array.isArray(row.userRoles)
-                        ? row.userRoles.map((r: any) => r.role.name).join(", ")
-                        : ""}
-                    </TableCell>
-                    <TableCell>
->>>>>>> Stashed changes
                       <Chip
-                        label={row.status}
+                        label={
+                          Array.from(
+                            getLeaveStatusToday(rows).todaysLeaveIds
+                          ).some((u: any) => u.staffId === row.staffId)
+                            ? "On Leave"
+                            : "Present"
+                        }
                         size="small"
                         sx={{
-                          ...getStatusColor(row.status),
+                          ...getStatusColor(
+                            Array.from(
+                              getLeaveStatusToday(rows).todaysLeaveIds
+                            ).some((u: any) => u.staffId === row.staffId)
+                              ? "On Leave"
+                              : "Present"
+                          ),
                           fontWeight: 500,
                           fontSize: "0.75rem",
                         }}
@@ -488,29 +461,16 @@ export default function Users() {
                             setShowPasswordModal(true);
                             handleMenuClose();
                           }}
-                          sx={{
-                            borderRadius: "6px",
-                            py: 1,
-                            fontSize: "0.875rem",
-                            "&:hover": { backgroundColor: "#eff1f4ff" },
-                          }}
                         >
                           Generate Password
                         </MenuItem>
 
                         <Divider sx={{ my: 0.5 }} />
 
-                        {/* Reset Account */}
                         <MenuItem
                           onClick={() => {
                             handleResetClick(row);
                             handleMenuClose();
-                          }}
-                          sx={{
-                            borderRadius: "6px",
-                            py: 1,
-                            fontSize: "0.875rem",
-                            "&:hover": { backgroundColor: "#eff1f4ff" },
                           }}
                         >
                           Reset Account
@@ -524,12 +484,6 @@ export default function Users() {
                                 setEditingIntern(row);
                                 setShowEditModal(true);
                                 handleMenuClose();
-                              }}
-                              sx={{
-                                borderRadius: "6px",
-                                py: 1,
-                                fontSize: "0.875rem",
-                                "&:hover": { backgroundColor: "#eff1f4ff" },
                               }}
                             >
                               Edit
