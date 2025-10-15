@@ -11,16 +11,25 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useAuth } from "../app/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function ProfileMenu() {
   const [menuAnchor, setmenuAnchor] = useState<null | HTMLElement>(null);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setmenuAnchor(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setmenuAnchor(null);
+  const handleClose = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -41,7 +50,7 @@ function ProfileMenu() {
             borderRadius: 2,
             mt: 1.5,
           },
-          className: "dark:bg-gray-800",
+          className: "dark:bg-[#14241D]",
         }}
       >
         {/* ============ Profile Info Section =========== */}
@@ -52,7 +61,7 @@ function ProfileMenu() {
             alignItems: "center",
             p: 2,
           }}
-          className="dark:bg-gray-800"
+          className="dark:bg-[#14241D]"
         >
           <Avatar sx={{ bgcolor: "teal", width: 56, height: 56, mb: 1 }}>
             EO
@@ -78,7 +87,7 @@ function ProfileMenu() {
         {/* ============ Logout Row =========== */}
         <MenuItem
           onClick={handleClose}
-          className="dark:bg-gray-800 dark:hover:bg-gray-500"
+          className="dark:bg-[#14241D] dark:hover:bg-[#172C24]"
         >
           <ListItemIcon>
             {/* <Logout fontSize="small" sx={{ color: "#00274D" }} /> hover*/}

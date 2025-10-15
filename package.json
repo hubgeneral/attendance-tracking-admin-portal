@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts",
-    "codegen:watch": "graphql-codegen --watch --config codegen.ts"
+    "codegen:watch": "graphql-codegen --watch --config codegen.ts",
+    "cyp-o": "cypress open",
+    "cyp-r": "cypress run"
   },
   "dependencies": {
     "@apollo/client": "^4.0.7",

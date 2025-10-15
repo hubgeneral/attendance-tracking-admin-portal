@@ -6,21 +6,39 @@ import "../App.css";
 import TimeClocker from "../assets/HMClockrgreen.svg";
 import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMLogo from "../assets/HMLogo.svg";
-import HMlogowh from "../assets/HMLogowh.svg";
+import HMLogowh from "../assets/HMLogowh.svg";
 import Footer from "../components/Footer";
 import ThemeBtn from "../components/ThemeBtn";
+import { useAuth } from "../app/hooks/useAuth";
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Email:", email, "Password:", password);
-    navigate("/app/dashboard");
+    try {
+      setLoading(true);
+      await login({ username, password });
+
+      console.log("Login successful");
+
+      navigate("/app/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+
+      setLoading(false);
+      setError("Invalid username or password");
+    }
+
+    console.log("Email:", username, "Password:", password);
   };
 
   return (
@@ -41,7 +59,7 @@ const Login = () => {
                 className="h-8 border-e-2 border-gray-200 pe-4 dark:hidden"
               />
               <img
-                src={HMLogo}
+                src={HMLogowh}
                 alt="Heidelberg Materials"
                 className="h-8 dark:hidden"
               />
@@ -53,7 +71,7 @@ const Login = () => {
                 className="h-8 border-e-2 border-gray-200 pe-4 hidden dark:block"
               />
               <img
-                src={HMlogowh}
+                src={HMLogo}
                 alt="Heidelberg Materials"
                 className="h-8 hidden dark:block"
               />
@@ -70,11 +88,16 @@ const Login = () => {
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
+            {error && (
+              <div className="bg-red-100 text-red-700 px-4 py-2 rounded">
+                {error}
+              </div>
+            )}
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
@@ -113,10 +136,18 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2"
+              className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading || !username || !password}
             >
-              <MdLogin />
-              <span>Login</span>
+              {loading ? (
+                <CircularProgress
+                  size={20}
+                  className="dark:text-white text-white"
+                />
+              ) : (
+                <MdLogin />
+              )}
+              <span>{loading ? "Logging in..." : "Login"}</span>
             </button>
           </form>
         </div>

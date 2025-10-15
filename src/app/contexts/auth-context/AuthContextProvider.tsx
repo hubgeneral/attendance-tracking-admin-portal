@@ -1,12 +1,15 @@
-import React from "react";
-import { AuthContext } from "./authContext";
+import React, { useState } from "react";
+import AuthContext from "./authContext";
 import type { AuthContextType, AuthProviderProps } from "../../types/authTypes";
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const value: AuthContextType = {
-    user: null,
-    login: async () => {},
-    logout: () => {},
+  const [authContextData, setAuthContextData] = useState<AuthContextType>({
+    currentUser: undefined,
+  });
+
+  const value = {
+    authContextData,
+    setAuthContextData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
