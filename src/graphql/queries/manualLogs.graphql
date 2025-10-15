@@ -1,17 +1,1 @@
-query GetRecentRequests {
-  users {
-    employeeName
-    requests {
-      requestDescription
-    }
-  }
-}
 
-query GetLogHistory {
-  users {
-    employeeName
-    requests {
-      requestDescription
-    }
-  }
-}

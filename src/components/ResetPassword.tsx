@@ -31,7 +31,7 @@ const ResetPassword = () => {
                 className="h-8 border-e-2 border-gray-200 pe-4 dark:hidden"
               />
               <img
-                src={HMLogo}
+                src={HMlogowh}
                 alt="Heidelberg Materials"
                 className="h-8 dark:hidden"
               />
@@ -43,7 +43,7 @@ const ResetPassword = () => {
                 className="h-8 border-e-2 border-gray-200 pe-4 hidden dark:block"
               />
               <img
-                src={HMlogowh}
+                src={HMLogo}
                 alt="Heidelberg Materials"
                 className="h-8 hidden dark:block"
               />
@@ -66,7 +66,7 @@ const ResetPassword = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                required
+                required={true}
               />
 
               <input
@@ -75,7 +75,7 @@ const ResetPassword = () => {
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
-                required
+                required={true}
               />
 
               <input
@@ -84,7 +84,7 @@ const ResetPassword = () => {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
-                required
+                required={true}
               />
 
               {/* <button
@@ -101,10 +101,11 @@ const ResetPassword = () => {
 
               <button
                 type="submit"
-                className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2"
+                className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {
                   navigate("/reset-password-confirmation");
                 }}
+                disabled={!email || !employeeId || !contact}
               >
                 <MdLock />
                 <span>Reset Password</span>

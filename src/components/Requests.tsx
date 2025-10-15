@@ -12,7 +12,7 @@ const Requests = () => {
           {new Array(3).fill(0).map((_, i) => (
             <div
               key={i}
-              className="flex justify-between items-center mb-3 p-3 border-[#E8ECF0] rounded-lg bg-[#F7F7F7] dark:bg-[#27473A] "
+              className="flex justify-between items-center mb-3 p-3 border-[#E8ECF0] rounded-lg bg-[#F7F7F7] dark:bg-[#1f3a30] "
             >
               <div>
                 <p className="text-sm dark:text-[#E9EDEB]">Addo Dankwa</p>

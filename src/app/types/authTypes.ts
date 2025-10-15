@@ -1,13 +1,12 @@
 import type { ReactNode } from "react";
+import type { AppUser, UserLoginResponse } from "../../generated/graphql";
 
 interface AuthContextType {
-  user?: { id: string; name: string } | null;
-  login?: (username: string, password: string) => Promise<void>;
-  logout?: () => void;
+  currentUser?: UserLoginResponse | undefined;
 }
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-export type { AuthContextType, AuthProviderProps};
+export type { AuthContextType, AuthProviderProps };

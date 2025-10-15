@@ -1,33 +1,10 @@
 mutation Login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
+    accessToken
     id
     userName
-    token
+    refreshToken
     role
+    isPasswordReset
   }
-}
-
-mutation LoginForForgottenPassword(
-  $email: String!
-  $staffId: String!
-  $phoneno: String!
-) {
-  loginForForgottenPassword(
-    email: $email
-    staffid: $staffId
-    phoneno: $phoneno
-  ) {
-    id
-    userName
-    token
-    role
-  }
-}
-
-mutation ResetPassword(
-  $token: String!
-  $username: String!
-  $password: String!
-) {
-  resetPassword(token: $token, username: $username, password: $password)
 }
