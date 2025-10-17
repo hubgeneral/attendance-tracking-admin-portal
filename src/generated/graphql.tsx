@@ -617,10 +617,7 @@ export type UserWithRoleResponseSortInput = {
   userName?: InputMaybe<SortEnumType>;
 };
 
-export type LoginMutationVariables = Exact<{
-  username: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
-}>;
+export type GetAllAttendanceQueryVariables = Exact<{ [key: string]: never }>;
 
 export type LoginMutation = {
   __typename?: "Mutation";
@@ -633,6 +630,22 @@ export type LoginMutation = {
     role?: string | null;
     isPasswordReset: boolean;
   };
+  
+export type GetAllAttendanceQuery = {
+  __typename?: "Query";
+  attendances: Array<{
+    __typename?: "Attendance";
+    clockIn?: any | null;
+    clockOut?: any | null;
+    currentDate?: any | null;
+    totalHoursWorked?: any | null;
+    user?: {
+      __typename?: "AppUser";
+      id: number;
+      staffId?: string | null;
+      employeeName?: string | null;
+    } | null;
+  }>;
 };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -725,6 +738,90 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+export const GetAllAttendanceDocument = gql`
+  query getAllAttendance {
+    attendances {
+      clockIn
+      clockOut
+      currentDate
+      totalHoursWorked
+      user {
+        id
+        staffId
+        employeeName
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAllAttendanceQuery__
+ *
+ * To run a query within a React component, call `useGetAllAttendanceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllAttendanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllAttendanceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllAttendanceQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAllAttendanceQuery,
+    GetAllAttendanceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllAttendanceQuery, GetAllAttendanceQueryVariables>(
+    GetAllAttendanceDocument,
+    options
+  );
+}
+export function useGetAllAttendanceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllAttendanceQuery,
+    GetAllAttendanceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAllAttendanceQuery,
+    GetAllAttendanceQueryVariables
+  >(GetAllAttendanceDocument, options);
+}
+export function useGetAllAttendanceSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAllAttendanceQuery,
+        GetAllAttendanceQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAllAttendanceQuery,
+    GetAllAttendanceQueryVariables
+  >(GetAllAttendanceDocument, options);
+}
+export type GetAllAttendanceQueryHookResult = ReturnType<
+  typeof useGetAllAttendanceQuery
+>;
+export type GetAllAttendanceLazyQueryHookResult = ReturnType<
+  typeof useGetAllAttendanceLazyQuery
+>;
+export type GetAllAttendanceSuspenseQueryHookResult = ReturnType<
+  typeof useGetAllAttendanceSuspenseQuery
+>;
+export type GetAllAttendanceQueryResult = Apollo.QueryResult<
+  GetAllAttendanceQuery,
+  GetAllAttendanceQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers {
