@@ -16,10 +16,22 @@ query getUsers {
   }
 }
 
+# query getUserById($id: Int!) {
+#   userById(id: $id) {
+#     staffId
+#     userName
+#     email
+#     status
+#     phoneNumber
+#   }
+# }
+
 query getUserById($id: Int!) {
   userById(id: $id) {
+    id
     staffId
     userName
+    employeeName
     email
     status
     phoneNumber
