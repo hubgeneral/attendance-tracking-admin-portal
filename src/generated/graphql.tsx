@@ -635,6 +635,25 @@ export type LoginMutation = {
   };
 };
 
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars["String"]["input"];
+  staffid: Scalars["String"]["input"];
+  phoneNumber: Scalars["String"]["input"];
+}>;
+
+export type ForgotPasswordMutation = {
+  __typename?: "Mutation";
+  loginForForgottenPassword: {
+    __typename?: "UserLoginResponse";
+    id?: string | null;
+    accessToken?: string | null;
+    isPasswordReset: boolean;
+    role?: string | null;
+    userName?: string | null;
+    refreshToken?: string | null;
+  };
+};
+
 export type GetAllAttendanceQueryVariables = Exact<{
   date?: InputMaybe<Scalars["LocalDate"]["input"]>;
 }>;
@@ -656,23 +675,6 @@ export type GetAllAttendanceQuery = {
   }>;
 };
 
-export type ForgotPasswordMutationVariables = Exact<{
-  email: Scalars["String"]["input"];
-  staffid: Scalars["String"]["input"];
-  phoneNumber: Scalars["String"]["input"];
-}>;
-
-export type ForgotPasswordMutation = {
-  __typename?: "Mutation";
-  loginForForgottenPassword: {
-    __typename?: "UserLoginResponse";
-    id?: string | null;
-    accessToken?: string | null;
-    isPasswordReset: boolean;
-    role?: string | null;
-    userName?: string | null;
-    refreshToken?: string | null;
-  };
 export type GetAttendanceByDateQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
   endDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
@@ -727,6 +729,7 @@ export type GetUserByIdQuery = {
   userById?: {
     __typename?: "AppUser";
     id: number;
+    staffId?: string | null;
     userName?: string | null;
     employeeName?: string | null;
     email?: string | null;
@@ -787,6 +790,71 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+>;
+export const ForgotPasswordDocument = gql`
+  mutation ForgotPassword(
+    $email: String!
+    $staffid: String!
+    $phoneNumber: String!
+  ) {
+    loginForForgottenPassword(
+      email: $email
+      staffid: $staffid
+      phoneno: $phoneNumber
+    ) {
+      id
+      accessToken
+      isPasswordReset
+      role
+      userName
+      refreshToken
+    }
+  }
+`;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<
+  ForgotPasswordMutation,
+  ForgotPasswordMutationVariables
+>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      staffid: // value for 'staffid'
+ *      phoneNumber: // value for 'phoneNumber'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >(ForgotPasswordDocument, options);
+}
+export type ForgotPasswordMutationHookResult = ReturnType<
+  typeof useForgotPasswordMutation
+>;
+export type ForgotPasswordMutationResult =
+  Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
+  ForgotPasswordMutation,
+  ForgotPasswordMutationVariables
 >;
 export const GetAllAttendanceDocument = gql`
   query getAllAttendance($date: LocalDate) {
@@ -874,70 +942,6 @@ export type GetAllAttendanceQueryResult = Apollo.QueryResult<
   GetAllAttendanceQuery,
   GetAllAttendanceQueryVariables
 >;
-export const ForgotPasswordDocument = gql`
-  mutation ForgotPassword(
-    $email: String!
-    $staffid: String!
-    $phoneNumber: String!
-  ) {
-    loginForForgottenPassword(
-      email: $email
-      staffid: $staffid
-      phoneno: $phoneNumber
-    ) {
-      id
-      accessToken
-      isPasswordReset
-      role
-      userName
-      refreshToken
-    }
-  }
-`;
-export type ForgotPasswordMutationFn = Apollo.MutationFunction<
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables
->;
-
-/**
- * __useForgotPasswordMutation__
- *
- * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
- *   variables: {
- *      email: // value for 'email'
- *      staffid: // value for 'staffid'
- *      phoneNumber: // value for 'phoneNumber'
- *   },
- * });
- */
-export function useForgotPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >(ForgotPasswordDocument, options);
-}
-export type ForgotPasswordMutationHookResult = ReturnType<
-  typeof useForgotPasswordMutation
->;
-export type ForgotPasswordMutationResult =
-  Apollo.MutationResult<ForgotPasswordMutation>;
-export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables
 export const GetAttendanceByDateDocument = gql`
   query getAttendanceByDate($startDate: LocalDate, $endDate: LocalDate) {
     attendances(
@@ -1113,6 +1117,7 @@ export const GetUserByIdDocument = gql`
   query getUserById($id: Int!) {
     userById(id: $id) {
       id
+      staffId
       userName
       employeeName
       email
