@@ -3,16 +3,22 @@ import TimeClocker from "../assets/HmClockrLogo.svg";
 import TimeClockerwh from "../assets/HMClockrwh.svg";
 import HMLogo from "../assets/HMLogo.svg";
 import HMlogowh from "../assets/HMLogowh.svg";
-import Footer from "../components/Footer";
-import ThemeBtn from "../components/ThemeBtn";
-import { MdLock } from "react-icons/md";
+import Footer from "./Footer";
+import ThemeBtn from "./ThemeBtn";
+import { MdLock, MdOutlineRemoveRedEye } from "react-icons/md";
+import { GoEyeClosed } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
-const ResetPassword = () => {
-  const [email, setEmail] = useState<string>("");
-  const [employeeId, setEmployeeId] = useState<string>("");
-  const [contact, setContact] = useState<string>("");
+const ResetPasswordConfirmation = () => {
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] =
+    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+
   return (
     <div className="h-screen bg-gray-100 dark:bg-[#1B2420] flex flex-col">
       {/* Theme toggle */}
@@ -54,60 +60,72 @@ const ResetPassword = () => {
             Digital Hub Ghana Clocking System
           </h1>
           <p className="text-center text-lg text-gray-600 dark:text-gray-300 mb-6">
-            Forgot Password?
+            Create New Password
           </p>
 
           {/* Form */}
           <form className="space-y-4">
             <div className="relative w-full flex flex-col gap-4">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                required={true}
-              />
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="New Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
+                  required={true}
+                />
 
-              <input
-                type="text"
-                placeholder="Employee ID"
-                value={employeeId}
-                onChange={(e) => setEmployeeId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
-                required={true}
-              />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  {showPassword ? (
+                    <MdOutlineRemoveRedEye className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <GoEyeClosed className="h-5 w-5 text-gray-400" />
+                  )}
+                </button>
+              </div>
+              <div className="relative w-full">
+                <input
+                  type={showConfirmedPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
+                  required={true}
+                />
 
-              <input
-                type="text"
-                placeholder="Contact"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-800 dark:bg-[#14201C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
-                required={true}
-              />
-
-              {/* <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                {showPassword ? (
-                  <MdOutlineRemoveRedEye className="h-5 w-5 text-gray-400" />
-                ) : (
-                  <GoEyeClosed className="h-5 w-5 text-gray-400" />
-                )}
-              </button> */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowConfirmedPassword(!showConfirmedPassword)
+                  }
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  {showConfirmedPassword ? (
+                    <MdOutlineRemoveRedEye className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <GoEyeClosed className="h-5 w-5 text-gray-400" />
+                  )}
+                </button>
+              </div>
 
               <button
                 type="submit"
-                className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => {
-                  navigate("/reset-password-confirmation");
-                }}
-                disabled={!email || !employeeId || !contact}
+                className="w-full loginbtn text-white py-2 rounded-lg hover:bg-green-800 dark:bg-[#004E2B] transition-colors flex items-center justify-center space-x-2  disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={!password || password !== confirmPassword}
               >
-                <MdLock />
+                {loading ? (
+                  <CircularProgress
+                    size={20}
+                    className="text-white dark:text-white"
+                  />
+                ) : (
+                  <MdLock />
+                )}
                 <span>Reset Password</span>
               </button>
             </div>
@@ -130,4 +148,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordConfirmation;
