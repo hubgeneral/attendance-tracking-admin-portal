@@ -362,44 +362,6 @@ export default function Users() {
                         }}
                         className="dark:bg-[#243e35] dark:text-[#E8EAE9] dark:border-[#253F35]"
                       >
-                        <MenuItem
-                          onClick={() => {
-                            setSelectedUser(row);
-                            setGeneratedPassword("AUTO-GEN123");
-                            setShowPasswordModal(true);
-                            handleMenuClose();
-                          }}
-                        >
-                          Generate Password
-                        </MenuItem>
-
-                        <Divider sx={{ my: 0.5 }} />
-
-                        <MenuItem
-                          onClick={() => {
-                            handleResetClick(row);
-                            handleMenuClose();
-                          }}
-                        >
-                          Reset Account
-                        </MenuItem>
-
-                        {row.employmentType === "Intern" && (
-                          <>
-                            <Divider sx={{ my: 0.5 }} />
-                            <MenuItem
-                              onClick={() => {
-                                setEditingIntern(row);
-                                setShowEditModal(true);
-                                handleMenuClose();
-                              }}
-                            >
-                              Edit
-                            </MenuItem>
-                          </>
-                        )}
-                      </Menu>
-                    </TableCell>
                         {header}
                       </TableCell>
                     ))}
