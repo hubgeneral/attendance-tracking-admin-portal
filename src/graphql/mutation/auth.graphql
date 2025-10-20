@@ -8,3 +8,22 @@ mutation Login($username: String!, $password: String!) {
     isPasswordReset
   }
 }
+
+mutation ForgotPassword(
+  $email: String!
+  $staffid: String!
+  $phoneNumber: String!
+) {
+  loginForForgottenPassword(
+    email: $email
+    staffid: $staffid
+    phoneno: $phoneNumber
+  ) {
+    id
+    accessToken
+    isPasswordReset
+    role
+    userName
+    refreshToken
+  }
+}
