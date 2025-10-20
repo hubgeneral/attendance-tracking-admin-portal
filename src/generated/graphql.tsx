@@ -617,7 +617,10 @@ export type UserWithRoleResponseSortInput = {
   userName?: InputMaybe<SortEnumType>;
 };
 
-export type GetAllAttendanceQueryVariables = Exact<{ [key: string]: never }>;
+export type LoginMutationVariables = Exact<{
+  username: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+}>;
 
 export type LoginMutation = {
   __typename?: "Mutation";
@@ -630,7 +633,12 @@ export type LoginMutation = {
     role?: string | null;
     isPasswordReset: boolean;
   };
-  
+};
+
+export type GetAllAttendanceQueryVariables = Exact<{
+  date?: InputMaybe<Scalars["LocalDate"]["input"]>;
+}>;
+
 export type GetAllAttendanceQuery = {
   __typename?: "Query";
   attendances: Array<{
@@ -665,6 +673,27 @@ export type ForgotPasswordMutation = {
     userName?: string | null;
     refreshToken?: string | null;
   };
+export type GetAttendanceByDateQueryVariables = Exact<{
+  startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  endDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+}>;
+
+export type GetAttendanceByDateQuery = {
+  __typename?: "Query";
+  attendances: Array<{
+    __typename?: "Attendance";
+    id: number;
+    clockIn?: any | null;
+    clockOut?: any | null;
+    clockingType: boolean;
+    totalHoursWorked?: any | null;
+    user?: {
+      __typename?: "AppUser";
+      staffId?: string | null;
+      employeeName?: string | null;
+      email?: string | null;
+    } | null;
+  }>;
 };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -697,8 +726,9 @@ export type GetUserByIdQuery = {
   __typename?: "Query";
   userById?: {
     __typename?: "AppUser";
-    staffId?: string | null;
+    id: number;
     userName?: string | null;
+    employeeName?: string | null;
     email?: string | null;
     status?: string | null;
     phoneNumber?: string | null;
@@ -757,9 +787,10 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+>;
 export const GetAllAttendanceDocument = gql`
-  query getAllAttendance {
-    attendances {
+  query getAllAttendance($date: LocalDate) {
+    attendances(where: { currentDate: { eq: $date } }) {
       clockIn
       clockOut
       currentDate
@@ -785,6 +816,7 @@ export const GetAllAttendanceDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllAttendanceQuery({
  *   variables: {
+ *      date: // value for 'date'
  *   },
  * });
  */
@@ -906,6 +938,95 @@ export type ForgotPasswordMutationResult =
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
+export const GetAttendanceByDateDocument = gql`
+  query getAttendanceByDate($startDate: LocalDate, $endDate: LocalDate) {
+    attendances(
+      where: { and: [{ currentDate: { gte: $startDate, lte: $endDate } }] }
+    ) {
+      id
+      clockIn
+      clockOut
+      clockingType
+      totalHoursWorked
+      user {
+        staffId
+        employeeName
+        email
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAttendanceByDateQuery__
+ *
+ * To run a query within a React component, call `useGetAttendanceByDateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAttendanceByDateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAttendanceByDateQuery({
+ *   variables: {
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *   },
+ * });
+ */
+export function useGetAttendanceByDateQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAttendanceByDateQuery,
+    GetAttendanceByDateQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAttendanceByDateQuery,
+    GetAttendanceByDateQueryVariables
+  >(GetAttendanceByDateDocument, options);
+}
+export function useGetAttendanceByDateLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAttendanceByDateQuery,
+    GetAttendanceByDateQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAttendanceByDateQuery,
+    GetAttendanceByDateQueryVariables
+  >(GetAttendanceByDateDocument, options);
+}
+export function useGetAttendanceByDateSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAttendanceByDateQuery,
+        GetAttendanceByDateQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAttendanceByDateQuery,
+    GetAttendanceByDateQueryVariables
+  >(GetAttendanceByDateDocument, options);
+}
+export type GetAttendanceByDateQueryHookResult = ReturnType<
+  typeof useGetAttendanceByDateQuery
+>;
+export type GetAttendanceByDateLazyQueryHookResult = ReturnType<
+  typeof useGetAttendanceByDateLazyQuery
+>;
+export type GetAttendanceByDateSuspenseQueryHookResult = ReturnType<
+  typeof useGetAttendanceByDateSuspenseQuery
+>;
+export type GetAttendanceByDateQueryResult = Apollo.QueryResult<
+  GetAttendanceByDateQuery,
+  GetAttendanceByDateQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers {
@@ -991,8 +1112,9 @@ export type GetUsersQueryResult = Apollo.QueryResult<
 export const GetUserByIdDocument = gql`
   query getUserById($id: Int!) {
     userById(id: $id) {
-      staffId
+      id
       userName
+      employeeName
       email
       status
       phoneNumber
