@@ -94,7 +94,7 @@ function ProfileMenu() {
               maxWidth: "200px",
               whiteSpace: "nowrap",
               overflow: "hidden",
-              textOverflow: "revert",
+              textOverflow: "ellipsis",
               cursor: "default",
             }}
             title={user?.email || "No email found"}
