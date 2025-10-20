@@ -37,37 +37,41 @@ export const useAuth = (): UseAuthProps => {
   const isAuthenticated = Boolean(authContextData?.currentUser);
   const [loginMutation] = useLoginMutation();
 
-  // useEffect(() => {
-  //   const loadAuthFromStorage = () => {
-  //     try {
-  //       const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-  //       const storedAccessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-  //       const storedRefreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+  useEffect(() => {
+    const loadAuthFromStorage = () => {
+      try {
+        const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+        const storedAccessToken = localStorage.getItem(
+          STORAGE_KEYS.ACCESS_TOKEN
+        );
+        const storedRefreshToken = localStorage.getItem(
+          STORAGE_KEYS.REFRESH_TOKEN
+        );
 
-  //       if (storedUser && storedAccessToken && storedRefreshToken) {
-  //         const user: UserLoginResponse = JSON.parse(storedUser);
+        if (storedUser && storedAccessToken && storedRefreshToken) {
+          const user: UserLoginResponse = JSON.parse(storedUser);
 
-  //         if (setAuthContextData) {
-  //           setAuthContextData({
-  //             currentUser: {
-  //               ...user,
-  //               accessToken: storedAccessToken,
-  //               refreshToken: storedRefreshToken,
-  //             },
-  //           });
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to load auth data from localStorage:", error);
-  //       // Clear corrupted data
-  //       localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-  //       localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-  //       localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-  //     }
-  //   };
+          if (setAuthContextData) {
+            setAuthContextData({
+              currentUser: {
+                ...user,
+                accessToken: storedAccessToken,
+                refreshToken: storedRefreshToken,
+              },
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load auth data from localStorage:", error);
+        // Clear corrupted data
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      }
+    };
 
-  //   loadAuthFromStorage();
-  // }, [setAuthContextData]);
+    loadAuthFromStorage();
+  }, [setAuthContextData]);
 
   // Save to localStorage helper
 
