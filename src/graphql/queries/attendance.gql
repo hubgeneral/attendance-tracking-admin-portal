@@ -1,19 +1,5 @@
-# query getAllAttendance($date: LocalDate) {
-#   attendances(where: { currentDate: { eq: $date } }) {
-#     clockIn
-#     clockOut
-#     currentDate
-#     totalHoursWorked
-#     user {
-#       id
-#       staffId
-#       employeeName
-#     }
-#   }
-# }
-
-query getAllAttendance {
-  attendances {
+query getAllAttendance($date: LocalDate) {
+  attendances(where: { currentDate: { eq: $date } }) {
     clockIn
     clockOut
     currentDate
@@ -25,6 +11,20 @@ query getAllAttendance {
     }
   }
 }
+
+# query getAllAttendance {
+#   attendances {
+#     clockIn
+#     clockOut
+#     currentDate
+#     totalHoursWorked
+#     user {
+#       id
+#       staffId
+#       employeeName
+#     }
+#   }
+# }
 
 query getAttendanceByDate($startDate: LocalDate, $endDate: LocalDate) {
   attendances(

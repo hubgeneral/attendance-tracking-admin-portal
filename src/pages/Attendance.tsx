@@ -8,24 +8,57 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useState } from "react";
 import { FaRegFileAlt } from "react-icons/fa";
 import { MdOutlineSearch } from "react-icons/md";
 import { DateRangePicker } from "rsuite";
-import { mockData } from "../Mockdata/Mockatt";
-import { useGetAllAttendanceQuery } from "../generated/graphql";
+import { useGetAttendanceByDateQuery } from "../generated/graphql";
 
-type Attendance = {
-  // id: string;
-  // staffId: string;
-  // employeeName: string;
+export type Attendance = {
   users: { id: string; staffId: string; employeeName: string }[];
   clockIn: string;
   clockOut: string;
   totalHours: string;
   totalTimeOff: string;
+  currentDate: { eq: Date };
 };
-const Attendance = () => {
-  const { data, loading, error } = useGetAllAttendanceQuery();
+export const Attendance = () => {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const today = new Date().toISOString().split("T")[0];
+
+  const startDate = dateRange[0]
+    ? dateRange[0].toISOString().split("T")[0]
+    : today;
+  const endDate = dateRange[1]
+    ? dateRange[1].toISOString().split("T")[0]
+    : today;
+
+  const shouldFilter = Boolean(dateRange[0] && dateRange[1]);
+
+  const {
+    data: todayData,
+    loading: todayLoading,
+    error: todayError,
+  } = useGetAttendanceByDateQuery({
+    variables: { startDate: today, endDate: today },
+    skip: shouldFilter,
+  });
+
+  const {
+    data: filteredData,
+    loading: filteredLoading,
+    error: filteredError,
+  } = useGetAttendanceByDateQuery({
+    variables: { startDate, endDate },
+    skip: !shouldFilter,
+  });
+
+  const data = shouldFilter ? filteredData : todayData;
+  const loading = shouldFilter ? filteredLoading : todayLoading;
+  const error = shouldFilter ? filteredError : todayError;
 
   return (
     <>
@@ -38,6 +71,7 @@ const Attendance = () => {
             size="md"
             placeholder="Select Date"
             placement="bottomEnd"
+            onChange={(Range) => setDateRange(Range || [null, null])}
           />
         </div>
       </div>
@@ -76,14 +110,13 @@ const Attendance = () => {
         </div>
 
         {/* ✅ Table */}
-        {/* ✅ Table */}
         <div className="max-h-[380px] overflow-y-auto">
           <TableContainer
             component={Paper}
             elevation={0}
             className="shadow-none border-none dark:bg-[#1A2D26] dark:border-none"
             sx={{
-              maxHeight: 380, // ensures scrolling only affects the table
+              maxHeight: 380,
             }}
           >
             <Table stickyHeader size="medium" aria-label="attendance table">
