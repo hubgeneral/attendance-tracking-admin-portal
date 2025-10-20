@@ -1,8 +1,8 @@
 import React, { type ReactNode } from "react";
 import { useAuth } from "../app/hooks/useAuth";
 import { Navigate, Route, Routes } from "react-router";
+import ForgotPassword from "../components/ForgotPassword";
 import ResetPassword from "../components/ResetPassword";
-import ResetPasswordConfirmation from "../components/ResetPasswordConfirmation";
 import Attendance from "../pages/Attendance";
 import ManualLogs from "../pages/ManualLogs";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -35,19 +35,19 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="reset-password"
+        path="forgot-password"
         element={
           <PublicRoute>
-            <ResetPassword />
+            <ForgotPassword />
           </PublicRoute>
         }
       />
       <Route
-        path="reset-password-confirmation"
+        path="reset-password"
         element={
-          <PublicRoute>
-            <ResetPasswordConfirmation />
-          </PublicRoute>
+          <ProtectedRoutes>
+            <ResetPassword />
+          </ProtectedRoutes>
         }
       />
 

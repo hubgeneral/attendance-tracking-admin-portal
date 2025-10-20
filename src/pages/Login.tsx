@@ -26,7 +26,7 @@ const Login = () => {
 
     try {
       setLoading(true);
-      await login({ username, password });
+      await login({ username: username.trim(), password: password.trim() });
 
       console.log("Login successful");
 
@@ -127,7 +127,7 @@ const Login = () => {
 
             <div className="text-right">
               <a
-                href="reset-password"
+                href="forgot-password"
                 className="text-green-600 text-sm hover:underline dark:text-green-400"
               >
                 Forget password?

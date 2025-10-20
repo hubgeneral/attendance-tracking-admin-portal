@@ -24,6 +24,10 @@ function ProfileMenu() {
   };
 
   const handleClose = async () => {
+    setmenuAnchor(null);
+  };
+
+  const handleLogout = async () => {
     try {
       await logout();
       navigate("/");
@@ -86,7 +90,7 @@ function ProfileMenu() {
 
         {/* ============ Logout Row =========== */}
         <MenuItem
-          onClick={handleClose}
+          onClick={handleLogout}
           className="dark:bg-[#14241D] dark:hover:bg-[#172C24]"
         >
           <ListItemIcon>
