@@ -557,7 +557,7 @@
             "deprecationReason": null
           },
           {
-            "name": "exitLogs",
+            "name": "entryExitLogs",
             "description": null,
             "args": [],
             "type": {
@@ -568,7 +568,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "ExitLog",
+                  "name": "EntryExitLog",
                   "ofType": null
                 }
               }
@@ -994,11 +994,11 @@
             "deprecationReason": null
           },
           {
-            "name": "exitLogs",
+            "name": "entryExitLogs",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ListFilterInputTypeOfExitLogFilterInput",
+              "name": "ListFilterInputTypeOfEntryExitLogFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -1773,6 +1773,30 @@
             "deprecationReason": null
           },
           {
+            "name": "entryExitLogs",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "EntryExitLog",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -1911,6 +1935,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "LocalDateOperationFilterInput",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "entryExitLogs",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ListFilterInputTypeOfEntryExitLogFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -2509,12 +2545,36 @@
       },
       {
         "kind": "OBJECT",
-        "name": "ExitLog",
+        "name": "EntryExitLog",
         "description": null,
         "isOneOf": null,
         "fields": [
           {
             "name": "appUserId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "attendance",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Attendance",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "attendanceId",
             "description": null,
             "args": [],
             "type": {
@@ -2534,13 +2594,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "LocalDate",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "LocalDate",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2550,13 +2606,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2566,13 +2618,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2598,13 +2646,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2629,7 +2673,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "ExitLogFilterInput",
+        "name": "EntryExitLogFilterInput",
         "description": null,
         "isOneOf": false,
         "fields": null,
@@ -2645,7 +2689,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "ExitLogFilterInput",
+                  "name": "EntryExitLogFilterInput",
                   "ofType": null
                 }
               }
@@ -2656,6 +2700,30 @@
           },
           {
             "name": "appUserId",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntOperationFilterInput",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "attendance",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "AttendanceFilterInput",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "attendanceId",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -2725,7 +2793,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "ExitLogFilterInput",
+                  "name": "EntryExitLogFilterInput",
                   "ofType": null
                 }
               }
@@ -3408,7 +3476,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "ListFilterInputTypeOfExitLogFilterInput",
+        "name": "ListFilterInputTypeOfEntryExitLogFilterInput",
         "description": null,
         "isOneOf": false,
         "fields": null,
@@ -3418,7 +3486,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ExitLogFilterInput",
+              "name": "EntryExitLogFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3442,7 +3510,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ExitLogFilterInput",
+              "name": "EntryExitLogFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3454,7 +3522,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "ExitLogFilterInput",
+              "name": "EntryExitLogFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -4120,11 +4188,11 @@
             "deprecationReason": null
           },
           {
-            "name": "geoFenceClockIn",
+            "name": "geofenceClockIn",
             "description": null,
             "args": [
               {
-                "name": "clockin",
+                "name": "clockinUtc",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -4140,14 +4208,14 @@
                 "deprecationReason": null
               },
               {
-                "name": "username",
+                "name": "id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "Int",
                     "ofType": null
                   }
                 },
@@ -4173,14 +4241,30 @@
             "description": null,
             "args": [
               {
-                "name": "username",
+                "name": "clockoutUtc",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "DateTime",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   }
                 },
@@ -5588,6 +5672,18 @@
           },
           {
             "name": "refreshToken",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resetToken",
             "description": null,
             "args": [],
             "type": {

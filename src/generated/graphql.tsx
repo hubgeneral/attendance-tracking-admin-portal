@@ -83,7 +83,7 @@ export type AppUser = {
   emailConfirmed: Scalars["Boolean"]["output"];
   employeeName?: Maybe<Scalars["String"]["output"]>;
   employeeType?: Maybe<Scalars["String"]["output"]>;
-  exitLogs?: Maybe<Array<ExitLog>>;
+  entryExitLogs?: Maybe<Array<EntryExitLog>>;
   id: Scalars["Int"]["output"];
   isPasswordReset: Scalars["Boolean"]["output"];
   leaves?: Maybe<Array<Leave>>;
@@ -115,7 +115,7 @@ export type AppUserFilterInput = {
   emailConfirmed?: InputMaybe<BooleanOperationFilterInput>;
   employeeName?: InputMaybe<StringOperationFilterInput>;
   employeeType?: InputMaybe<StringOperationFilterInput>;
-  exitLogs?: InputMaybe<ListFilterInputTypeOfExitLogFilterInput>;
+  entryExitLogs?: InputMaybe<ListFilterInputTypeOfEntryExitLogFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   isPasswordReset?: InputMaybe<BooleanOperationFilterInput>;
   leaves?: InputMaybe<ListFilterInputTypeOfLeaveFilterInput>;
@@ -186,6 +186,7 @@ export type Attendance = {
   clockOut?: Maybe<Scalars["DateTime"]["output"]>;
   clockingType: Scalars["Boolean"]["output"];
   currentDate?: Maybe<Scalars["LocalDate"]["output"]>;
+  entryExitLogs: Array<EntryExitLog>;
   id: Scalars["Int"]["output"];
   status?: Maybe<Scalars["String"]["output"]>;
   totalHoursWorked?: Maybe<Scalars["Decimal"]["output"]>;
@@ -199,6 +200,7 @@ export type AttendanceFilterInput = {
   clockOut?: InputMaybe<DateTimeOperationFilterInput>;
   clockingType?: InputMaybe<BooleanOperationFilterInput>;
   currentDate?: InputMaybe<LocalDateOperationFilterInput>;
+  entryExitLogs?: InputMaybe<ListFilterInputTypeOfEntryExitLogFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<AttendanceFilterInput>>;
   status?: InputMaybe<StringOperationFilterInput>;
@@ -253,25 +255,29 @@ export type DecimalOperationFilterInput = {
   nlte?: InputMaybe<Scalars["Decimal"]["input"]>;
 };
 
-export type ExitLog = {
-  __typename?: "ExitLog";
-  appUserId: Scalars["Int"]["output"];
-  currentDate: Scalars["LocalDate"]["output"];
-  entryTime: Scalars["DateTime"]["output"];
-  exitTime: Scalars["DateTime"]["output"];
+export type EntryExitLog = {
+  __typename?: "EntryExitLog";
+  appUserId?: Maybe<Scalars["Int"]["output"]>;
+  attendance?: Maybe<Attendance>;
+  attendanceId: Scalars["Int"]["output"];
+  currentDate?: Maybe<Scalars["LocalDate"]["output"]>;
+  entryTime?: Maybe<Scalars["DateTime"]["output"]>;
+  exitTime?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["Int"]["output"];
-  totalExitTime: Scalars["Int"]["output"];
+  totalExitTime?: Maybe<Scalars["Int"]["output"]>;
   user?: Maybe<AppUser>;
 };
 
-export type ExitLogFilterInput = {
-  and?: InputMaybe<Array<ExitLogFilterInput>>;
+export type EntryExitLogFilterInput = {
+  and?: InputMaybe<Array<EntryExitLogFilterInput>>;
   appUserId?: InputMaybe<IntOperationFilterInput>;
+  attendance?: InputMaybe<AttendanceFilterInput>;
+  attendanceId?: InputMaybe<IntOperationFilterInput>;
   currentDate?: InputMaybe<LocalDateOperationFilterInput>;
   entryTime?: InputMaybe<DateTimeOperationFilterInput>;
   exitTime?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
-  or?: InputMaybe<Array<ExitLogFilterInput>>;
+  or?: InputMaybe<Array<EntryExitLogFilterInput>>;
   totalExitTime?: InputMaybe<IntOperationFilterInput>;
   user?: InputMaybe<AppUserFilterInput>;
 };
@@ -339,11 +345,11 @@ export type ListFilterInputTypeOfAttendanceFilterInput = {
   some?: InputMaybe<AttendanceFilterInput>;
 };
 
-export type ListFilterInputTypeOfExitLogFilterInput = {
-  all?: InputMaybe<ExitLogFilterInput>;
+export type ListFilterInputTypeOfEntryExitLogFilterInput = {
+  all?: InputMaybe<EntryExitLogFilterInput>;
   any?: InputMaybe<Scalars["Boolean"]["input"]>;
-  none?: InputMaybe<ExitLogFilterInput>;
-  some?: InputMaybe<ExitLogFilterInput>;
+  none?: InputMaybe<EntryExitLogFilterInput>;
+  some?: InputMaybe<EntryExitLogFilterInput>;
 };
 
 export type ListFilterInputTypeOfLeaveFilterInput = {
@@ -388,7 +394,7 @@ export type Mutation = {
   createUser: AppUser;
   deleteAttendance: Scalars["Boolean"]["output"];
   deleteUser: Scalars["Boolean"]["output"];
-  geoFenceClockIn: Scalars["String"]["output"];
+  geofenceClockIn: Scalars["String"]["output"];
   geofenceClockOut: Scalars["String"]["output"];
   login: UserLoginResponse;
   loginForForgottenPassword: UserLoginResponse;
@@ -423,13 +429,14 @@ export type MutationDeleteUserArgs = {
   id: Scalars["Int"]["input"];
 };
 
-export type MutationGeoFenceClockInArgs = {
-  clockin: Scalars["DateTime"]["input"];
-  username: Scalars["String"]["input"];
+export type MutationGeofenceClockInArgs = {
+  clockinUtc: Scalars["DateTime"]["input"];
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationGeofenceClockOutArgs = {
-  username: Scalars["String"]["input"];
+  clockoutUtc: Scalars["DateTime"]["input"];
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationLoginArgs = {
@@ -568,6 +575,7 @@ export type UserLoginResponse = {
   id?: Maybe<Scalars["String"]["output"]>;
   isPasswordReset: Scalars["Boolean"]["output"];
   refreshToken?: Maybe<Scalars["String"]["output"]>;
+  resetToken?: Maybe<Scalars["String"]["output"]>;
   role?: Maybe<Scalars["String"]["output"]>;
   userName?: Maybe<Scalars["String"]["output"]>;
 };
@@ -632,6 +640,7 @@ export type LoginMutation = {
     refreshToken?: string | null;
     role?: string | null;
     isPasswordReset: boolean;
+    resetToken?: string | null;
   };
 };
 
@@ -651,6 +660,22 @@ export type ForgotPasswordMutation = {
     role?: string | null;
     userName?: string | null;
     refreshToken?: string | null;
+    resetToken?: string | null;
+  };
+};
+
+export type ResetPasswordMutationVariables = Exact<{
+  token: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+}>;
+
+export type ResetPasswordMutation = {
+  __typename?: "Mutation";
+  resetPassword: {
+    __typename?: "UserResetPasswordResponse";
+    message?: string | null;
+    isPasswordReset?: boolean | null;
   };
 };
 
@@ -747,6 +772,7 @@ export const LoginDocument = gql`
       refreshToken
       role
       isPasswordReset
+      resetToken
     }
   }
 `;
@@ -808,6 +834,7 @@ export const ForgotPasswordDocument = gql`
       role
       userName
       refreshToken
+      resetToken
     }
   }
 `;
@@ -855,6 +882,63 @@ export type ForgotPasswordMutationResult =
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
+>;
+export const ResetPasswordDocument = gql`
+  mutation ResetPassword(
+    $token: String!
+    $username: String!
+    $password: String!
+  ) {
+    resetPassword(token: $token, username: $username, password: $password) {
+      message
+      isPasswordReset
+    }
+  }
+`;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
+>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >(ResetPasswordDocument, options);
+}
+export type ResetPasswordMutationHookResult = ReturnType<
+  typeof useResetPasswordMutation
+>;
+export type ResetPasswordMutationResult =
+  Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
 >;
 export const GetAllAttendanceDocument = gql`
   query getAllAttendance($date: LocalDate) {

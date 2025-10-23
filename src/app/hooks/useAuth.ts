@@ -134,7 +134,7 @@ export const useAuth = (): UseAuthProps => {
           refreshToken,
           isPasswordReset,
         } = loginData.login;
-        if (!role || !accessToken) {
+        if (!role || !accessToken || !refreshToken) {
           throw new Error("Login failed: Incomplete data");
         }
 
