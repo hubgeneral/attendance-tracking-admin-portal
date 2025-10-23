@@ -9,6 +9,7 @@ import { MdLock, MdOutlineRemoveRedEye } from "react-icons/md";
 import { GoEyeClosed } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { useResetPassword } from "../app/hooks/useResetPassword";
 
 const ResetPasswordConfirmation = () => {
   const [password, setPassword] = useState<string>("");
@@ -17,7 +18,36 @@ const ResetPasswordConfirmation = () => {
   const [showConfirmedPassword, setShowConfirmedPassword] =
     useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { resetPassword } = useResetPassword();
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      await resetPassword({
+        newPassword: password.trim(),
+        confirmPassword: confirmPassword.trim(),
+      });
+
+      console.log("Password reset successful");
+      setMessage("Password reset successful. Redirecting to login...");
+
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/login");
+      }, 1000);
+    } catch (error) {
+      console.log("Password reset failed:", error);
+      setLoading(false);
+      setError("Password reset failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="h-screen bg-gray-100 dark:bg-[#1B2420] flex flex-col">
@@ -64,7 +94,17 @@ const ResetPasswordConfirmation = () => {
           </p>
 
           {/* Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handlePasswordReset}>
+            {message && (
+              <div className="bg-red-100 text-green-600 px-4 py-2 rounded">
+                {message}
+              </div>
+            )}
+            {error && (
+              <div className="bg-red-100 text-red-700 px-4 py-2 rounded">
+                {error}
+              </div>
+            )}
             <div className="relative w-full flex flex-col gap-4">
               <div className="relative w-full">
                 <input

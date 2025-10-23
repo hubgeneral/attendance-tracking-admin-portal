@@ -6,6 +6,7 @@ mutation Login($username: String!, $password: String!) {
     refreshToken
     role
     isPasswordReset
+    resetToken
   }
 }
 
@@ -25,5 +26,17 @@ mutation ForgotPassword(
     role
     userName
     refreshToken
+    resetToken
+  }
+}
+
+mutation ResetPassword(
+  $token: String!
+  $username: String!
+  $password: String!
+) {
+  resetPassword(token: $token, username: $username, password: $password) {
+    message
+    isPasswordReset
   }
 }
