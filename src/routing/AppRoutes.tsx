@@ -29,17 +29,17 @@ const AppRoutes = () => {
       <Route
         path="/"
         element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
+          // <PublicRoute>
+          <Login />
+          // </PublicRoute>
         }
       />
       <Route
         path="forgot-password"
         element={
-          <PublicRoute>
-            <ForgotPassword />
-          </PublicRoute>
+          // <PublicRoute>
+          <ForgotPassword />
+          // </PublicRoute>
         }
       />
       <Route

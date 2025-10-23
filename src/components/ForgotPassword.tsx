@@ -19,19 +19,37 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const { forgotPassword } = useResetPassword();
 
-  const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       setLoading(true);
       await forgotPassword({
-        email: email,
-        staffId: employeeId,
-        phoneNumber: contact,
+        email: email.trim(),
+        staffId: employeeId.trim(),
+        phoneNumber: contact.trim(),
       });
 
       console.log("Password reset request successful");
       navigate("/reset-password");
+
+      // Verify tokens/user were stored before navigating
+      // const storedToken = localStorage.getItem("accessToken");
+      // const storedUser = localStorage.getItem("currentUser");
+
+      // if (storedToken && storedUser) {
+      //   console.log(
+      //     "Token and user found in localStorage, navigating to reset page"
+      //   );
+      //   navigate("/reset-password");
+      // } else {
+      //   console.error(
+      //     "Missing token or user after forgotPassword. Cannot navigate to reset page."
+      //   );
+      //   setError(
+      //     "Unable to proceed to reset page. Please contact support or try again."
+      //   );
+      // }
     } catch (error) {
       console.error("Password reset request failed:", error);
 
@@ -87,7 +105,7 @@ const ForgotPassword = () => {
           </p>
 
           {/* Form */}
-          <form className="space-y-4" onSubmit={handleResetPassword}>
+          <form className="space-y-4" onSubmit={handleForgotPassword}>
             {error && (
               <div className="bg-red-100 text-red-700 px-4 py-2 rounded">
                 {error}
