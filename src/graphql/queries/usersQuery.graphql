@@ -1,14 +1,38 @@
-query getUsers {
-  users {
+# query getUsers {
+#   users {
+#     staffId
+#     employeeName
+#     email
+#     userRoles {
+#       role {
+#         name
+#       }
+#     }
+#     status
+#     leaves {
+#       approvalStatus
+#     }
+#     employeeType
+#   }
+# }
+
+query getUsers($search: String) {
+  users(
+    where: {
+      or: [
+        { employeeName: { contains: $search } }
+        { staffId: { contains: $search } }
+      ]
+    }
+  ) {
     staffId
-    employeeName
     email
+    employeeName
     userRoles {
       role {
         name
       }
     }
-    status
     leaves {
       approvalStatus
     }

@@ -13,6 +13,7 @@ import { FaRegFileAlt } from "react-icons/fa";
 import { MdOutlineSearch } from "react-icons/md";
 import { DateRangePicker } from "rsuite";
 import { useGetAttendanceByDateQuery } from "../generated/graphql";
+import { useGetUsersLazyQuery } from "../generated/graphql";
 
 export type Attendance = {
   users: { id: string; staffId: string; employeeName: string }[];
@@ -60,6 +61,28 @@ export const Attendance = () => {
   const loading = shouldFilter ? filteredLoading : todayLoading;
   const error = shouldFilter ? filteredError : todayError;
 
+  const [query, setQuery] = useState("");
+  const [rows] = useState<any[]>([]);
+
+  const [search, setSearch] = useState("");
+
+
+
+  // const filteredRows = rows.filter(
+  //   (row: {
+  //     employeeName: string;
+  //     staffId: string;
+  //     role: string;
+  //     status: string;
+  //   }) => {
+  //     const matchesQuery =
+  //       row.employeeName?.toLowerCase().includes(query.toLowerCase()) ||
+  //       row.staffId?.toLowerCase().includes(query.toLowerCase());
+
+  //     return matchesQuery;
+  //   }
+  // );
+
   return (
     <>
       <div className="flex justify-between items-center mb-4 px-1 dark:bg-[#131C18]">
@@ -87,7 +110,9 @@ export const Attendance = () => {
               <MdOutlineSearch className="text-gray-400 h-5 w-5" />
               <input
                 type="search"
-                className="border-0 focus:outline-none p-1 text-sm w-full  dark:text-[#E8EAE9] dark:bg-[#1A2D26]"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="border-0 focus:outline-none p-1 text-sm w-full dark:text-[#E8EAE9] dark:bg-[#1A2D26]"
                 placeholder="Search employee name or id"
               />
             </div>
@@ -209,7 +234,10 @@ export const Attendance = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  data?.attendances?.map((row: any) => (
+                  (rows.length > 0
+                    ? rows
+                    : data?.attendances
+                  )?.map((row: any) => (
                     <TableRow
                       key={row.id}
                       className="hover:bg-gray-50 dark:hover:bg-[#204335]"
