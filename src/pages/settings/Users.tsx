@@ -444,9 +444,9 @@ export default function Users() {
                         <Chip
                           label={
                             // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                            (
-                              getLeaveStatusToday(rows) as any
-                            ).todaysLeaveIds?.has(row.staffId)
+                            getLeaveStatusToday(rows).todaysLeaveIds.has(
+                              row.staffId
+                            )
                               ? "On Leave"
                               : "Present"
                           }
@@ -454,9 +454,9 @@ export default function Users() {
                           sx={{
                             ...getStatusColor(
                               // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                              (
-                                getLeaveStatusToday(rows) as any
-                              ).todaysLeaveIds?.has(row.staffId)
+                              getLeaveStatusToday(rows).todaysLeaveIds.has(
+                                row.staffId
+                              )
                                 ? "On Leave"
                                 : "Present"
                             ),
