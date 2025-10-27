@@ -30,21 +30,19 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-
 import GeneratedPasswordModal from "../../components/GeneratePasswordModal";
 import ResetAccountModal from "../../components/ResetAccountModal";
 import EditInternModal from "../../components/EditInternModal";
 import AddInternModal from "../../components/AddInternModal";
-
-import { useGetUsersQuery } from "../../generated/graphql";
 import { getRoles, getStatuses } from "../../services/mockData";
-
 import { getLeaveStatusToday } from "../../../misc";
+import { useGetUsersLazyQuery } from "../../generated/graphql";
+import { useGetUsersQuery } from "../../generated/graphql";
 
 export default function Users() {
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
   const [RoleFilter, setRoleFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
 
@@ -93,36 +91,68 @@ export default function Users() {
     setShowResetModal(false);
     setShowPasswordModal(true);
   };
+  const { data: allData } = useGetUsersQuery({});
 
-  const { data: userData, loading, error } = useGetUsersQuery();
+  const [fetchUsers, { data: searchData, loading, error }] =
+    useGetUsersLazyQuery();
+
+  const handleSearch = () => {
+    if (search.trim() !== "") {
+      fetchUsers({ variables: { search } });
+    } else {
+      fetchUsers({ variables: { search: "" } });
+    }
+  };
+
   const [rows, setRows] = useState<any[]>([]);
 
+  // useEffect(() => {
+  //   fetchUsers({ variables: { search: "" } });
+  // }, []);
+
   useEffect(() => {
-    if (userData?.users) {
-      const UserInfo = userData.users.map((user) => ({
+    if (search.trim() === "") {
+      fetchUsers({ variables: { search: "" } });
+    }
+  }, [search]);
+
+  useEffect(() => {
+    const dataToUse = searchData?.users || allData?.users;
+
+    if (dataToUse) {
+      const UserInfo = dataToUse.map((user) => ({
         ...user,
         role:
           user.userRoles?.map((r) => r.role.name).join(", ") || "Unassigned",
       }));
+
       setRows(UserInfo);
       console.log("User Info:", UserInfo);
     }
-  }, [userData]);
+  }, [searchData, allData]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const filteredRows = rows.filter(
-    (row: {
-      employeeName: string;
-      staffId: string;
-      employeeType: string;
-      status: string;
-    }) =>
-      (row.employeeName || row.staffId) &&
-      (RoleFilter === "All" || row.employeeType === RoleFilter) &&
-      (statusFilter === "All" || row.status === statusFilter)
-  );
+  // const rows = rows.filter(
+  //   (row: {
+  //     employeeName: string;
+  //     staffId: string;
+  //     role: string;
+  //     status: string;
+  //   }) => {
+  //     const matchesQuery =
+  //       row.employeeName?.toLowerCase().includes(search.toLowerCase()) ||
+  //       row.staffId?.toLowerCase().includes(search.toLowerCase());
+
+  //     const matchesRole = RoleFilter === "All" || row.role === RoleFilter;
+
+  //     const matchesStatus =
+  //       statusFilter === "All" || row.status === statusFilter;
+
+  //     return matchesQuery && matchesRole && matchesStatus;
+  //   }
+  // );
 
   // const getStatusColor = (status: string) => {
   //   switch (status) {
@@ -201,7 +231,7 @@ export default function Users() {
   };
 
   return (
-    <div className="px-6 min-h-screen">
+    <div className="px-6 ">
       {/* Header with Back + Add Intern */}
       <Box className="flex items-center justify-between mb-4 flex-shrink-0">
         <Box>
@@ -270,12 +300,21 @@ export default function Users() {
                 placeholder="Search employee name or id ..."
                 variant="outlined"
                 size="small"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon className="text-gray-400 dark:text-white" />
+                      <SearchIcon
+                        className="text-gray-400 dark:text-white"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleSearch}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -379,7 +418,7 @@ export default function Users() {
                 </TableHead>
 
                 <TableBody>
-                  {filteredRows.map((row: User) => (
+                  {rows.map((row: User) => (
                     <TableRow key={row.id} hover>
                       <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
                         {row.staffId}
@@ -404,18 +443,20 @@ export default function Users() {
                       <TableCell className="dark:border-[#253F35]">
                         <Chip
                           label={
-                            Array.from(
-                              getLeaveStatusToday(rows).todaysLeaveIds
-                            ).some((u: any) => u.staffId === row.staffId)
+                            // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
+                            getLeaveStatusToday(rows).todaysLeaveIds.has(
+                              row.staffId
+                            )
                               ? "On Leave"
                               : "Present"
                           }
                           size="small"
                           sx={{
                             ...getStatusColor(
-                              Array.from(
-                                getLeaveStatusToday(rows).todaysLeaveIds
-                              ).some((u: any) => u.staffId === row.staffId)
+                              // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
+                              getLeaveStatusToday(rows).todaysLeaveIds.has(
+                                row.staffId
+                              )
                                 ? "On Leave"
                                 : "Present"
                             ),
@@ -497,7 +538,7 @@ export default function Users() {
             </TableContainer>
           </div>
 
-          {filteredRows.length === 0 && (
+          {rows.length === 0 && (
             <Box className="text-center py-8 dark:bg-gray-900">
               <Typography
                 variant="body1"
