@@ -248,49 +248,48 @@ export const Attendance = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  (rows.length > 0 ? rows : data?.attendances)?.map(
-                    (row: any) => (
-                      <TableRow
-                        key={row.id}
-                        className="hover:bg-gray-50 dark:hover:bg-[#204335]"
-                      >
-                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                          {row.user?.employeeName} - {row.user?.staffId}
-                        </TableCell>
-                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                          {row.clockIn
-                            ? new Date(row.clockIn).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })
-                            : "N/A"}
-                        </TableCell>
-                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                          {row.clockOut
-                            ? new Date(row.clockOut).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })
-                            : "N/A"}
-                        </TableCell>
-                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                          {row.totalHoursWorked}
-                        </TableCell>
-                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                          {(() => {
-                            const total = parseFloat(
-                              row.totalHoursWorked ?? "0"
-                            );
-                            const timeOff = 8 - total;
-                            if (isNaN(timeOff) || timeOff <= 0) return "N/A";
-                            return timeOff % 1 === 0
-                              ? timeOff
-                              : timeOff.toFixed(2);
-                          })()}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )
+                  (rows.length > 0
+                    ? rows
+                    : data?.attendances
+                  )?.map((row: any) => (
+                    <TableRow
+                      key={row.id}
+                      className="hover:bg-gray-50 dark:hover:bg-[#204335]"
+                    >
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.user?.employeeName} - {row.user?.staffId}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.clockIn
+                          ? new Date(row.clockIn).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.clockOut
+                          ? new Date(row.clockOut).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {row.totalHoursWorked}
+                      </TableCell>
+                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                        {(() => {
+                          const total = parseFloat(row.totalHoursWorked ?? "0");
+                          const timeOff = 8 - total;
+                          if (isNaN(timeOff) || timeOff <= 0) return "N/A";
+                          return timeOff % 1 === 0
+                            ? timeOff
+                            : timeOff.toFixed(2);
+                        })()}
+                      </TableCell>
+                    </TableRow>
+                  ))
                 )}
               </TableBody>
             </Table>
