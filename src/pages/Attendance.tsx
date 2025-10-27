@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -228,7 +229,15 @@ export const Attendance = () => {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={5} align="center">
+                    <TableCell
+                      colSpan={5}
+                      align="center"
+                      className="dark:text-white"
+                    >
+                      <CircularProgress
+                        size={20}
+                        className="dark:text-white text-white mr-3"
+                      />
                       Loading...
                     </TableCell>
                   </TableRow>

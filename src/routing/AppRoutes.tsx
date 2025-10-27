@@ -11,6 +11,7 @@ import Layout from "../layout/Layout";
 import Dashboard from "../pages/Dashboard";
 import Settings from "../pages/settings/Settings";
 import UsersPage from "../pages/settings/Users";
+import Page404 from "./page404";
 
 const PublicRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -67,8 +68,16 @@ const AppRoutes = () => {
         <Route path="settings/users" element={<UsersPage />} />
       </Route>
 
-      {/* Catch all - redirect to login */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* Catch all - redirect to 404 */}
+      <Route
+        path="*"
+        element={
+          // <PublicRoute>
+          <Page404 />
+          // </PublicRoute>
+        }
+      />
+      {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
     </Routes>
   );
 };

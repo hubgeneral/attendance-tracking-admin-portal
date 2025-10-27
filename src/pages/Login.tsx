@@ -37,8 +37,6 @@ const Login = () => {
       setLoading(false);
       setError("Invalid username or password");
     }
-
-    console.log("Email:", username, "Password:", password);
   };
 
   return (
