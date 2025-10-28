@@ -1,0 +1,50 @@
+query TotalStats {
+  dashboardTotalStats {
+    totalEmployees
+    employeesClocledIn
+    employeesClocledOut
+    totalAbsent
+    totalLeaves
+  }
+}
+
+query ClockTime {
+  averageClockTime {
+    averageClockIn
+    averageClockOut
+  }
+}
+
+query MostPunctual($startDay: LocalDate!, $stopDate: LocalDate!) {
+  punctualEmployees(startday: $startDay, stopdate: $stopDate) {
+    employeeName
+    timeOfDay
+  }
+}
+
+query LateEmployees($startDay: LocalDate!, $stopDate: LocalDate!) {
+  lateEmployees(startday: $startDay, stopdate: $stopDate) {
+    employeeName
+    timeOfDay
+  }
+}
+
+query MostUnproductive($startDay: LocalDate!, $stopDate: LocalDate!) {
+  mostWastedHours(startday: $startDay, stopdate: $stopDate) {
+    employeeName
+    totalWastedHours
+  }
+}
+query DashboardRequests {
+  requests {
+    employeeName
+    timeOfDay
+  }
+}
+
+query WorkHourSummary($startDay: LocalDate!, $stopDate: LocalDate!) {
+  workHoursSummary(startday: $startDay, stopdate: $stopDate) {
+    totalWorkingHours
+    totalOffHours
+  }
+}

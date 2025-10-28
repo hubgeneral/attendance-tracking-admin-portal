@@ -1,6 +1,8 @@
 import { Card, CardContent } from "@mui/material";
+import { useDashboardRequestsQuery } from "../generated/graphql";
 
 const Requests = () => {
+  const { data: requestsData } = useDashboardRequestsQuery();
   return (
     <Card className="shadow-sm shadow-gray-500 rounded-lg p-0  max-h-[290px] ">
       <CardContent className="dark:bg-[#1A2D26]">
@@ -8,23 +10,35 @@ const Requests = () => {
           Requests
         </h3>
 
-        <div className="sm:max-h-[250px] sm:overflow-y-auto">
-          {new Array(3).fill(0).map((_, i) => (
-            <div
-              key={i}
-              className="flex justify-between items-center mb-3 p-3 border-[#E8ECF0] rounded-lg bg-[#F7F7F7] dark:bg-[#1f3a30] "
-            >
-              <div>
-                <p className="text-sm dark:text-[#E9EDEB]">Addo Dankwa</p>
-                <p className="text-sm text-gray-500 dark:text-[#C0C0C0]">
-                  02/11/2025 09:00
-                </p>
+        <div className="flex-1 sm:max-h-[250px] sm:overflow-y-auto">
+          {requestsData?.requests && requestsData.requests.length > 0 ? (
+            requestsData.requests.slice(0, 3).map((req, i) => (
+              <div
+                key={i}
+                className="flex justify-between items-center mb-3 p-3 border-[#E8ECF0] rounded-lg bg-[#F7F7F7] dark:bg-[#1f3a30] "
+              >
+                <div>
+                  <p className="text-sm dark:text-[#E9EDEB]">
+                    {req?.employeeName ?? "N/A"}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-[#C0C0C0]">
+                    {req?.timeOfDay
+                      ? new Date(req.timeOfDay).toLocaleString()
+                      : "N/A"}
+                  </p>
+                </div>
+                <button className="bg-white text-[#004E2B] px-3 py-1 border-2 rounded-lg border-[#E8ECF0] text-xs dark:text-[#F7F7F7] dark:bg-[#1A2D26] dark:border-[#315547]">
+                  Take Action
+                </button>
               </div>
-              <button className="bg-white text-[#004E2B] px-3 py-1 border-2 rounded-lg border-[#E8ECF0] text-xs dark:text-[#F7F7F7] dark:bg-[#1A2D26] dark:border-[#315547]">
-                Take Action
-              </button>
+            ))
+          ) : (
+            <div className="flex items-center justify-center h-[220px]">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                No data available
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </CardContent>
     </Card>

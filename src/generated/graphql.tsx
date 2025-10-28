@@ -816,6 +816,7 @@ export type ResetPasswordMutation = {
 
 export type GetAllAttendanceQueryVariables = Exact<{
   date?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  search?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type GetAllAttendanceQuery = {
@@ -855,6 +856,126 @@ export type GetAttendanceByDateQuery = {
       employeeName?: string | null;
       email?: string | null;
     } | null;
+  }>;
+};
+
+export type TotalStatsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TotalStatsQuery = {
+  __typename?: "Query";
+  dashboardTotalStats: {
+    __typename?: "DashboardTotalSummary";
+    totalEmployees: number;
+    employeesClocledIn: number;
+    employeesClocledOut: number;
+    totalAbsent: number;
+    totalLeaves: number;
+  };
+};
+
+export type ClockTimeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ClockTimeQuery = {
+  __typename?: "Query";
+  averageClockTime: {
+    __typename?: "AverageClockTimeResult";
+    averageClockIn?: any | null;
+    averageClockOut?: any | null;
+  };
+};
+
+export type MostPunctualQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
+
+export type MostPunctualQuery = {
+  __typename?: "Query";
+  punctualEmployees: Array<{
+    __typename?: "PunctualEmployees";
+    employeeName?: string | null;
+    timeOfDay?: any | null;
+  }>;
+};
+
+export type LateEmployeesQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
+
+export type LateEmployeesQuery = {
+  __typename?: "Query";
+  lateEmployees: Array<{
+    __typename?: "LateEmployees";
+    employeeName?: string | null;
+    timeOfDay?: any | null;
+  }>;
+};
+
+export type MostUnproductiveQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
+
+export type MostUnproductiveQuery = {
+  __typename?: "Query";
+  mostWastedHours: Array<{
+    __typename?: "MostHoursWastedByEmployee";
+    employeeName?: string | null;
+    totalWastedHours?: any | null;
+  }>;
+};
+
+export type DashboardRequestsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DashboardRequestsQuery = {
+  __typename?: "Query";
+  requests: Array<{
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    timeOfDay?: any | null;
+  }>;
+};
+
+export type WorkHourSummaryQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
+
+export type WorkHourSummaryQuery = {
+  __typename?: "Query";
+  workHoursSummary: {
+    __typename?: "WorkingHours";
+    totalWorkingHours: any;
+    totalOffHours: any;
+  };
+};
+
+export type HistoryLogsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HistoryLogsQuery = {
+  __typename?: "Query";
+  manualLogs: Array<{
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    reason?: string | null;
+    clockIn?: any | null;
+    clockOut?: any | null;
+    actionBy?: string | null;
+  }>;
+};
+
+export type RecentRequestsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type RecentRequestsQuery = {
+  __typename?: "Query";
+  requests: Array<{
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    reason?: string | null;
+    clockIn?: any | null;
+    clockOut?: any | null;
+    actionBy?: string | null;
   }>;
 };
 
@@ -1077,8 +1198,16 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordMutationVariables
 >;
 export const GetAllAttendanceDocument = gql`
-  query getAllAttendance($date: LocalDate) {
-    attendances(where: { currentDate: { eq: $date } }) {
+  query getAllAttendance($date: LocalDate, $search: String) {
+    attendances(
+      where: {
+        currentDate: { eq: $date }
+        or: [
+          { user: { employeeName: { contains: $search } } }
+          { user: { staffId: { contains: $search } } }
+        ]
+      }
+    ) {
       clockIn
       clockOut
       currentDate
@@ -1105,6 +1234,7 @@ export const GetAllAttendanceDocument = gql`
  * const { data, loading, error } = useGetAllAttendanceQuery({
  *   variables: {
  *      date: // value for 'date'
+ *      search: // value for 'search'
  *   },
  * });
  */
@@ -1251,6 +1381,726 @@ export type GetAttendanceByDateSuspenseQueryHookResult = ReturnType<
 export type GetAttendanceByDateQueryResult = Apollo.QueryResult<
   GetAttendanceByDateQuery,
   GetAttendanceByDateQueryVariables
+>;
+export const TotalStatsDocument = gql`
+  query TotalStats {
+    dashboardTotalStats {
+      totalEmployees
+      employeesClocledIn
+      employeesClocledOut
+      totalAbsent
+      totalLeaves
+    }
+  }
+`;
+
+/**
+ * __useTotalStatsQuery__
+ *
+ * To run a query within a React component, call `useTotalStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTotalStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTotalStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTotalStatsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    TotalStatsQuery,
+    TotalStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TotalStatsQuery, TotalStatsQueryVariables>(
+    TotalStatsDocument,
+    options
+  );
+}
+export function useTotalStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TotalStatsQuery,
+    TotalStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TotalStatsQuery, TotalStatsQueryVariables>(
+    TotalStatsDocument,
+    options
+  );
+}
+export function useTotalStatsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<TotalStatsQuery, TotalStatsQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<TotalStatsQuery, TotalStatsQueryVariables>(
+    TotalStatsDocument,
+    options
+  );
+}
+export type TotalStatsQueryHookResult = ReturnType<typeof useTotalStatsQuery>;
+export type TotalStatsLazyQueryHookResult = ReturnType<
+  typeof useTotalStatsLazyQuery
+>;
+export type TotalStatsSuspenseQueryHookResult = ReturnType<
+  typeof useTotalStatsSuspenseQuery
+>;
+export type TotalStatsQueryResult = Apollo.QueryResult<
+  TotalStatsQuery,
+  TotalStatsQueryVariables
+>;
+export const ClockTimeDocument = gql`
+  query ClockTime {
+    averageClockTime {
+      averageClockIn
+      averageClockOut
+    }
+  }
+`;
+
+/**
+ * __useClockTimeQuery__
+ *
+ * To run a query within a React component, call `useClockTimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClockTimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClockTimeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClockTimeQuery(
+  baseOptions?: Apollo.QueryHookOptions<ClockTimeQuery, ClockTimeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ClockTimeQuery, ClockTimeQueryVariables>(
+    ClockTimeDocument,
+    options
+  );
+}
+export function useClockTimeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ClockTimeQuery,
+    ClockTimeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ClockTimeQuery, ClockTimeQueryVariables>(
+    ClockTimeDocument,
+    options
+  );
+}
+export function useClockTimeSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ClockTimeQuery, ClockTimeQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ClockTimeQuery, ClockTimeQueryVariables>(
+    ClockTimeDocument,
+    options
+  );
+}
+export type ClockTimeQueryHookResult = ReturnType<typeof useClockTimeQuery>;
+export type ClockTimeLazyQueryHookResult = ReturnType<
+  typeof useClockTimeLazyQuery
+>;
+export type ClockTimeSuspenseQueryHookResult = ReturnType<
+  typeof useClockTimeSuspenseQuery
+>;
+export type ClockTimeQueryResult = Apollo.QueryResult<
+  ClockTimeQuery,
+  ClockTimeQueryVariables
+>;
+export const MostPunctualDocument = gql`
+  query MostPunctual($startDay: LocalDate!, $stopDate: LocalDate!) {
+    punctualEmployees(startday: $startDay, stopdate: $stopDate) {
+      employeeName
+      timeOfDay
+    }
+  }
+`;
+
+/**
+ * __useMostPunctualQuery__
+ *
+ * To run a query within a React component, call `useMostPunctualQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMostPunctualQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMostPunctualQuery({
+ *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
+ *   },
+ * });
+ */
+export function useMostPunctualQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    MostPunctualQuery,
+    MostPunctualQueryVariables
+  > &
+    (
+      | { variables: MostPunctualQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MostPunctualQuery, MostPunctualQueryVariables>(
+    MostPunctualDocument,
+    options
+  );
+}
+export function useMostPunctualLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MostPunctualQuery,
+    MostPunctualQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MostPunctualQuery, MostPunctualQueryVariables>(
+    MostPunctualDocument,
+    options
+  );
+}
+export function useMostPunctualSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        MostPunctualQuery,
+        MostPunctualQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<MostPunctualQuery, MostPunctualQueryVariables>(
+    MostPunctualDocument,
+    options
+  );
+}
+export type MostPunctualQueryHookResult = ReturnType<
+  typeof useMostPunctualQuery
+>;
+export type MostPunctualLazyQueryHookResult = ReturnType<
+  typeof useMostPunctualLazyQuery
+>;
+export type MostPunctualSuspenseQueryHookResult = ReturnType<
+  typeof useMostPunctualSuspenseQuery
+>;
+export type MostPunctualQueryResult = Apollo.QueryResult<
+  MostPunctualQuery,
+  MostPunctualQueryVariables
+>;
+export const LateEmployeesDocument = gql`
+  query LateEmployees($startDay: LocalDate!, $stopDate: LocalDate!) {
+    lateEmployees(startday: $startDay, stopdate: $stopDate) {
+      employeeName
+      timeOfDay
+    }
+  }
+`;
+
+/**
+ * __useLateEmployeesQuery__
+ *
+ * To run a query within a React component, call `useLateEmployeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLateEmployeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLateEmployeesQuery({
+ *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
+ *   },
+ * });
+ */
+export function useLateEmployeesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    LateEmployeesQuery,
+    LateEmployeesQueryVariables
+  > &
+    (
+      | { variables: LateEmployeesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<LateEmployeesQuery, LateEmployeesQueryVariables>(
+    LateEmployeesDocument,
+    options
+  );
+}
+export function useLateEmployeesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LateEmployeesQuery,
+    LateEmployeesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<LateEmployeesQuery, LateEmployeesQueryVariables>(
+    LateEmployeesDocument,
+    options
+  );
+}
+export function useLateEmployeesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        LateEmployeesQuery,
+        LateEmployeesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    LateEmployeesQuery,
+    LateEmployeesQueryVariables
+  >(LateEmployeesDocument, options);
+}
+export type LateEmployeesQueryHookResult = ReturnType<
+  typeof useLateEmployeesQuery
+>;
+export type LateEmployeesLazyQueryHookResult = ReturnType<
+  typeof useLateEmployeesLazyQuery
+>;
+export type LateEmployeesSuspenseQueryHookResult = ReturnType<
+  typeof useLateEmployeesSuspenseQuery
+>;
+export type LateEmployeesQueryResult = Apollo.QueryResult<
+  LateEmployeesQuery,
+  LateEmployeesQueryVariables
+>;
+export const MostUnproductiveDocument = gql`
+  query MostUnproductive($startDay: LocalDate!, $stopDate: LocalDate!) {
+    mostWastedHours(startday: $startDay, stopdate: $stopDate) {
+      employeeName
+      totalWastedHours
+    }
+  }
+`;
+
+/**
+ * __useMostUnproductiveQuery__
+ *
+ * To run a query within a React component, call `useMostUnproductiveQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMostUnproductiveQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMostUnproductiveQuery({
+ *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
+ *   },
+ * });
+ */
+export function useMostUnproductiveQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    MostUnproductiveQuery,
+    MostUnproductiveQueryVariables
+  > &
+    (
+      | { variables: MostUnproductiveQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MostUnproductiveQuery, MostUnproductiveQueryVariables>(
+    MostUnproductiveDocument,
+    options
+  );
+}
+export function useMostUnproductiveLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MostUnproductiveQuery,
+    MostUnproductiveQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    MostUnproductiveQuery,
+    MostUnproductiveQueryVariables
+  >(MostUnproductiveDocument, options);
+}
+export function useMostUnproductiveSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        MostUnproductiveQuery,
+        MostUnproductiveQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    MostUnproductiveQuery,
+    MostUnproductiveQueryVariables
+  >(MostUnproductiveDocument, options);
+}
+export type MostUnproductiveQueryHookResult = ReturnType<
+  typeof useMostUnproductiveQuery
+>;
+export type MostUnproductiveLazyQueryHookResult = ReturnType<
+  typeof useMostUnproductiveLazyQuery
+>;
+export type MostUnproductiveSuspenseQueryHookResult = ReturnType<
+  typeof useMostUnproductiveSuspenseQuery
+>;
+export type MostUnproductiveQueryResult = Apollo.QueryResult<
+  MostUnproductiveQuery,
+  MostUnproductiveQueryVariables
+>;
+export const DashboardRequestsDocument = gql`
+  query DashboardRequests {
+    requests {
+      employeeName
+      timeOfDay
+    }
+  }
+`;
+
+/**
+ * __useDashboardRequestsQuery__
+ *
+ * To run a query within a React component, call `useDashboardRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDashboardRequestsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    DashboardRequestsQuery,
+    DashboardRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    DashboardRequestsQuery,
+    DashboardRequestsQueryVariables
+  >(DashboardRequestsDocument, options);
+}
+export function useDashboardRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DashboardRequestsQuery,
+    DashboardRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    DashboardRequestsQuery,
+    DashboardRequestsQueryVariables
+  >(DashboardRequestsDocument, options);
+}
+export function useDashboardRequestsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        DashboardRequestsQuery,
+        DashboardRequestsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    DashboardRequestsQuery,
+    DashboardRequestsQueryVariables
+  >(DashboardRequestsDocument, options);
+}
+export type DashboardRequestsQueryHookResult = ReturnType<
+  typeof useDashboardRequestsQuery
+>;
+export type DashboardRequestsLazyQueryHookResult = ReturnType<
+  typeof useDashboardRequestsLazyQuery
+>;
+export type DashboardRequestsSuspenseQueryHookResult = ReturnType<
+  typeof useDashboardRequestsSuspenseQuery
+>;
+export type DashboardRequestsQueryResult = Apollo.QueryResult<
+  DashboardRequestsQuery,
+  DashboardRequestsQueryVariables
+>;
+export const WorkHourSummaryDocument = gql`
+  query WorkHourSummary($startDay: LocalDate!, $stopDate: LocalDate!) {
+    workHoursSummary(startday: $startDay, stopdate: $stopDate) {
+      totalWorkingHours
+      totalOffHours
+    }
+  }
+`;
+
+/**
+ * __useWorkHourSummaryQuery__
+ *
+ * To run a query within a React component, call `useWorkHourSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkHourSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkHourSummaryQuery({
+ *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
+ *   },
+ * });
+ */
+export function useWorkHourSummaryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    WorkHourSummaryQuery,
+    WorkHourSummaryQueryVariables
+  > &
+    (
+      | { variables: WorkHourSummaryQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<WorkHourSummaryQuery, WorkHourSummaryQueryVariables>(
+    WorkHourSummaryDocument,
+    options
+  );
+}
+export function useWorkHourSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    WorkHourSummaryQuery,
+    WorkHourSummaryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    WorkHourSummaryQuery,
+    WorkHourSummaryQueryVariables
+  >(WorkHourSummaryDocument, options);
+}
+export function useWorkHourSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        WorkHourSummaryQuery,
+        WorkHourSummaryQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    WorkHourSummaryQuery,
+    WorkHourSummaryQueryVariables
+  >(WorkHourSummaryDocument, options);
+}
+export type WorkHourSummaryQueryHookResult = ReturnType<
+  typeof useWorkHourSummaryQuery
+>;
+export type WorkHourSummaryLazyQueryHookResult = ReturnType<
+  typeof useWorkHourSummaryLazyQuery
+>;
+export type WorkHourSummarySuspenseQueryHookResult = ReturnType<
+  typeof useWorkHourSummarySuspenseQuery
+>;
+export type WorkHourSummaryQueryResult = Apollo.QueryResult<
+  WorkHourSummaryQuery,
+  WorkHourSummaryQueryVariables
+>;
+export const HistoryLogsDocument = gql`
+  query HistoryLogs {
+    manualLogs {
+      employeeName
+      reason
+      clockIn
+      clockOut
+      actionBy
+    }
+  }
+`;
+
+/**
+ * __useHistoryLogsQuery__
+ *
+ * To run a query within a React component, call `useHistoryLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHistoryLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHistoryLogsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHistoryLogsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    HistoryLogsQuery,
+    HistoryLogsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HistoryLogsQuery, HistoryLogsQueryVariables>(
+    HistoryLogsDocument,
+    options
+  );
+}
+export function useHistoryLogsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HistoryLogsQuery,
+    HistoryLogsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<HistoryLogsQuery, HistoryLogsQueryVariables>(
+    HistoryLogsDocument,
+    options
+  );
+}
+export function useHistoryLogsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        HistoryLogsQuery,
+        HistoryLogsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<HistoryLogsQuery, HistoryLogsQueryVariables>(
+    HistoryLogsDocument,
+    options
+  );
+}
+export type HistoryLogsQueryHookResult = ReturnType<typeof useHistoryLogsQuery>;
+export type HistoryLogsLazyQueryHookResult = ReturnType<
+  typeof useHistoryLogsLazyQuery
+>;
+export type HistoryLogsSuspenseQueryHookResult = ReturnType<
+  typeof useHistoryLogsSuspenseQuery
+>;
+export type HistoryLogsQueryResult = Apollo.QueryResult<
+  HistoryLogsQuery,
+  HistoryLogsQueryVariables
+>;
+export const RecentRequestsDocument = gql`
+  query RecentRequests {
+    requests {
+      employeeName
+      reason
+      clockIn
+      clockOut
+      actionBy
+    }
+  }
+`;
+
+/**
+ * __useRecentRequestsQuery__
+ *
+ * To run a query within a React component, call `useRecentRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecentRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecentRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRecentRequestsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RecentRequestsQuery, RecentRequestsQueryVariables>(
+    RecentRequestsDocument,
+    options
+  );
+}
+export function useRecentRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RecentRequestsQuery, RecentRequestsQueryVariables>(
+    RecentRequestsDocument,
+    options
+  );
+}
+export function useRecentRequestsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        RecentRequestsQuery,
+        RecentRequestsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  >(RecentRequestsDocument, options);
+}
+export type RecentRequestsQueryHookResult = ReturnType<
+  typeof useRecentRequestsQuery
+>;
+export type RecentRequestsLazyQueryHookResult = ReturnType<
+  typeof useRecentRequestsLazyQuery
+>;
+export type RecentRequestsSuspenseQueryHookResult = ReturnType<
+  typeof useRecentRequestsSuspenseQuery
+>;
+export type RecentRequestsQueryResult = Apollo.QueryResult<
+  RecentRequestsQuery,
+  RecentRequestsQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers($search: String) {
