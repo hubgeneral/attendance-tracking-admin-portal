@@ -1,31 +1,33 @@
 import { Stack, Box, Typography } from "@mui/material";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
+import { useWorkHourSummaryQuery } from "../generated/graphql";
+import { useState } from "react";
 
 export default function BasicGauges() {
-  return (
-    // <Stack
-    //   direction="row"
-    //   justifyContent="center" // centers horizontally
-    //   alignItems="center"
-    //   className="text-[#07C437] "
-    // >
-    //   <Gauge
-    //     width={130}
-    //     height={130}
-    //     value={60}
-    //     startAngle={-90}
-    //     endAngle={90}
-    //     color="#07C437"
-    //     valueMax={100}
-    //   />
-    // </Stack>
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const today = new Date().toISOString().split("T")[0];
 
+  const startDate = dateRange[0]
+    ? dateRange[0].toISOString().split("T")[0]
+    : today;
+  const endDate = dateRange[1]
+    ? dateRange[1].toISOString().split("T")[0]
+    : today;
+
+  const { data: summaryData } = useWorkHourSummaryQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
+
+  return (
     <Stack direction="column" spacing={2} alignItems="center">
       {/* Gauge itself */}
       <Gauge
         width={150}
         height={150}
-        value={60}
+        value={summaryData?.workHoursSummary?.totalWorkingHours || 0}
         startAngle={-90}
         endAngle={90}
         outerRadius="100%"
@@ -75,14 +77,5 @@ export default function BasicGauges() {
         </Stack>
       </Box>
     </Stack>
-
   );
-
 }
-
-
-
-
-
-
-

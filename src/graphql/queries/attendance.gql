@@ -1,5 +1,13 @@
-query getAllAttendance($date: LocalDate) {
-  attendances(where: { currentDate: { eq: $date } }) {
+query getAllAttendance($date: LocalDate, $search: String) {
+  attendances(
+    where: {
+      currentDate: { eq: $date }
+      or: [
+        { user: { employeeName: { contains: $search } } }
+        { user: { staffId: { contains: $search } } }
+      ]
+    }
+  ) {
     clockIn
     clockOut
     currentDate

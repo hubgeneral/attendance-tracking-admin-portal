@@ -3,13 +3,89 @@ import { DateRangePicker } from "rsuite";
 import EmployerBarChart from "../components/EmployerBarchart";
 import RankingCard from "../components/RankingCard";
 import StatCard from "../components/StatCard";
-import { DashboardRangingCardData } from "../Mockdata/DashboardRangingCard";
-import statsData from "../Mockdata/Statmockdata";
-
+import {
+  useLateEmployeesQuery,
+  useMostUnproductiveQuery,
+  useTotalStatsQuery,
+} from "../generated/graphql";
+import { useClockTimeQuery } from "../generated/graphql";
+import { useMostPunctualQuery } from "../generated/graphql";
+import { formatTime } from "../../misc";
+import { useState } from "react";
 import Requests from "../components/Requests";
 import WorkHourSummary from "../components/WorkHourSummary";
-
+// import { skip } from "node:test";
+// import { useEffect } from "react";
 const Dashboard = () => {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const today = new Date().toISOString().split("T")[0];
+
+  const startDate = dateRange[0]
+    ? dateRange[0].toISOString().split("T")[0]
+    : today;
+  const endDate = dateRange[1]
+    ? dateRange[1].toISOString().split("T")[0]
+    : today;
+
+  const { data, loading, error } = useTotalStatsQuery();
+  const { data: clockData } = useClockTimeQuery();
+  const { data: punctualData } = useMostPunctualQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
+  const { data: lateEmployeesdata } = useLateEmployeesQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
+
+  const { data: mostunproductivedata } = useMostUnproductiveQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading stats: {error.message}</p>;
+  const stats = data?.dashboardTotalStats;
+
+  //   useEffect(() => {
+  //   if (shouldFilter) {
+  //     refetch({ startDay, stopDate: endDate });
+  //   }
+  // }, [dateRange]);
+
+  const updatedStatsData = [
+    {
+      label: "Total Employees",
+      dataKey: "totalEmployees",
+      value: stats?.totalEmployees ?? 0,
+      icon: "IoPeople",
+    },
+    {
+      label: "Employees Clocked In",
+      dataKey: "employeesClocledIn",
+      value: stats?.employeesClocledIn ?? 0,
+      icon: "timeicon1",
+    },
+    {
+      label: "Employees Clocked Out",
+      dataKey: "employeesClocledOut",
+      value: stats?.employeesClocledOut ?? 0,
+      icon: "timeicon2",
+    },
+    {
+      label: "Employees Absent",
+      dataKey: "totalAbsent",
+      value: stats?.totalAbsent ?? 0,
+      icon: "timeicon3",
+    },
+    {
+      label: "Employees On Leave",
+      dataKey: "totalLeaves",
+      value: stats?.totalLeaves ?? 0,
+      icon: "timeicon4",
+    },
+  ];
+
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-2 ">
@@ -21,13 +97,13 @@ const Dashboard = () => {
             size="md"
             placeholder="Select Date"
             placement="bottomEnd"
-            className="w-full sm:w-auto"
+            onChange={(Range) => setDateRange(Range || [null, null])}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 gap-4 mb-3 ">
-        {statsData.map((stat, index) => (
+        {updatedStatsData.map((stat, index) => (
           <StatCard
             key={index}
             label={stat.label}
@@ -57,7 +133,9 @@ const Dashboard = () => {
                     Average Clock-In Time
                   </p>
                   <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
-                    08:30 AM
+                    {formatTime(
+                      clockData?.averageClockTime.averageClockIn || "N/A"
+                    )}
                   </h2>
                 </CardContent>
               </Card>
@@ -78,7 +156,7 @@ const Dashboard = () => {
                     Average Clock-Out Time
                   </p>
                   <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
-                    08:30 AM
+                    {formatTime(clockData?.averageClockTime?.averageClockOut)}
                   </h2>
                 </CardContent>
               </Card>
@@ -92,15 +170,50 @@ const Dashboard = () => {
       </div>
 
       <section className="w-full grid gap-3 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-        {DashboardRangingCardData?.map((value) => (
-          <RankingCard
-            key={value.title}
-            title={value.title}
-            color={value.color}
-            icon={value.icon}
-            entries={value.entries}
-          />
-        ))}
+        <RankingCard
+          title="Punctual Employees"
+          color="#0C4DB0"
+          entries={
+            punctualData?.punctualEmployees?.length
+              ? punctualData.punctualEmployees.map((emp) => ({
+                  name: emp.employeeName ?? "N/A",
+                  stat: formatTime(emp.timeOfDay ?? "No time recorded"),
+                }))
+              : [{ name: "No data available", stat: "" }]
+          }
+        />
+
+        <RankingCard
+          title="Late Employees"
+          color="#D58A39"
+          entries={
+            lateEmployeesdata?.lateEmployees?.length
+              ? lateEmployeesdata.lateEmployees.map((emp) => ({
+                  name: emp.employeeName ?? "N/A",
+                  stat: formatTime(emp.timeOfDay ?? "No time recorded"),
+                }))
+              : [{ name: "No data available", stat: "" }]
+          }
+        />
+
+        <RankingCard
+          title="Most Hours Worked"
+          color="#0CB036"
+          entries={[{ name: "No data available", stat: "" }]}
+        />
+
+        <RankingCard
+          title="Most Off Hours"
+          color="#D53951"
+          entries={
+            mostunproductivedata?.mostWastedHours?.length
+              ? mostunproductivedata.mostWastedHours.map((emp) => ({
+                  name: emp.employeeName ?? "N/A",
+                  stat: `${emp.totalWastedHours ?? 0} hrs`,
+                }))
+              : [{ name: "No data available", stat: "" }]
+          }
+        />
       </section>
     </>
   );

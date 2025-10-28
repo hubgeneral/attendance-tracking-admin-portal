@@ -35,9 +35,9 @@ import ResetAccountModal from "../../components/ResetAccountModal";
 import EditInternModal from "../../components/EditInternModal";
 import AddInternModal from "../../components/AddInternModal";
 import { getRoles, getStatuses } from "../../services/mockData";
-import { getLeaveStatusToday } from "../../../misc";
 import { useGetUsersLazyQuery } from "../../generated/graphql";
 import { useGetUsersQuery } from "../../generated/graphql";
+import { getLeaveStatusToday } from "../../../helpers";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -444,9 +444,9 @@ export default function Users() {
                         <Chip
                           label={
                             // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                            getLeaveStatusToday(rows).todaysLeaveIds.has(
-                              row.staffId
-                            )
+                            (
+                              getLeaveStatusToday(rows) as any
+                            ).todaysLeaveIds?.has(row.staffId)
                               ? "On Leave"
                               : "Present"
                           }
@@ -454,9 +454,9 @@ export default function Users() {
                           sx={{
                             ...getStatusColor(
                               // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                              getLeaveStatusToday(rows).todaysLeaveIds.has(
-                                row.staffId
-                              )
+                              (
+                                getLeaveStatusToday(rows) as any
+                              ).todaysLeaveIds?.has(row.staffId)
                                 ? "On Leave"
                                 : "Present"
                             ),
