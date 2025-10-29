@@ -9,6 +9,7 @@
 
 describe('Dashboard Header', () => {
   beforeEach(() => {
+    cy.login()
     cy.visit('/app/dashboard') 
   })
 
