@@ -8,5 +8,5 @@
       "jsx": "react-jsx",
       "types": ["cypress", "node"]
     },
-    "include": ["**/*.ts", "**/*.tsx"]
+    "include": ["**/*.ts", "**/*.tsx","cypress/**/*/.ts"]
   }

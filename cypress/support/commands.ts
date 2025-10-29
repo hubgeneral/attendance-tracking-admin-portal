@@ -35,3 +35,25 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("login", () => {
+  cy.session("user-session", () => {
+    cy.visit("/");
+    cy.get('input[type="text"]').type("DHG2011");
+    cy.get('input[type="password"]').type("password@123");
+    cy.get(".loginbtn").click();
+    cy.url().should("include", "/app/dashboard");
+    
+
+    cy.window().then((win)=>{
+      console.log("localStorage:",win.localStorage)
+      console.log("sessionStorage:", win.sessionStorage)
+    })
+  });
+});
+
+// Cypress.Commands.add("waitForAttendance", () => {
+//   cy.intercept("POST", "**/graphql").as("getAttendance");
+//   cy.visit("/app/attendance");
+//   cy.wait("@getAttendance");
+// });
