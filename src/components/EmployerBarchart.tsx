@@ -12,17 +12,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-interface AttendanceData {
-  day: string;
-  clockedIn: number;
-  absent: number;
-  onLeave: number;
-}
-
-const EmployerBarChart = () => {
-  const today = new Date().toISOString().split("T")[0];
+const EmployerBarChart = ({
+  startDay,
+  stopDate,
+}: {
+  startDay: string;
+  stopDate: string;
+}) => {
   const { data, loading, error } = useAttendanceGraphDataQuery({
-    variables: { startDay: today, stopDate: today },
+    variables: { startDay: startDay, stopDate: stopDate },
   });
 
   if (loading) return <p>Loading chart...</p>;
@@ -30,11 +28,21 @@ const EmployerBarChart = () => {
 
   const chartData = data?.graphData || [];
 
+  const formattedData = chartData.map((item) => ({
+    day: item.day,
+    clockedIn: item.clockedInCount ?? item.clockedInCount ?? 0,
+    absent: item.absent ?? 0,
+    onLeave: item.onLeave ?? 0,
+  }));
+
   const attendanceMetric = [
     { value: "Clocked In", color: "#07C437", dataKey: "clockedIn" },
     { value: "Absent", color: "#FF0101", dataKey: "absent" },
     { value: "On Leave", color: "#FFA640", dataKey: "onLeave" },
   ];
+  // Log the formatted data before returning JSX
+  console.log("formattedData:", formattedData);
+
   return (
     <div>
       <Card className="lg:col-span-6 row-span-2 shadow-sm shadow-gray-500 rounded-lg">
@@ -43,8 +51,8 @@ const EmployerBarChart = () => {
             Total Employees
           </h3>
           <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={chartData}>
-              <XAxis dataKey="day" />
+            <BarChart data={formattedData}>
+              <XAxis dataKey="day" tick={{ fontSize: 12 }} />
               <YAxis tickCount={6} domain={[0, 50]} />
               <Tooltip />
               <Legend
