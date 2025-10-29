@@ -116,7 +116,9 @@ const Dashboard = () => {
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 w-full">
         {/* Left Chart */}
         <div className="w-full md:w-[45%]">
-          <EmployerBarChart />
+          <EmployerBarChart
+            {...({ startDay: startDate, stopDate: endDate } as any)}
+          />
         </div>
 
         {/* Right Side */}
