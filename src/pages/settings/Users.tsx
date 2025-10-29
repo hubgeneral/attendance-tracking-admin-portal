@@ -370,12 +370,12 @@ export default function Users() {
           </Box>
 
           {/* Users Table */}
-          <div className="max-h-[350px] overflow-y-auto">
+          <div className="max-h-[50vh] 2xl:max-h-[80vh] overflow-y-auto">
             <TableContainer
               component={Paper}
               elevation={0}
               className="dark:bg-[#1A2D26]"
-              sx={{ maxHeight: 350 }}
+              sx={{ maxHeight: "auto" }}
             >
               <Table stickyHeader aria-label="users table">
                 <TableHead>
