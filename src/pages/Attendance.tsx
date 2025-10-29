@@ -133,7 +133,7 @@ export const Attendance = () => {
         </div>
 
         {/* ✅ Table */}
-        <div className="max-h-[65vh] 2xl:max-h-[80vh] overflow-y-auto">
+        <div className="max-h-[55vh] 2xl:max-h-[80vh] overflow-y-auto">
           {
             //xss
             //md

@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@mui/material";
-import data from "../Mockdata/BarChartData";
 import CustomizedLegent from "./CustomizeLegent";
+import { useAttendanceGraphDataQuery } from "../generated/graphql";
 
 import {
   BarChart,
@@ -12,7 +12,24 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface AttendanceData {
+  day: string;
+  clockedIn: number;
+  absent: number;
+  onLeave: number;
+}
+
 const EmployerBarChart = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const { data, loading, error } = useAttendanceGraphDataQuery({
+    variables: { startDay: today, stopDate: today },
+  });
+
+  if (loading) return <p>Loading chart...</p>;
+  if (error) return <p>Error loading chart: {error.message}</p>;
+
+  const chartData = data?.graphData || [];
+
   const attendanceMetric = [
     { value: "Clocked In", color: "#07C437", dataKey: "clockedIn" },
     { value: "Absent", color: "#FF0101", dataKey: "absent" },
@@ -26,7 +43,7 @@ const EmployerBarChart = () => {
             Total Employees
           </h3>
           <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={data}>
+            <BarChart data={chartData}>
               <XAxis dataKey="day" />
               <YAxis tickCount={6} domain={[0, 50]} />
               <Tooltip />

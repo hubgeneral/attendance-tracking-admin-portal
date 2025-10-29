@@ -63,13 +63,13 @@ const Dashboard = () => {
     {
       label: "Employees Clocked In",
       dataKey: "employeesClocledIn",
-      value: stats?.employeesClocledIn ?? 0,
+      value: stats?.employeesClockedIn ?? 0,
       icon: "timeicon1",
     },
     {
       label: "Employees Clocked Out",
       dataKey: "employeesClocledOut",
-      value: stats?.employeesClocledOut ?? 0,
+      value: stats?.employeesClockedOut ?? 0,
       icon: "timeicon2",
     },
     {

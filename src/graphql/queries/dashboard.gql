@@ -1,8 +1,8 @@
 query TotalStats {
   dashboardTotalStats {
     totalEmployees
-    employeesClocledIn
-    employeesClocledOut
+    employeesClockedIn
+    employeesClockedOut
     totalAbsent
     totalLeaves
   }
@@ -12,6 +12,15 @@ query ClockTime {
   averageClockTime {
     averageClockIn
     averageClockOut
+  }
+}
+
+query attendanceGraphData($startDay: LocalDate!, $stopDate: LocalDate!) {
+  graphData(startDate: $startDay, endDate: $stopDate) {
+    day
+    clockedInCount
+    absent
+    onLeave
   }
 }
 
@@ -35,8 +44,8 @@ query MostUnproductive($startDay: LocalDate!, $stopDate: LocalDate!) {
     totalWastedHours
   }
 }
-query DashboardRequests {
-  requests {
+query DashboardRequests($startDay: LocalDate!, $stopDate: LocalDate!) {
+  requestLogs(startday: $startDay, stopdate: $stopDate) {
     employeeName
     timeOfDay
   }
