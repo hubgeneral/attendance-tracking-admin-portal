@@ -997,6 +997,37 @@ export type WorkHourSummaryQuery = {
   };
 };
 
+export type RecentRequestsQueryVariables = Exact<{
+  startday: Scalars["LocalDate"]["input"];
+  stopdate: Scalars["LocalDate"]["input"];
+}>;
+
+export type RecentRequestsQuery = {
+  __typename?: "Query";
+  requestLogs: Array<{
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    reason?: string | null;
+    timeOfDay?: any | null;
+  }>;
+};
+
+export type LogHistroyQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LogHistroyQuery = {
+  __typename?: "Query";
+  manualLogs: Array<{
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    currentDate?: any | null;
+    timeOfDay?: any | null;
+    reason?: string | null;
+    clockIn?: any | null;
+    clockOut?: any | null;
+    actionBy?: string | null;
+  }>;
+};
+
 export type GetUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars["String"]["input"]>;
 }>;
@@ -2051,6 +2082,169 @@ export type WorkHourSummarySuspenseQueryHookResult = ReturnType<
 export type WorkHourSummaryQueryResult = Apollo.QueryResult<
   WorkHourSummaryQuery,
   WorkHourSummaryQueryVariables
+>;
+export const RecentRequestsDocument = gql`
+  query recentRequests($startday: LocalDate!, $stopdate: LocalDate!) {
+    requestLogs(startday: $startday, stopdate: $stopdate) {
+      employeeName
+      reason
+      timeOfDay
+    }
+  }
+`;
+
+/**
+ * __useRecentRequestsQuery__
+ *
+ * To run a query within a React component, call `useRecentRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecentRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecentRequestsQuery({
+ *   variables: {
+ *      startday: // value for 'startday'
+ *      stopdate: // value for 'stopdate'
+ *   },
+ * });
+ */
+export function useRecentRequestsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  > &
+    (
+      | { variables: RecentRequestsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RecentRequestsQuery, RecentRequestsQueryVariables>(
+    RecentRequestsDocument,
+    options
+  );
+}
+export function useRecentRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RecentRequestsQuery, RecentRequestsQueryVariables>(
+    RecentRequestsDocument,
+    options
+  );
+}
+export function useRecentRequestsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        RecentRequestsQuery,
+        RecentRequestsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    RecentRequestsQuery,
+    RecentRequestsQueryVariables
+  >(RecentRequestsDocument, options);
+}
+export type RecentRequestsQueryHookResult = ReturnType<
+  typeof useRecentRequestsQuery
+>;
+export type RecentRequestsLazyQueryHookResult = ReturnType<
+  typeof useRecentRequestsLazyQuery
+>;
+export type RecentRequestsSuspenseQueryHookResult = ReturnType<
+  typeof useRecentRequestsSuspenseQuery
+>;
+export type RecentRequestsQueryResult = Apollo.QueryResult<
+  RecentRequestsQuery,
+  RecentRequestsQueryVariables
+>;
+export const LogHistroyDocument = gql`
+  query LogHistroy {
+    manualLogs {
+      employeeName
+      currentDate
+      timeOfDay
+      reason
+      clockIn
+      clockOut
+      actionBy
+    }
+  }
+`;
+
+/**
+ * __useLogHistroyQuery__
+ *
+ * To run a query within a React component, call `useLogHistroyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLogHistroyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLogHistroyQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogHistroyQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    LogHistroyQuery,
+    LogHistroyQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<LogHistroyQuery, LogHistroyQueryVariables>(
+    LogHistroyDocument,
+    options
+  );
+}
+export function useLogHistroyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LogHistroyQuery,
+    LogHistroyQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<LogHistroyQuery, LogHistroyQueryVariables>(
+    LogHistroyDocument,
+    options
+  );
+}
+export function useLogHistroySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<LogHistroyQuery, LogHistroyQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<LogHistroyQuery, LogHistroyQueryVariables>(
+    LogHistroyDocument,
+    options
+  );
+}
+export type LogHistroyQueryHookResult = ReturnType<typeof useLogHistroyQuery>;
+export type LogHistroyLazyQueryHookResult = ReturnType<
+  typeof useLogHistroyLazyQuery
+>;
+export type LogHistroySuspenseQueryHookResult = ReturnType<
+  typeof useLogHistroySuspenseQuery
+>;
+export type LogHistroyQueryResult = Apollo.QueryResult<
+  LogHistroyQuery,
+  LogHistroyQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers($search: String) {

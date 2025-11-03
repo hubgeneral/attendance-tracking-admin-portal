@@ -1,5 +1,6 @@
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import { recentRequests } from "../services/mockData";
+import { useRecentRequestsQuery } from "../generated/graphql";
+import { useState } from "react";
 
 interface RecentRequestsProps {
   onTakeAction: (request: {
@@ -10,6 +11,23 @@ interface RecentRequestsProps {
 }
 
 export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const today = new Date().toISOString().split("T")[0];
+
+  const startDate = dateRange[0]
+    ? dateRange[0].toISOString().split("T")[0]
+    : today;
+  const endDate = dateRange[1]
+    ? dateRange[1].toISOString().split("T")[0]
+    : today;
+
+  const { data, loading, error } = useRecentRequestsQuery({
+    variables: { startday: startDate, stopdate: endDate },
+  });
+
   return (
     <Card className="mb-6" elevation={1}>
       <CardContent className="dark:bg-[#14241D]">
@@ -20,9 +38,19 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
         </div>
 
         <div className="space-y-3 max-h-[180px] overflow-y-auto pr-2">
-          {recentRequests.map((request) => (
+          {!loading &&
+            !error &&
+            (!data?.requestLogs || data.requestLogs.length === 0) && (
+              <div className="py-8 text-center text-gray-500 dark:text-[#C3C3C3]">
+                <p className="font-medium">No recent requests</p>
+                <p className="text-sm text-gray-400 dark:text-[#9BA3A0]">
+                  Requests from employees will appear here.
+                </p>
+              </div>
+            )}
+          {data?.requestLogs?.map((request, index) => (
             <div
-              key={request.id}
+              key={index}
               className="flex items-center justify-between py-6 px-6 bg-[#F7F7F7] rounded-[5px] gap-24 dark:bg-[#172C24]"
             >
               <div className="flex flex-col">
@@ -46,7 +74,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                   variant="caption"
                   className="text-[#758DA3] whitespace-nowrap dark:text-[#C3C3C3]"
                 >
-                  {request.date}
+                  {request.timeOfDay}
                 </Typography>
               </div>
 
@@ -72,7 +100,13 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                     backgroundColor: "#fff",
                   },
                 }}
-                onClick={() => onTakeAction(request)} // 👈 Call parent handler
+                onClick={() =>
+                  onTakeAction({
+                    employeeName: request.employeeName ?? "",
+                    date: request.timeOfDay ?? "",
+                    reason: request.reason ?? "",
+                  })
+                } // 👈 Call parent handler with request data
               >
                 Take Action
               </Button>
