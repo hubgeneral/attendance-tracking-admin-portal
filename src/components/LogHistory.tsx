@@ -1,4 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search";
+import { useLogHistroyQuery } from "../generated/graphql";
+
 import {
   Box,
   Card,
@@ -16,24 +18,46 @@ import {
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { DateRangePicker } from "rsuite";
-import { logHistory, type LogRecord } from "../Mockdata/LogHistoryData";
+
 export default function LogHistory() {
   const [query, setQuery] = useState("");
+
+  const { data, loading, error } = useLogHistroyQuery();
+  const LogHistory = data?.manualLogs || [];
+
+  interface LogRecord {
+    id: string;
+    employeeName: string;
+    reason: string;
+    clockIn: string;
+    clockOut: string;
+    oldClockIn?: string;
+    oldClockOut?: string;
+    actionBy: string;
+    actionDate: string;
+  }
+
   const rows = useMemo(() => {
-    let filtered = logHistory;
+    let filtered = LogHistory as LogRecord[];
     if (query) {
       const q = query.toLowerCase();
-      filtered = filtered.filter(
-        (r: LogRecord) =>
-          r.employeeName.toLowerCase().includes(q) ||
-          r.reason.toLowerCase().includes(q) ||
-          r.clockIn.toLowerCase().includes(q) ||
-          r.clockOut.toLowerCase().includes(q) ||
-          r.actionBy.toLowerCase().includes(q)
-      );
+      filtered = filtered.filter((r) => {
+        const employee = (r.employeeName ?? "").toString().toLowerCase();
+        const reason = (r.reason ?? "").toString().toLowerCase();
+        const clockIn = (r.clockIn ?? "").toString().toLowerCase();
+        const clockOut = (r.clockOut ?? "").toString().toLowerCase();
+        const actionBy = (r.actionBy ?? "").toString().toLowerCase();
+        return (
+          employee.includes(q) ||
+          reason.includes(q) ||
+          clockIn.includes(q) ||
+          clockOut.includes(q) ||
+          actionBy.includes(q)
+        );
+      });
     }
     return filtered;
-  }, [query]);
+  }, [query, LogHistory]);
   return (
     <Card className="mb-6" elevation={1}>
       <CardContent className="dark:bg-[#14241D]">
