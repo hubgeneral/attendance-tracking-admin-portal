@@ -34,9 +34,19 @@ query getAllAttendance($date: LocalDate, $search: String) {
 #   }
 # }
 
-query getAttendanceByDate($startDate: LocalDate, $endDate: LocalDate) {
+query getAttendanceByDate(
+  $startDate: LocalDate
+  $endDate: LocalDate
+  $search: String
+) {
   attendances(
-    where: { and: [{ currentDate: { gte: $startDate, lte: $endDate } }] }
+    where: {
+      and: [{ currentDate: { gte: $startDate, lte: $endDate } }]
+      or: [
+        { user: { employeeName: { contains: $search } } }
+        { user: { staffId: { contains: $search } } }
+      ]
+    }
   ) {
     id
     clockIn

@@ -9,12 +9,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegFileAlt } from "react-icons/fa";
 import { MdOutlineSearch } from "react-icons/md";
 import { DateRangePicker } from "rsuite";
-import { useGetAttendanceByDateQuery } from "../generated/graphql";
-import { useGetUsersLazyQuery } from "../generated/graphql";
+import { useGetAttendanceByDateLazyQuery } from "../generated/graphql";
 
 export type Attendance = {
   users: { id: string; staffId: string; employeeName: string }[];
@@ -25,6 +24,7 @@ export type Attendance = {
   currentDate: { eq: Date };
 };
 export const Attendance = () => {
+  const [search, setSearch] = useState("");
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
@@ -38,49 +38,42 @@ export const Attendance = () => {
     ? dateRange[1].toISOString().split("T")[0]
     : today;
 
-  const shouldFilter = Boolean(dateRange[0] && dateRange[1]);
+  //
 
-  const {
-    data: todayData,
-    loading: todayLoading,
-    error: todayError,
-  } = useGetAttendanceByDateQuery({
-    variables: { startDate: today, endDate: today },
-    skip: shouldFilter,
-  });
+  const [getAttendance, { data, loading, error }] =
+    useGetAttendanceByDateLazyQuery();
 
-  const {
-    data: filteredData,
-    loading: filteredLoading,
-    error: filteredError,
-  } = useGetAttendanceByDateQuery({
-    variables: { startDate, endDate },
-    skip: !shouldFilter,
-  });
+  const [rows, setRows] = useState<any[]>([]);
 
-  const data = shouldFilter ? filteredData : todayData;
-  const loading = shouldFilter ? filteredLoading : todayLoading;
-  const error = shouldFilter ? filteredError : todayError;
+  useEffect(() => {
+    if (search.trim() === "") {
+      getAttendance({
+        variables: {
+          startDate,
+          endDate,
+          search: "",
+        },
+      });
+    }
+  }, [search]);
 
-  const [query, setQuery] = useState("");
-  const [rows] = useState<any[]>([]);
+  useEffect(() => {
+    if (data?.attendances) {
+      setRows(data.attendances);
+    }
+  }, [data]);
 
-  const [search, setSearch] = useState("");
+  const handleSearch = () => {
+    const text = search.trim();
 
-  // const filteredRows = rows.filter(
-  //   (row: {
-  //     employeeName: string;
-  //     staffId: string;
-  //     role: string;
-  //     status: string;
-  //   }) => {
-  //     const matchesQuery =
-  //       row.employeeName?.toLowerCase().includes(query.toLowerCase()) ||
-  //       row.staffId?.toLowerCase().includes(query.toLowerCase());
-
-  //     return matchesQuery;
-  //   }
-  // );
+    getAttendance({
+      variables: {
+        startDate,
+        endDate,
+        search: text,
+      },
+    });
+  };
 
   return (
     <>
@@ -109,10 +102,15 @@ export const Attendance = () => {
               <MdOutlineSearch className="text-gray-400 h-5 w-5" />
               <input
                 type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 className="border-0 focus:outline-none p-1 text-sm w-full dark:text-[#E8EAE9] dark:bg-[#1A2D26]"
                 placeholder="Search employee name or id"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
               />
             </div>
 
