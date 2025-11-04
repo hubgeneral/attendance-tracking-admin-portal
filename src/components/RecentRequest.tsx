@@ -106,7 +106,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                     date: request.timeOfDay ?? "",
                     reason: request.reason ?? "",
                   })
-                } // 👈 Call parent handler with request data
+                }
               >
                 Take Action
               </Button>

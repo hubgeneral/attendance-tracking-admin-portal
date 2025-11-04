@@ -533,6 +533,7 @@ export type PunctualEmployees = {
 
 export type Query = {
   __typename?: "Query";
+  attendanceByDate: Array<Attendance>;
   attendanceByUserId: Array<Attendance>;
   attendances: Array<Attendance>;
   averageClockTime: AverageClockTimeResult;
@@ -551,6 +552,11 @@ export type Query = {
   usersOnLeaveToday: Array<AppUser>;
   usersWithRoles: Array<UserWithRoleResponse>;
   workHoursSummary: WorkingHours;
+};
+
+export type QueryAttendanceByDateArgs = {
+  startDate: Scalars["DateTime"]["input"];
+  stopDate: Scalars["DateTime"]["input"];
 };
 
 export type QueryAttendanceByUserIdArgs = {
@@ -866,6 +872,7 @@ export type GetAllAttendanceQuery = {
 export type GetAttendanceByDateQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
   endDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  search?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type GetAttendanceByDateQuery = {
@@ -1342,9 +1349,19 @@ export type GetAllAttendanceQueryResult = Apollo.QueryResult<
   GetAllAttendanceQueryVariables
 >;
 export const GetAttendanceByDateDocument = gql`
-  query getAttendanceByDate($startDate: LocalDate, $endDate: LocalDate) {
+  query getAttendanceByDate(
+    $startDate: LocalDate
+    $endDate: LocalDate
+    $search: String
+  ) {
     attendances(
-      where: { and: [{ currentDate: { gte: $startDate, lte: $endDate } }] }
+      where: {
+        and: [{ currentDate: { gte: $startDate, lte: $endDate } }]
+        or: [
+          { user: { employeeName: { contains: $search } } }
+          { user: { staffId: { contains: $search } } }
+        ]
+      }
     ) {
       id
       clockIn
@@ -1374,6 +1391,7 @@ export const GetAttendanceByDateDocument = gql`
  *   variables: {
  *      startDate: // value for 'startDate'
  *      endDate: // value for 'endDate'
+ *      search: // value for 'search'
  *   },
  * });
  */

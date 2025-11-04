@@ -61,7 +61,7 @@ export default function Users() {
     email: string;
     userRoles: { role: { name: string } }[];
     status: string;
-    employmentType: string;
+    employeeType: string;
     department: string;
   };
 
@@ -73,6 +73,7 @@ export default function Users() {
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, row: any) => {
     setAnchorEl(event.currentTarget);
     setSelectedRowId(row.id);
+    setSelectedUser(row);
   };
 
   const handleMenuClose = () => {
@@ -93,8 +94,7 @@ export default function Users() {
   };
   const { data: allData } = useGetUsersQuery({});
 
-  const [fetchUsers, { data: searchData, loading, error }] =
-    useGetUsersLazyQuery();
+  const [fetchUsers, { data: searchData }] = useGetUsersLazyQuery();
 
   const handleSearch = () => {
     if (search.trim() !== "") {
@@ -105,10 +105,6 @@ export default function Users() {
   };
 
   const [rows, setRows] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //   fetchUsers({ variables: { search: "" } });
-  // }, []);
 
   useEffect(() => {
     if (search.trim() === "") {
@@ -130,9 +126,6 @@ export default function Users() {
       console.log("User Info:", UserInfo);
     }
   }, [searchData, allData]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   // const rows = rows.filter(
   //   (row: {
@@ -178,37 +171,37 @@ export default function Users() {
     }
   };
 
-  const handleAddIntern = (intern: {
+  const handleAddIntern = (Internship: {
     employeeId: string;
     employeeName: string;
     email: string;
   }) => {
     const newIntern = {
       id: Date.now().toString(),
-      employeeId: intern.employeeId,
-      employeeName: intern.employeeName,
-      email: intern.email,
+      employeeId: Internship.employeeId,
+      employeeName: Internship.employeeName,
+      email: Internship.email,
       role: "Intern",
       status: "Active",
-      employmentType: "Intern",
+      employeeType: "Internship",
       department: "General",
     };
     setRows((prev: any) => [...prev, newIntern]);
   };
 
-  const handleEditIntern = (intern: {
+  const handleEditIntern = (Internship: {
     employeeId: string;
     employeeName: string;
     email: string;
   }) => {
     const newIntern = {
       id: Date.now().toString(),
-      employeeId: intern.employeeId,
-      employeeName: intern.employeeName,
-      email: intern.email,
+      employeeId: Internship.employeeId,
+      employeeName: Internship.employeeName,
+      email: Internship.email,
       role: "Intern",
       status: "Active",
-      employmentType: "Intern",
+      employeeType: "Internship",
       department: "General",
     };
     setRows((prev: any) => [...prev, newIntern]);
@@ -466,7 +459,7 @@ export default function Users() {
                         />
                       </TableCell>
                       <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.employmentType}
+                        {row.employeeType}
                       </TableCell>
                       <TableCell
                         align="right"
@@ -475,61 +468,6 @@ export default function Users() {
                         <IconButton onClick={(e) => handleMenuOpen(e, row)}>
                           <MoreVertIcon className="dark:text-[#E8EAE9]" />
                         </IconButton>
-
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl) && selectedRowId === row.id}
-                          onClose={handleMenuClose}
-                          PaperProps={{
-                            elevation: 3,
-                            sx: {
-                              borderRadius: "10px",
-                              p: 1,
-                              minWidth: 180,
-                              boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
-                            },
-                          }}
-                          MenuListProps={{
-                            disablePadding: true,
-                          }}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              setSelectedUser(row);
-                              setGeneratedPassword("AUTO-GEN123");
-                              setShowPasswordModal(true);
-                              handleMenuClose();
-                            }}
-                          >
-                            Generate Password
-                          </MenuItem>
-
-                          <Divider sx={{ my: 0.5 }} />
-
-                          <MenuItem
-                            onClick={() => {
-                              handleResetClick(row);
-                              handleMenuClose();
-                            }}
-                          >
-                            Reset Account
-                          </MenuItem>
-
-                          {row.employmentType === "Intern" && (
-                            <>
-                              <Divider sx={{ my: 0.5 }} />
-                              <MenuItem
-                                onClick={() => {
-                                  setEditingIntern(row);
-                                  setShowEditModal(true);
-                                  handleMenuClose();
-                                }}
-                              >
-                                Edit
-                              </MenuItem>
-                            </>
-                          )}
-                        </Menu>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -551,6 +489,60 @@ export default function Users() {
           )}
         </CardContent>
       </Card>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => {
+          setAnchorEl(null);
+          setSelectedUser(null);
+        }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            borderRadius: "10px",
+            p: 1,
+            minWidth: 180,
+            backgroundColor: "white",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            setGeneratedPassword("AUTO-GEN123");
+            setShowPasswordModal(true);
+            setAnchorEl(null);
+          }}
+        >
+          Generate Password
+        </MenuItem>
+
+        <Divider />
+
+        <MenuItem
+          onClick={() => {
+            handleResetClick(selectedUser);
+            setAnchorEl(null);
+          }}
+        >
+          Reset Account
+        </MenuItem>
+
+        {selectedUser?.employeeType === "Internship" && (
+          <>
+            <Divider />
+            <MenuItem
+              onClick={() => {
+                setEditingIntern(selectedUser);
+                setShowEditModal(true);
+                setAnchorEl(null);
+              }}
+            >
+              Edit
+            </MenuItem>
+          </>
+        )}
+      </Menu>
 
       {/* Add Intern Modal */}
       <AddInternModal
