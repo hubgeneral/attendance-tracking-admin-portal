@@ -38,7 +38,7 @@ const ResetPasswordConfirmation = () => {
 
       setTimeout(() => {
         setLoading(false);
-        navigate("/login");
+        navigate("/");
       }, 1000);
     } catch (error) {
       console.log("Password reset failed:", error);
