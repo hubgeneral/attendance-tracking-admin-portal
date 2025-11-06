@@ -15,8 +15,8 @@ query ClockTime {
   }
 }
 
-query attendanceGraphData($startDay: LocalDate!, $stopDate: LocalDate!) {
-  graphData(startDate: $startDay, endDate: $stopDate) {
+query attendanceGraphData {
+  graphData {
     day
     clockedInCount
     absent

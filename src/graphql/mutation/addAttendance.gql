@@ -1,0 +1,33 @@
+mutation AddManualAttendance(
+  $adminID: Int!
+  $adminName: String!
+  $employeeID: Int!
+  $employeeName: String!
+  $reason: String!
+  $clockIn: DateTime!
+  $clockOut: DateTime!
+  $approvalStatus: String!
+) {
+  createManualLog(
+    adminId: $adminID
+    adminName: $adminName
+    employeeId: $employeeID
+    reason: $reason
+    employeeName: $employeeName
+    clockIn: $clockIn
+    clockOut: $clockOut
+    approvalStatus: $approvalStatus
+  ) {
+    employeeName
+    reason
+    clockIn
+    clockOut
+  }
+}
+
+query SearchEmployees($search: String!) {
+  users(where: { or: [{ employeeName: { contains: $search } }] }) {
+    id
+    employeeName
+  }
+}

@@ -58,6 +58,18 @@ export const Attendance = () => {
   }, [search]);
 
   useEffect(() => {
+    if (dateRange) {
+      getAttendance({
+        variables: {
+          startDate,
+          endDate,
+          search: search.trim(),
+        },
+      });
+    }
+  }, [dateRange]);
+
+  useEffect(() => {
     if (data?.attendances) {
       setRows(data.attendances);
     }
@@ -132,20 +144,14 @@ export const Attendance = () => {
         </div>
 
         {/* ✅ Table */}
-        <div className="max-h-[55vh] 2xl:max-h-[80vh] overflow-y-auto">
-          {
-            //xss
-            //md
-            //lg
-            //xl
-            //2xl
-          }
+        <div className="h-[55vh] 2xl:h-[80vh]">
           <TableContainer
             component={Paper}
             elevation={0}
             className="shadow-none border-none dark:bg-[#1A2D26] dark:border-none"
             sx={{
-              maxHeight: "auto",
+              maxHeight: 440,
+              overflow: "hidden",
             }}
           >
             <Table stickyHeader size="medium" aria-label="attendance table">
@@ -236,7 +242,7 @@ export const Attendance = () => {
                         size={20}
                         className="dark:text-white text-white mr-3"
                       />
-                      Loading...
+                      Loading
                     </TableCell>
                   </TableRow>
                 ) : error ? (
@@ -246,48 +252,49 @@ export const Attendance = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  (rows.length > 0
-                    ? rows
-                    : data?.attendances
-                  )?.map((row: any) => (
-                    <TableRow
-                      key={row.id}
-                      className="hover:bg-gray-50 dark:hover:bg-[#204335]"
-                    >
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.user?.employeeName} - {row.user?.staffId}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.clockIn
-                          ? new Date(row.clockIn).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.clockOut
-                          ? new Date(row.clockOut).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.totalHoursWorked}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {(() => {
-                          const total = parseFloat(row.totalHoursWorked ?? "0");
-                          const timeOff = 8 - total;
-                          if (isNaN(timeOff) || timeOff <= 0) return "N/A";
-                          return timeOff % 1 === 0
-                            ? timeOff
-                            : timeOff.toFixed(2);
-                        })()}
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  (rows.length > 0 ? rows : data?.attendances)?.map(
+                    (row: any) => (
+                      <TableRow
+                        key={row.id}
+                        className="hover:bg-gray-50 dark:hover:bg-[#204335]"
+                      >
+                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                          {row.user?.employeeName} - {row.user?.staffId}
+                        </TableCell>
+                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                          {row.clockIn
+                            ? new Date(row.clockIn).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                          {row.clockOut
+                            ? new Date(row.clockOut).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                          {row.totalHoursWorked}
+                        </TableCell>
+                        <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
+                          {(() => {
+                            const total = parseFloat(
+                              row.totalHoursWorked ?? "0"
+                            );
+                            const timeOff = 8 - total;
+                            if (isNaN(timeOff) || timeOff <= 0) return "N/A";
+                            return timeOff % 1 === 0
+                              ? timeOff
+                              : timeOff.toFixed(2);
+                          })()}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )
                 )}
               </TableBody>
             </Table>

@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@mui/material";
+import { Card, CardContent, CircularProgress } from "@mui/material";
 import { DateRangePicker } from "rsuite";
 import EmployerBarChart from "../components/EmployerBarchart";
 import RankingCard from "../components/RankingCard";
@@ -43,15 +43,12 @@ const Dashboard = () => {
     variables: { startDay: startDate, stopDate: endDate },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <CircularProgress size={20} className="dark:text-white text-white mr-3" />
+    );
   if (error) return <p>Error loading stats: {error.message}</p>;
   const stats = data?.dashboardTotalStats;
-
-  //   useEffect(() => {
-  //   if (shouldFilter) {
-  //     refetch({ startDay, stopDate: endDate });
-  //   }
-  // }, [dateRange]);
 
   const updatedStatsData = [
     {

@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useRecentRequestsQuery } from "../generated/graphql";
 import { useState } from "react";
+import { formatTime, formatDate } from "../../helpers";
 
 interface RecentRequestsProps {
   onTakeAction: (request: {
@@ -38,6 +39,12 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
         </div>
 
         <div className="space-y-3 max-h-[180px] overflow-y-auto pr-2">
+          {loading && (
+            <div className="py-8 text-center text-gray-500 dark:text-[#C3C3C3]">
+              <p className="font-medium">Loading...</p>
+            </div>
+          )}
+
           {!loading &&
             !error &&
             (!data?.requestLogs || data.requestLogs.length === 0) && (
@@ -48,6 +55,7 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                 </p>
               </div>
             )}
+
           {data?.requestLogs?.map((request, index) => (
             <div
               key={index}
@@ -74,7 +82,9 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
                   variant="caption"
                   className="text-[#758DA3] whitespace-nowrap dark:text-[#C3C3C3]"
                 >
-                  {request.timeOfDay}
+                  {`${formatDate(request.timeOfDay)} ${formatTime(
+                    request.timeOfDay
+                  )}`}
                 </Typography>
               </div>
 
