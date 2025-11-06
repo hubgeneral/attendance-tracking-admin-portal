@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
   Divider,
   FormControl,
   IconButton,
@@ -25,7 +26,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
@@ -92,7 +93,11 @@ export default function Users() {
     setShowResetModal(false);
     setShowPasswordModal(true);
   };
-  const { data: allData } = useGetUsersQuery({});
+  const { data: allData } = useGetUsersQuery();
+  // if (loading)
+  //   return (
+  //     <CircularProgress size={20} className="dark:text-white text-white mr-3" />
+  //   );
 
   const [fetchUsers, { data: searchData }] = useGetUsersLazyQuery();
 
@@ -126,26 +131,6 @@ export default function Users() {
       console.log("User Info:", UserInfo);
     }
   }, [searchData, allData]);
-
-  // const rows = rows.filter(
-  //   (row: {
-  //     employeeName: string;
-  //     staffId: string;
-  //     role: string;
-  //     status: string;
-  //   }) => {
-  //     const matchesQuery =
-  //       row.employeeName?.toLowerCase().includes(search.toLowerCase()) ||
-  //       row.staffId?.toLowerCase().includes(search.toLowerCase());
-
-  //     const matchesRole = RoleFilter === "All" || row.role === RoleFilter;
-
-  //     const matchesStatus =
-  //       statusFilter === "All" || row.status === statusFilter;
-
-  //     return matchesQuery && matchesRole && matchesStatus;
-  //   }
-  // );
 
   // const getStatusColor = (status: string) => {
   //   switch (status) {
@@ -255,7 +240,7 @@ export default function Users() {
           </Typography>
         </Box>
 
-        <Button
+        {/* <Button
           variant="contained"
           startIcon={<AddIcon />}
           sx={{
@@ -268,7 +253,7 @@ export default function Users() {
           onClick={() => setOpen(true)}
         >
           Add Intern
-        </Button>
+        </Button> */}
       </Box>
 
       {/* All Users Card */}
@@ -363,14 +348,16 @@ export default function Users() {
           </Box>
 
           {/* Users Table */}
-          <div className="max-h-[50vh] 2xl:max-h-[80vh] overflow-y-auto">
+          <div className="h-[50vh] 2xl:h-[80vh]">
             <TableContainer
               component={Paper}
               elevation={0}
               className="dark:bg-[#1A2D26]"
-              sx={{ maxHeight: "auto" }}
+              sx={{
+                maxHeight: 440,
+              }}
             >
-              <Table stickyHeader aria-label="users table">
+              <Table stickyHeader aria-label="sticky header">
                 <TableHead>
                   <TableRow>
                     {[
@@ -436,9 +423,12 @@ export default function Users() {
                       <TableCell className="dark:border-[#253F35]">
                         <Chip
                           label={
-                            // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                            getLeaveStatusToday(rows).todaysLeaveIds.has(
-                              row.staffId
+                            (getLeaveStatusToday(rows) ?? []).some(
+                              (leave: any) =>
+                                leave?.employeeId === row.staffId ||
+                                leave?.staffId === row.staffId ||
+                                leave?.employeeId === row.employeeId ||
+                                leave?.staffId === row.employeeId
                             )
                               ? "On Leave"
                               : "Present"
@@ -446,9 +436,12 @@ export default function Users() {
                           size="small"
                           sx={{
                             ...getStatusColor(
-                              // getLeaveStatusToday(rows).todaysLeaveIds.has(row.employeeId)
-                              getLeaveStatusToday(rows).todaysLeaveIds.has(
-                                row.staffId
+                              (getLeaveStatusToday(rows) ?? []).some(
+                                (leave: any) =>
+                                  leave?.employeeId === row.staffId ||
+                                  leave?.staffId === row.staffId ||
+                                  leave?.employeeId === row.employeeId ||
+                                  leave?.staffId === row.employeeId
                               )
                                 ? "On Leave"
                                 : "Present"

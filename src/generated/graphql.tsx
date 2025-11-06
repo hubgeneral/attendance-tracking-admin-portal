@@ -793,6 +793,41 @@ export type WorkingHours = {
   totalWorkingHours: Scalars["Decimal"]["output"];
 };
 
+export type AddManualAttendanceMutationVariables = Exact<{
+  adminID: Scalars["Int"]["input"];
+  adminName: Scalars["String"]["input"];
+  employeeID: Scalars["Int"]["input"];
+  employeeName: Scalars["String"]["input"];
+  reason: Scalars["String"]["input"];
+  clockIn: Scalars["DateTime"]["input"];
+  clockOut: Scalars["DateTime"]["input"];
+  approvalStatus: Scalars["String"]["input"];
+}>;
+
+export type AddManualAttendanceMutation = {
+  __typename?: "Mutation";
+  createManualLog: {
+    __typename?: "RequestLog";
+    employeeName?: string | null;
+    reason?: string | null;
+    clockIn?: any | null;
+    clockOut?: any | null;
+  };
+};
+
+export type SearchEmployeesQueryVariables = Exact<{
+  search: Scalars["String"]["input"];
+}>;
+
+export type SearchEmployeesQuery = {
+  __typename?: "Query";
+  users: Array<{
+    __typename?: "AppUser";
+    id: number;
+    employeeName?: string | null;
+  }>;
+};
+
 export type LoginMutationVariables = Exact<{
   username: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
@@ -918,10 +953,7 @@ export type ClockTimeQuery = {
   };
 };
 
-export type AttendanceGraphDataQueryVariables = Exact<{
-  startDay: Scalars["LocalDate"]["input"];
-  stopDate: Scalars["LocalDate"]["input"];
-}>;
+export type AttendanceGraphDataQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AttendanceGraphDataQuery = {
   __typename?: "Query";
@@ -1076,6 +1108,167 @@ export type GetUserByIdQuery = {
   } | null;
 };
 
+export const AddManualAttendanceDocument = gql`
+  mutation AddManualAttendance(
+    $adminID: Int!
+    $adminName: String!
+    $employeeID: Int!
+    $employeeName: String!
+    $reason: String!
+    $clockIn: DateTime!
+    $clockOut: DateTime!
+    $approvalStatus: String!
+  ) {
+    createManualLog(
+      adminId: $adminID
+      adminName: $adminName
+      employeeId: $employeeID
+      reason: $reason
+      employeeName: $employeeName
+      clockIn: $clockIn
+      clockOut: $clockOut
+      approvalStatus: $approvalStatus
+    ) {
+      employeeName
+      reason
+      clockIn
+      clockOut
+    }
+  }
+`;
+export type AddManualAttendanceMutationFn = Apollo.MutationFunction<
+  AddManualAttendanceMutation,
+  AddManualAttendanceMutationVariables
+>;
+
+/**
+ * __useAddManualAttendanceMutation__
+ *
+ * To run a mutation, you first call `useAddManualAttendanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddManualAttendanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addManualAttendanceMutation, { data, loading, error }] = useAddManualAttendanceMutation({
+ *   variables: {
+ *      adminID: // value for 'adminID'
+ *      adminName: // value for 'adminName'
+ *      employeeID: // value for 'employeeID'
+ *      employeeName: // value for 'employeeName'
+ *      reason: // value for 'reason'
+ *      clockIn: // value for 'clockIn'
+ *      clockOut: // value for 'clockOut'
+ *      approvalStatus: // value for 'approvalStatus'
+ *   },
+ * });
+ */
+export function useAddManualAttendanceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddManualAttendanceMutation,
+    AddManualAttendanceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddManualAttendanceMutation,
+    AddManualAttendanceMutationVariables
+  >(AddManualAttendanceDocument, options);
+}
+export type AddManualAttendanceMutationHookResult = ReturnType<
+  typeof useAddManualAttendanceMutation
+>;
+export type AddManualAttendanceMutationResult =
+  Apollo.MutationResult<AddManualAttendanceMutation>;
+export type AddManualAttendanceMutationOptions = Apollo.BaseMutationOptions<
+  AddManualAttendanceMutation,
+  AddManualAttendanceMutationVariables
+>;
+export const SearchEmployeesDocument = gql`
+  query SearchEmployees($search: String!) {
+    users(where: { or: [{ employeeName: { contains: $search } }] }) {
+      id
+      employeeName
+    }
+  }
+`;
+
+/**
+ * __useSearchEmployeesQuery__
+ *
+ * To run a query within a React component, call `useSearchEmployeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchEmployeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchEmployeesQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchEmployeesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchEmployeesQuery,
+    SearchEmployeesQueryVariables
+  > &
+    (
+      | { variables: SearchEmployeesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchEmployeesQuery, SearchEmployeesQueryVariables>(
+    SearchEmployeesDocument,
+    options
+  );
+}
+export function useSearchEmployeesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchEmployeesQuery,
+    SearchEmployeesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchEmployeesQuery,
+    SearchEmployeesQueryVariables
+  >(SearchEmployeesDocument, options);
+}
+export function useSearchEmployeesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SearchEmployeesQuery,
+        SearchEmployeesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    SearchEmployeesQuery,
+    SearchEmployeesQueryVariables
+  >(SearchEmployeesDocument, options);
+}
+export type SearchEmployeesQueryHookResult = ReturnType<
+  typeof useSearchEmployeesQuery
+>;
+export type SearchEmployeesLazyQueryHookResult = ReturnType<
+  typeof useSearchEmployeesLazyQuery
+>;
+export type SearchEmployeesSuspenseQueryHookResult = ReturnType<
+  typeof useSearchEmployeesSuspenseQuery
+>;
+export type SearchEmployeesQueryResult = Apollo.QueryResult<
+  SearchEmployeesQuery,
+  SearchEmployeesQueryVariables
+>;
 export const LoginDocument = gql`
   mutation Login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -1596,8 +1789,8 @@ export type ClockTimeQueryResult = Apollo.QueryResult<
   ClockTimeQueryVariables
 >;
 export const AttendanceGraphDataDocument = gql`
-  query attendanceGraphData($startDay: LocalDate!, $stopDate: LocalDate!) {
-    graphData(startDate: $startDay, endDate: $stopDate) {
+  query attendanceGraphData {
+    graphData {
       day
       clockedInCount
       absent
@@ -1618,20 +1811,14 @@ export const AttendanceGraphDataDocument = gql`
  * @example
  * const { data, loading, error } = useAttendanceGraphDataQuery({
  *   variables: {
- *      startDay: // value for 'startDay'
- *      stopDate: // value for 'stopDate'
  *   },
  * });
  */
 export function useAttendanceGraphDataQuery(
-  baseOptions: Apollo.QueryHookOptions<
+  baseOptions?: Apollo.QueryHookOptions<
     AttendanceGraphDataQuery,
     AttendanceGraphDataQueryVariables
-  > &
-    (
-      | { variables: AttendanceGraphDataQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
