@@ -60,10 +60,26 @@ export default function Header() {
             </a>
 
             <nav className="flex items-center space-x-1">
-              <NavItem to="/app/dashboard" label="Dashboard" />
-              <NavItem to="/app/attendance" label="Attendance" />
-              <NavItem to="/app/logs" label="Manual Logs" />
-              <NavItem to="/app/settings" label="Settings" />
+              <NavItem
+                to="/app/dashboard"
+                label="Dashboard"
+                data-testid="Dashboard"
+              />
+              <NavItem
+                to="/app/attendance"
+                label="Attendance"
+                data-testid="Attendance"
+              />
+              <NavItem
+                to="/app/logs"
+                label="Manual Logs"
+                data-testid="Manual-Logs"
+              />
+              <NavItem
+                to="/app/settings"
+                label="Settings"
+                data-testid="Settings"
+              />
             </nav>
           </div>
 
