@@ -5,7 +5,7 @@ describe("template spec", () => {
   });
 
   it("passes", () => {
-    cy.url("http://localhost:5173/app/attendance");
+    cy.url("/app/attendance");
   });
 
   it("displays  page title", () => {
