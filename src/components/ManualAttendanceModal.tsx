@@ -111,7 +111,6 @@ export default function ManualAttendanceModal({
       });
 
       console.log("Manual attendance added:", result);
-      console.log("Check if data appears now in Recent Requests");
 
       onSuccess("Manual attendance request submitted successfully.");
 

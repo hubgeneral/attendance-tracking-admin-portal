@@ -132,9 +132,7 @@ const Dashboard = () => {
                     Average Clock-In Time
                   </p>
                   <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
-                    {formatTime(
-                      clockData?.averageClockTime.averageClockIn || "N/A"
-                    )}
+                    {formatTime(clockData?.averageClockTime.averageClockIn)}
                   </h2>
                 </CardContent>
               </Card>
