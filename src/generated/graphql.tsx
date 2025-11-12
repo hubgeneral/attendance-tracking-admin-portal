@@ -413,7 +413,7 @@ export type Mutation = {
   __typename?: "Mutation";
   createAttendance: Attendance;
   createManualLog: RequestLog;
-  createRequest: Scalars["String"]["output"];
+  createRequestLog: Scalars["String"]["output"];
   createUser: AppUser;
   deleteAttendance: Scalars["Boolean"]["output"];
   deleteRequest: Scalars["String"]["output"];
@@ -424,7 +424,7 @@ export type Mutation = {
   loginForForgottenPassword: UserLoginResponse;
   resetPassword: UserResetPasswordResponse;
   updateAttendance?: Maybe<Attendance>;
-  updateRequest: Scalars["String"]["output"];
+  updateRequestLog: Scalars["String"]["output"];
   updateUser?: Maybe<AppUser>;
 };
 
@@ -443,12 +443,12 @@ export type MutationCreateManualLogArgs = {
   approvalStatus: Scalars["String"]["input"];
   clockIn: Scalars["DateTime"]["input"];
   clockOut: Scalars["DateTime"]["input"];
-  employeeId: Scalars["Int"]["input"];
   employeeName: Scalars["String"]["input"];
   reason: Scalars["String"]["input"];
+  userid: Scalars["Int"]["input"];
 };
 
-export type MutationCreateRequestArgs = {
+export type MutationCreateRequestLogArgs = {
   reason: Scalars["String"]["input"];
   userid: Scalars["Int"]["input"];
 };
@@ -510,7 +510,7 @@ export type MutationUpdateAttendanceArgs = {
   totalhoursworked: Scalars["Int"]["input"];
 };
 
-export type MutationUpdateRequestArgs = {
+export type MutationUpdateRequestLogArgs = {
   reason: Scalars["String"]["input"];
   requestId: Scalars["Int"]["input"];
 };
@@ -534,7 +534,7 @@ export type PunctualEmployees = {
 export type Query = {
   __typename?: "Query";
   attendanceByDate: Array<Attendance>;
-  attendanceByUserId: Array<Attendance>;
+  attendanceByUserName: Array<Attendance>;
   attendances: Array<Attendance>;
   averageClockTime: AverageClockTimeResult;
   dashboardTotalStats: DashboardTotalSummary;
@@ -559,7 +559,8 @@ export type QueryAttendanceByDateArgs = {
   stopDate: Scalars["DateTime"]["input"];
 };
 
-export type QueryAttendanceByUserIdArgs = {
+export type QueryAttendanceByUserNameArgs = {
+  day: Scalars["LocalDate"]["input"];
   username: Scalars["String"]["input"];
 };
 
@@ -796,8 +797,8 @@ export type WorkingHours = {
 export type AddManualAttendanceMutationVariables = Exact<{
   adminID: Scalars["Int"]["input"];
   adminName: Scalars["String"]["input"];
-  employeeID: Scalars["Int"]["input"];
   employeeName: Scalars["String"]["input"];
+  userid: Scalars["Int"]["input"];
   reason: Scalars["String"]["input"];
   clockIn: Scalars["DateTime"]["input"];
   clockOut: Scalars["DateTime"]["input"];
@@ -1112,8 +1113,8 @@ export const AddManualAttendanceDocument = gql`
   mutation AddManualAttendance(
     $adminID: Int!
     $adminName: String!
-    $employeeID: Int!
     $employeeName: String!
+    $userid: Int!
     $reason: String!
     $clockIn: DateTime!
     $clockOut: DateTime!
@@ -1122,8 +1123,8 @@ export const AddManualAttendanceDocument = gql`
     createManualLog(
       adminId: $adminID
       adminName: $adminName
-      employeeId: $employeeID
       reason: $reason
+      userid: $userid
       employeeName: $employeeName
       clockIn: $clockIn
       clockOut: $clockOut
@@ -1156,8 +1157,8 @@ export type AddManualAttendanceMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      adminID: // value for 'adminID'
  *      adminName: // value for 'adminName'
- *      employeeID: // value for 'employeeID'
  *      employeeName: // value for 'employeeName'
+ *      userid: // value for 'userid'
  *      reason: // value for 'reason'
  *      clockIn: // value for 'clockIn'
  *      clockOut: // value for 'clockOut'
