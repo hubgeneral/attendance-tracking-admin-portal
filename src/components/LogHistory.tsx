@@ -1,23 +1,19 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { useLogHistroyQuery } from "../generated/graphql";
+import TableComponent from "./Tables";
 
 import {
   Box,
   Card,
   CardContent,
+  CircularProgress,
   InputAdornment,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { DateRangePicker } from "rsuite";
+import { formatDate, formatTime } from "../../helpers";
 
 export default function LogHistory() {
   const [query, setQuery] = useState("");
@@ -58,6 +54,70 @@ export default function LogHistory() {
     }
     return filtered;
   }, [query, LogHistory]);
+
+  const columns = [
+    {
+      field: "employeeName",
+      headerName: "Employee",
+      valueGetter: (row: any) => row.employeeName,
+    },
+    {
+      field: "reason",
+      headerName: "Reason",
+      valueGetter: (row: any) => row.reason,
+    },
+    {
+      field: "clockIn",
+      headerName: "Clock In",
+      valueGetter: (row: any) => (
+        <>
+          {row.oldClockIn ? (
+            <span
+              style={{
+                textDecoration: "line-through",
+                color: "#A4A4A4",
+                marginRight: 6,
+              }}
+            >
+              {formatTime(row.oldClockIn)}
+            </span>
+          ) : null}
+          {formatTime(row.clockIn)}
+        </>
+      ),
+    },
+
+    {
+      field: "clockOut",
+      headerName: "Clock Out",
+      valueGetter: (row: any) => (
+        <>
+          {row.oldClockOut ? (
+            <span
+              style={{
+                textDecoration: "line-through",
+                color: "#A4A4A4",
+                marginRight: 6,
+              }}
+            >
+              {formatTime(row.oldClockOut)}
+            </span>
+          ) : null}
+          {formatTime(row.clockOut)}
+        </>
+      ),
+    },
+    {
+      field: "actionBy",
+      headerName: "Action By",
+      valueGetter: (row: any) => {
+        if (!row.actionBy && !row.actionDate) {
+          return <span style={{ color: "#A4A4A4" }}>—</span>;
+        }
+        return `${row.actionBy} ${formatDate(row.actionDate)}`;
+      },
+    },
+  ];
   return (
     <Card className="mb-6" elevation={1}>
       <CardContent className="dark:bg-[#14241D]">
@@ -126,186 +186,16 @@ export default function LogHistory() {
         </Box>
 
         {/* Table */}
-        <TableContainer component={Paper} className="dark:bg-[#1A2D26]">
-          <Table>
-            <TableHead>
-              <TableRow
-                sx={{
-                  backgroundColor: "#F0F2F5",
-                  height: "5px",
-                  border: "1px solid #E8ECF0",
-                }}
-                className="dark:bg-[#203d32] dark:border-none"
-              >
-                <TableCell
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: 14,
-                    py: 1,
-                    color: "#52667A",
-                    whiteSpace: "nowrap",
-                  }}
-                  className="dark:text-[#E8EAE9] dark:border-none"
-                >
-                  Employee
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: 14,
-                    py: 1,
-                    color: "#52667A",
-                  }}
-                  className="dark:text-[#E8EAE9] dark:border-none"
-                >
-                  Reason
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: 14,
-                    py: 1,
-
-                    color: "#52667A",
-                  }}
-                  className="dark:text-[#E8EAE9] dark:border-none"
-                >
-                  Clock In
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: 14,
-                    py: 1,
-                    color: "#52667A",
-                  }}
-                  className="dark:text-[#E8EAE9] dark:border-none"
-                >
-                  Clock Out
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: 14,
-                    py: 1,
-                    color: "#52667A",
-                  }}
-                  className="dark:text-[#E8EAE9] dark:border-none"
-                >
-                  Action By
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className="dark:border-none"
-                ></TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {rows.map((row: LogRecord) => {
-                return (
-                  <TableRow key={row.id} hover>
-                    {/* Employee */}
-                    <TableCell
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: 14,
-                        whiteSpace: "nowrap",
-                      }}
-                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
-                    >
-                      {row.employeeName}
-                    </TableCell>
-
-                    <TableCell
-                      sx={{
-                        maxWidth: 300,
-                        overflow: "hidden",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                      }}
-                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
-                    >
-                      {row.reason}
-                    </TableCell>
-
-                    {/* Clock In */}
-                    <TableCell
-                      sx={{
-                        whiteSpace: "nowrap",
-                        color: "#29333D",
-                      }}
-                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
-                    >
-                      {row.oldClockIn ? (
-                        <span
-                          style={{
-                            textDecoration: "line-through",
-                            color: "#A4A4A4",
-                            marginRight: 6,
-                          }}
-                        >
-                          {row.oldClockIn}
-                        </span>
-                      ) : null}
-                      {row.clockIn}
-                    </TableCell>
-
-                    {/* Clock Out */}
-                    <TableCell
-                      sx={{
-                        whiteSpace: "nowrap",
-                        color: "#29333D",
-                      }}
-                      className="dark:text-[#E8EAE9] dark:border-[#263b34]"
-                    >
-                      {row.oldClockOut ? (
-                        <span
-                          style={{
-                            textDecoration: "line-through",
-                            color: "#A4A4A4",
-                            marginRight: 6,
-                          }}
-                        >
-                          {row.oldClockOut}
-                        </span>
-                      ) : null}
-                      {row.clockOut}
-                    </TableCell>
-
-                    {/* Action By */}
-                    <TableCell className="dark:border-[#263b34]">
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500 }}
-                        className="dark:text-[#E7E9E8]"
-                      >
-                        {row.actionBy}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "#6b7280",
-                          display: "block",
-                          whiteSpace: "nowrap",
-                        }}
-                        className="dark:text-[#707274]"
-                      >
-                        {row.actionDate}
-                      </Typography>
-                    </TableCell>
-
-                    {/* Status with Chip */}
-                    <TableCell
-                      align="center"
-                      className="dark:border-[#263b34]"
-                    ></TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {loading ? (
+          <Box className="flex justify-center items-center h-full">
+            <CircularProgress size={24} className="dark:text-white" />
+            <span className="ms-2 dark:text-white">Loading..</span>
+          </Box>
+        ) : error ? (
+          <p className="text-center">Error loading History</p>
+        ) : (
+          <TableComponent columns={columns} data={LogHistory} />
+        )}
         {rows.length === 0 && (
           <Box className="text-center py-8">
             <Typography variant="body1" color="textSecondary">

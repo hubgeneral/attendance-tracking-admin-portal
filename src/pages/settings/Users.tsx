@@ -12,14 +12,7 @@ import {
   InputLabel,
   Menu,
   MenuItem,
-  Paper,
   Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -39,6 +32,7 @@ import { getRoles, getStatuses } from "../../services/mockData";
 import { useGetUsersLazyQuery } from "../../generated/graphql";
 import { useGetUsersQuery } from "../../generated/graphql";
 import { getLeaveStatusToday } from "../../../helpers";
+import TableComponent from "../../components/Tables";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -93,14 +87,9 @@ export default function Users() {
     setShowResetModal(false);
     setShowPasswordModal(true);
   };
-  const { data: allData } = useGetUsersQuery();
-  // if (loading)
-  //   return (
-  //     <CircularProgress size={20} className="dark:text-white text-white mr-3" />
-  //   );
 
-  const [fetchUsers, { data: searchData }] = useGetUsersLazyQuery();
-
+  const [fetchUsers, { data, loading, error }] = useGetUsersLazyQuery();
+  const usersData = data?.users || [];
   const handleSearch = () => {
     if (search.trim() !== "") {
       fetchUsers({ variables: { search } });
@@ -118,7 +107,7 @@ export default function Users() {
   }, [search]);
 
   useEffect(() => {
-    const dataToUse = searchData?.users || allData?.users;
+    const dataToUse = data?.users || [];
 
     if (dataToUse) {
       const UserInfo = dataToUse.map((user) => ({
@@ -130,7 +119,7 @@ export default function Users() {
       setRows(UserInfo);
       console.log("User Info:", UserInfo);
     }
-  }, [searchData, allData]);
+  }, [data]);
 
   // const getStatusColor = (status: string) => {
   //   switch (status) {
@@ -173,6 +162,81 @@ export default function Users() {
     };
     setRows((prev: any) => [...prev, newIntern]);
   };
+
+  const columns = [
+    {
+      field: "staffId",
+      headerName: "Employee ID",
+      valueGetter: (row: any) => row.staffId,
+    },
+    {
+      field: "employeeName",
+      headerName: "Employee",
+      valueGetter: (row: any) => row.employeeName,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      valueGetter: (row: any) => row.email,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      valueGetter: (row: any) =>
+        row.userRoles && Array.isArray(row.userRoles)
+          ? row.userRoles.map((r: any) => r.role.name).join(", ")
+          : "",
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      valueGetter: (row: any) => (
+        <Chip
+          label={
+            (getLeaveStatusToday(rows) ?? []).some(
+              (leave: any) =>
+                leave?.employeeId === row.staffId ||
+                leave?.staffId === row.staffId ||
+                leave?.employeeId === row.employeeId ||
+                leave?.staffId === row.employeeId
+            )
+              ? "On Leave"
+              : "Present"
+          }
+          size="small"
+          sx={{
+            ...getStatusColor(
+              (getLeaveStatusToday(rows) ?? []).some(
+                (leave: any) =>
+                  leave?.employeeId === row.staffId ||
+                  leave?.staffId === row.staffId ||
+                  leave?.employeeId === row.employeeId ||
+                  leave?.staffId === row.employeeId
+              )
+                ? "On Leave"
+                : "Present"
+            ),
+            fontWeight: 500,
+            fontSize: "0.75rem",
+          }}
+        />
+      ),
+    },
+    {
+      field: "employeeType",
+      headerName: "Employment Type",
+      valueGetter: (row: any) => row.employeeType,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      renderCell: (row: any) => (
+        <IconButton onClick={(e) => handleMenuOpen(e, row)}>
+          <MoreVertIcon className="dark:text-[#E8EAE9]" />
+        </IconButton>
+      ),
+    },
+  ];
 
   const handleEditIntern = (Internship: {
     employeeId: string;
@@ -348,125 +412,19 @@ export default function Users() {
           </Box>
 
           {/* Users Table */}
-          <div className="h-[50vh] 2xl:h-[80vh]">
-            <TableContainer
-              component={Paper}
-              elevation={0}
-              className="dark:bg-[#1A2D26]"
-              sx={{
-                maxHeight: 440,
-              }}
-            >
-              <Table stickyHeader aria-label="sticky header">
-                <TableHead>
-                  <TableRow>
-                    {[
-                      "Employee ID",
-                      "Employee",
-                      "Email",
-                      "Role",
-                      "Status",
-                      "Employment Type",
-                    ].map((header) => (
-                      <TableCell
-                        key={header}
-                        sx={{
-                          backgroundColor: "#F0F2F5",
-                          color: "#000",
-                          fontWeight: 600,
-                          position: "sticky",
-                          top: 0,
-                          zIndex: 2,
-                          lineHeight: 1,
-                        }}
-                        className="dark:bg-[#243e35] dark:text-[#E8EAE9] dark:border-[#253F35]"
-                      >
-                        {header}
-                      </TableCell>
-                    ))}
-                    <TableCell
-                      align="right"
-                      sx={{
-                        backgroundColor: "#F0F2F5",
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 2,
-                      }}
-                      className="dark:bg-[#243e35] dark:border-[#253F35]"
-                    />
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {rows.map((row: User) => (
-                    <TableRow key={row.id} hover>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.staffId}
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontWeight: 500 }}
-                        className="dark:text-[#E8EAE9] dark:border-[#253F35]"
-                      >
-                        {row.employeeName}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.email}
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.userRoles && Array.isArray(row.userRoles)
-                          ? row.userRoles
-                              .map((r: any) => r.role.name)
-                              .join(", ")
-                          : ""}
-                      </TableCell>
-
-                      <TableCell className="dark:border-[#253F35]">
-                        <Chip
-                          label={
-                            (getLeaveStatusToday(rows) ?? []).some(
-                              (leave: any) =>
-                                leave?.employeeId === row.staffId ||
-                                leave?.staffId === row.staffId ||
-                                leave?.employeeId === row.employeeId ||
-                                leave?.staffId === row.employeeId
-                            )
-                              ? "On Leave"
-                              : "Present"
-                          }
-                          size="small"
-                          sx={{
-                            ...getStatusColor(
-                              (getLeaveStatusToday(rows) ?? []).some(
-                                (leave: any) =>
-                                  leave?.employeeId === row.staffId ||
-                                  leave?.staffId === row.staffId ||
-                                  leave?.employeeId === row.employeeId ||
-                                  leave?.staffId === row.employeeId
-                              )
-                                ? "On Leave"
-                                : "Present"
-                            ),
-                            fontWeight: 500,
-                            fontSize: "0.75rem",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell className="dark:text-[#E8EAE9] dark:border-[#253F35]">
-                        {row.employeeType}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        className="dark:border-[#253F35]"
-                      >
-                        <IconButton onClick={(e) => handleMenuOpen(e, row)}>
-                          <MoreVertIcon className="dark:text-[#E8EAE9]" />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+          <div>
+            {loading ? (
+              <Box className="flex justify-center items-center h-full">
+                <CircularProgress size={24} />
+                <span className="ms-2">Loading..</span>
+              </Box>
+            ) : usersData && usersData.length > 0 ? (
+              <TableComponent columns={columns} data={usersData} />
+            ) : error ? (
+              <p className="text-center">Error loading History</p>
+            ) : (
+              <p className="text-center">No users found</p>
+            )}
           </div>
 
           {rows.length === 0 && (
