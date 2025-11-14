@@ -920,6 +920,7 @@ export type GetAttendanceByDateQuery = {
     clockOut?: any | null;
     clockingType: boolean;
     totalHoursWorked?: any | null;
+    currentDate?: any | null;
     user?: {
       __typename?: "AppUser";
       staffId?: string | null;
@@ -1562,6 +1563,7 @@ export const GetAttendanceByDateDocument = gql`
       clockOut
       clockingType
       totalHoursWorked
+      currentDate
       user {
         staffId
         employeeName

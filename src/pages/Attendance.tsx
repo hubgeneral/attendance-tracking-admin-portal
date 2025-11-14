@@ -5,7 +5,7 @@ import { MdOutlineSearch } from "react-icons/md";
 import { DateRangePicker } from "rsuite";
 import { useGetAttendanceByDateLazyQuery } from "../generated/graphql";
 import TableComponent from "../components/Tables";
-import { formatTime } from "../../helpers";
+import { convertToHoursMinutes, formatTime } from "../../helpers";
 
 export type Attendance = {
   users: { id: string; staffId: string; employeeName: string }[];
@@ -44,6 +44,15 @@ export const Attendance = () => {
         `${row.user?.employeeName} - ${row.user?.staffId}`,
     },
     {
+      field: "currentDate",
+      headerName: "Date",
+      valueGetter: (row: any) => {
+        const date = new Date(row.currentDate);
+        const formatted = date.toLocaleDateString("en-GB");
+        return formatted;
+      },
+    },
+    {
       field: "clockIn",
       headerName: "Clock In",
       valueGetter: (row: any) =>
@@ -58,7 +67,10 @@ export const Attendance = () => {
     {
       field: "totalHoursWorked",
       headerName: "Total Hours Worked",
-      valueGetter: (row: any) => row.totalHoursWorked,
+      valueGetter: (row: any) =>
+        row.totalHoursWorked
+          ? convertToHoursMinutes(row.totalHoursWorked)
+          : "N/A",
     },
     {
       field: "employeeType",
@@ -67,7 +79,7 @@ export const Attendance = () => {
         const total = parseFloat(row.totalHoursWorked ?? "0");
         const timeOff = 8 - total;
         if (isNaN(timeOff) || timeOff <= 0) return "N/A";
-        return timeOff % 1 === 0 ? timeOff : timeOff.toFixed(2);
+        return convertToHoursMinutes(timeOff);
       },
     },
   ];
