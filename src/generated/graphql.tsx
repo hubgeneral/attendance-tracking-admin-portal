@@ -1053,9 +1053,9 @@ export type RecentRequestsQuery = {
   }>;
 };
 
-export type LogHistroyQueryVariables = Exact<{ [key: string]: never }>;
+export type LogHistoryQueryVariables = Exact<{ [key: string]: never }>;
 
-export type LogHistroyQuery = {
+export type LogHistoryQuery = {
   __typename?: "Query";
   manualLogs: Array<{
     __typename?: "RequestLog";
@@ -2293,7 +2293,11 @@ export type WorkHourSummaryQueryResult = Apollo.QueryResult<
 >;
 export const RecentRequestsDocument = gql`
   query recentRequests($startday: LocalDate!, $stopdate: LocalDate!) {
-    requestLogs(startday: $startday, stopdate: $stopdate) {
+    requestLogs(
+      startday: $startday
+      stopdate: $stopdate
+      order: [{ id: DESC }]
+    ) {
       employeeName
       reason
       timeOfDay
@@ -2376,9 +2380,9 @@ export type RecentRequestsQueryResult = Apollo.QueryResult<
   RecentRequestsQuery,
   RecentRequestsQueryVariables
 >;
-export const LogHistroyDocument = gql`
-  query LogHistroy {
-    manualLogs {
+export const LogHistoryDocument = gql`
+  query LogHistory {
+    manualLogs(order: [{ id: DESC }]) {
       employeeName
       currentDate
       timeOfDay
@@ -2391,68 +2395,68 @@ export const LogHistroyDocument = gql`
 `;
 
 /**
- * __useLogHistroyQuery__
+ * __useLogHistoryQuery__
  *
- * To run a query within a React component, call `useLogHistroyQuery` and pass it any options that fit your needs.
- * When your component renders, `useLogHistroyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLogHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLogHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLogHistroyQuery({
+ * const { data, loading, error } = useLogHistoryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useLogHistroyQuery(
+export function useLogHistoryQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    LogHistroyQuery,
-    LogHistroyQueryVariables
+    LogHistoryQuery,
+    LogHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export function useLogHistroyLazyQuery(
+export function useLogHistoryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    LogHistroyQuery,
-    LogHistroyQueryVariables
+    LogHistoryQuery,
+    LogHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useLazyQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export function useLogHistroySuspenseQuery(
+export function useLogHistorySuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<LogHistroyQuery, LogHistroyQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<LogHistoryQuery, LogHistoryQueryVariables>
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useSuspenseQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export type LogHistroyQueryHookResult = ReturnType<typeof useLogHistroyQuery>;
-export type LogHistroyLazyQueryHookResult = ReturnType<
-  typeof useLogHistroyLazyQuery
+export type LogHistoryQueryHookResult = ReturnType<typeof useLogHistoryQuery>;
+export type LogHistoryLazyQueryHookResult = ReturnType<
+  typeof useLogHistoryLazyQuery
 >;
-export type LogHistroySuspenseQueryHookResult = ReturnType<
-  typeof useLogHistroySuspenseQuery
+export type LogHistorySuspenseQueryHookResult = ReturnType<
+  typeof useLogHistorySuspenseQuery
 >;
-export type LogHistroyQueryResult = Apollo.QueryResult<
-  LogHistroyQuery,
-  LogHistroyQueryVariables
+export type LogHistoryQueryResult = Apollo.QueryResult<
+  LogHistoryQuery,
+  LogHistoryQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers($search: String) {

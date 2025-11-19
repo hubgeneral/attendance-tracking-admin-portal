@@ -1,5 +1,5 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { useLogHistroyQuery } from "../generated/graphql";
+import { useLogHistoryQuery } from "../generated/graphql";
 import TableComponent from "./Tables";
 
 import {
@@ -18,7 +18,7 @@ import { formatDate, formatTime } from "../../helpers";
 export default function LogHistory() {
   const [query, setQuery] = useState("");
 
-  const { data, loading, error } = useLogHistroyQuery();
+  const { data, loading, error } = useLogHistoryQuery();
   const LogHistory = data?.manualLogs || [];
 
   interface LogRecord {

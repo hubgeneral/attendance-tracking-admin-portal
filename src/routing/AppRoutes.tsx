@@ -12,9 +12,15 @@ import Dashboard from "../pages/Dashboard";
 import Settings from "../pages/settings/Settings";
 import UsersPage from "../pages/settings/Users";
 import Page404 from "./page404";
+import AccessDenied from "../pages/AccessDenied";
 
 const PublicRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Wait for auth initialization to complete before making redirect decisions
+  if (isLoading) {
+    return null; // or a loading spinner if you prefer
+  }
 
   if (isAuthenticated) {
     return <Navigate to="/app/dashboard" replace />;
@@ -77,6 +83,7 @@ const AppRoutes = () => {
           // </PublicRoute>
         }
       />
+      <Route path="access-denied" element={<AccessDenied />} />
       {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
     </Routes>
   );
