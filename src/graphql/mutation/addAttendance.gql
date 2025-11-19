@@ -1,8 +1,8 @@
 mutation AddManualAttendance(
   $adminID: Int!
   $adminName: String!
-  $employeeID: Int!
   $employeeName: String!
+  $userid: Int!
   $reason: String!
   $clockIn: DateTime!
   $clockOut: DateTime!
@@ -11,8 +11,8 @@ mutation AddManualAttendance(
   createManualLog(
     adminId: $adminID
     adminName: $adminName
-    employeeId: $employeeID
     reason: $reason
+    userid: $userid
     employeeName: $employeeName
     clockIn: $clockIn
     clockOut: $clockOut

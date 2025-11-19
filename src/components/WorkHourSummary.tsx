@@ -15,3 +15,33 @@ const WorkHourSummary = () => {
 };
 
 export default WorkHourSummary;
+
+{
+  /* import { Card, CardContent } from "@mui/material";
+import GrageChart from "./GrageChart";
+import { useWorkHourSummaryQuery } from "../generated/graphql";
+
+interface WorkHourSummaryProps {
+  startDay: string;
+  stopDate: string;
+}
+
+const WorkHourSummary = ({ startDay, stopDate }: WorkHourSummaryProps) => {
+  useWorkHourSummaryQuery({
+    variables: { startDay, stopDate },
+  });
+  return (
+    <Card className="shadow-sm shadow-gray-500 rounded-lg p-0 h-[290px] ">
+      <CardContent className="h-full dark:bg-[#1A2D26]">
+        <h3 className="text-lg font-semibold mb-2 text-[#758DA3] dark:text-[#C3C3C3]">
+          Work Hour Summary
+        </h3>
+        <GrageChart />
+      </CardContent>
+    </Card>
+  );
+};
+
+export default WorkHourSummary;
+ */
+}

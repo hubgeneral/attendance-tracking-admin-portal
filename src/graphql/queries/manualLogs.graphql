@@ -6,8 +6,17 @@ query recentRequests($startday: LocalDate!, $stopdate: LocalDate!) {
   }
 }
 
-query LogHistroy {
-  manualLogs {
+query LogHistory($search: String) {
+  manualLogs(
+    where: {
+      or: [
+        { employeeName: { contains: $search } }
+        { reason: { contains: $search } }
+        { actionBy: { contains: $search } }
+      ]
+    }
+  ) {
+    id
     employeeName
     currentDate
     timeOfDay

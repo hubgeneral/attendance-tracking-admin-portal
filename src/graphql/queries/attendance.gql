@@ -53,6 +53,7 @@ query getAttendanceByDate(
     clockOut
     clockingType
     totalHoursWorked
+    currentDate
     user {
       staffId
       employeeName

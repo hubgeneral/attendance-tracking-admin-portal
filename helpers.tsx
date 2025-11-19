@@ -42,3 +42,9 @@ export function formatTime(timeString: string) {
     hour12: true,
   });
 }
+
+export function convertToHoursMinutes(value: number): string {
+  const hours = Math.floor(value);
+  const minutes = Math.round((value - hours) * 60);
+  return `${hours}h ${minutes}m`;
+}

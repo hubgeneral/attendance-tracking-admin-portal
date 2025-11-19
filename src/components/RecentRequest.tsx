@@ -91,6 +91,10 @@ export default function RecentRequests({ onTakeAction }: RecentRequestsProps) {
               <Typography
                 variant="body2"
                 className="text-[#29333D] flex-1 text-left mr-4 dark:text-[#E8EAE9]"
+                sx={{
+                  flexWrap: "wrap",
+                  maxWidth: "200px",
+                }}
               >
                 {request.reason}
               </Typography>
