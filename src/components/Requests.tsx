@@ -1,8 +1,17 @@
 import { Card, CardContent } from "@mui/material";
 import { useDashboardRequestsQuery } from "../generated/graphql";
 
-const Requests = () => {
-  const { data: requestsData } = useDashboardRequestsQuery();
+const Requests = ({
+  startDay,
+  stopDate,
+}: {
+  startDay: string;
+  stopDate: string;
+}) => {
+  const { data: requestsData } = useDashboardRequestsQuery({
+    variables: { startDay, stopDate },
+  });
+
   return (
     <Card className="shadow-sm shadow-gray-500 rounded-lg p-0  max-h-[290px] ">
       <CardContent className="dark:bg-[#1A2D26]">
@@ -11,8 +20,8 @@ const Requests = () => {
         </h3>
 
         <div className="flex-1 sm:max-h-[250px] sm:overflow-y-auto">
-          {requestsData?.requests && requestsData.requests.length > 0 ? (
-            requestsData.requests.slice(0, 3).map((req, i) => (
+          {requestsData?.requestLogs && requestsData.requestLogs.length > 0 ? (
+            requestsData.requestLogs.slice(0, 3).map((req, i) => (
               <div
                 key={i}
                 className="flex justify-between items-center mb-3 p-3 border-[#E8ECF0] rounded-lg bg-[#F7F7F7] dark:bg-[#1f3a30] "
