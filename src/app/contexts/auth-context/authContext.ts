@@ -12,6 +12,8 @@ const AuthContext = createContext<{
     | undefined;
   getLoggedInUser?: (email: string) => void;
   resetAuthContext?: (email: string) => void;
+  isLoading?: boolean;
+  setIsLoading?: Dispatch<React.SetStateAction<boolean>>;
 }>({ authContextData });
 
 export default AuthContext;
