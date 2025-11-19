@@ -42,13 +42,26 @@ Cypress.Commands.add("login", () => {
     cy.get('input[type="text"]').type("DHG2011");
     cy.get('input[type="password"]').type("password@123");
     cy.get(".loginbtn").click();
-    cy.url().should("include", "/app/dashboard");
-    
 
-    cy.window().then((win)=>{
-      console.log("localStorage:",win.localStorage)
-      console.log("sessionStorage:", win.sessionStorage)
-    })
+    cy.url().then((currentUrl) => {
+      const routedToDashboard = currentUrl.includes("/app/");
+      const routedToAccessDenied = currentUrl.includes("/access-denied");
+
+      expect(
+        routedToDashboard || routedToAccessDenied,
+        "User should land on dashboard or access denied page"
+      ).to.be.true;
+
+      cy.window().then((win) => {
+        const isAdmin = routedToDashboard;
+        win.localStorage.setItem("cypress-is-admin", JSON.stringify(isAdmin));
+      });
+    });
+
+    cy.window().then((win) => {
+      console.log("localStorage:", win.localStorage);
+      console.log("sessionStorage:", win.sessionStorage);
+    });
   });
 });
 

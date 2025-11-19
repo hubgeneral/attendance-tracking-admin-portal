@@ -2384,7 +2384,11 @@ export type WorkHourSummaryQueryResult = Apollo.QueryResult<
 >;
 export const RecentRequestsDocument = gql`
   query recentRequests($startday: LocalDate!, $stopdate: LocalDate!) {
-    requestLogs(startday: $startday, stopdate: $stopdate) {
+    requestLogs(
+      startday: $startday
+      stopdate: $stopdate
+      order: [{ id: DESC }]
+    ) {
       employeeName
       reason
       timeOfDay

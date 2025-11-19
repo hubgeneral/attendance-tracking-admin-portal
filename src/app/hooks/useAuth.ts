@@ -13,6 +13,7 @@ interface LoginCredentials {
 interface UseAuthProps {
   currentUser: UserLoginResponse | undefined;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
   setAuthData: (user: UserLoginResponse, accessToken: string) => void;
@@ -33,7 +34,7 @@ export const useAuth = (): UseAuthProps => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
 
-  const { authContextData, setAuthContextData } = context;
+  const { authContextData, setAuthContextData, isLoading, setIsLoading } = context;
   const isAuthenticated = Boolean(authContextData?.currentUser);
   const [loginMutation] = useLoginMutation();
 
@@ -67,11 +68,15 @@ export const useAuth = (): UseAuthProps => {
         localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
         localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      } finally {
+        if (setIsLoading) {
+          setIsLoading(false);
+        }
       }
     };
 
     loadAuthFromStorage();
-  }, [setAuthContextData]);
+  }, [setAuthContextData, setIsLoading]);
 
   // Save to localStorage helper
 
@@ -216,6 +221,7 @@ export const useAuth = (): UseAuthProps => {
   return {
     currentUser: authContextData?.currentUser,
     isAuthenticated,
+    isLoading: isLoading ?? true,
     login,
     logout,
     setAuthData,

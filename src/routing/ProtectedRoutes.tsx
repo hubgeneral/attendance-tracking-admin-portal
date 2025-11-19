@@ -7,10 +7,19 @@ interface ProtectedRoutesProps {
 }
 
 const ProtectedRoutes = ({ children }: ProtectedRoutesProps) => {
-  const { currentUser, isAuthenticated } = useAuth();
+  const { currentUser, isAuthenticated, isLoading } = useAuth();
+
+  // Wait for auth initialization to complete before making redirect decisions
+  if (isLoading) {
+    return null; // or a loading spinner if you prefer
+  }
 
   if (!currentUser && !isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
+  }
+
+  if (currentUser?.role?.toLowerCase() !== "admin") {
+    return <Navigate to="/access-denied" replace />;
   }
 
   return <>{children}</>;
