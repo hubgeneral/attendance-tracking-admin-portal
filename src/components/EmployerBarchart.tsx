@@ -12,12 +12,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const EmployerBarChart = () => {
-  const { data, loading, error } = useAttendanceGraphDataQuery({});
-
-  if (loading) return <p>Loading chart...</p>;
-  if (error) return <p>Error loading chart: {error.message}</p>;
-
+const EmployerBarChart = ({
+  startDay,
+  stopDate,
+}: {
+  startDay: string;
+  stopDate: string;
+}) => {
+  const { data, loading, error } = useAttendanceGraphDataQuery({
+    variables: { startDay: startDay, stopDate: stopDate } as any,
+  });
   const chartData = data?.graphData || [];
 
   const formattedData = chartData.map((item) => ({

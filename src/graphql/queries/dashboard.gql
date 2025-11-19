@@ -1,5 +1,5 @@
-query TotalStats {
-  dashboardTotalStats {
+query TotalStats($startDay: LocalDate!, $stopDate: LocalDate!) {
+  dashboardTotalStats(startDate: $startDay, endDate: $stopDate) {
     totalEmployees
     employeesClockedIn
     employeesClockedOut
@@ -8,15 +8,15 @@ query TotalStats {
   }
 }
 
-query ClockTime {
-  averageClockTime {
+query ClockTime($startDay: LocalDate!, $stopDate: LocalDate!) {
+  averageClockTime(startDate: $startDay, endDate: $stopDate) {
     averageClockIn
     averageClockOut
   }
 }
 
-query attendanceGraphData {
-  graphData {
+query attendanceGraphData($startDay: LocalDate!, $stopDate: LocalDate!) {
+  graphData(startDate: $startDay, endDate: $stopDate) {
     day
     clockedInCount
     absent
