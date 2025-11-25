@@ -197,6 +197,39 @@ export type AttendanceSortInput = {
   user?: InputMaybe<AppUserSortInput>;
 };
 
+export type AverageAttendanceResult = {
+  __typename?: "AverageAttendanceResult";
+  averageClockIn?: Maybe<Scalars["DateTime"]["output"]>;
+  averageClockOut?: Maybe<Scalars["DateTime"]["output"]>;
+  averageTotalHoursWorked?: Maybe<Scalars["Decimal"]["output"]>;
+  employeeeName?: Maybe<Scalars["String"]["output"]>;
+  startDate: Scalars["LocalDate"]["output"];
+  stopDate: Scalars["LocalDate"]["output"];
+  userId: Scalars["Int"]["output"];
+};
+
+export type AverageAttendanceResultFilterInput = {
+  and?: InputMaybe<Array<AverageAttendanceResultFilterInput>>;
+  averageClockIn?: InputMaybe<DateTimeOperationFilterInput>;
+  averageClockOut?: InputMaybe<DateTimeOperationFilterInput>;
+  averageTotalHoursWorked?: InputMaybe<DecimalOperationFilterInput>;
+  employeeeName?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<AverageAttendanceResultFilterInput>>;
+  startDate?: InputMaybe<LocalDateOperationFilterInput>;
+  stopDate?: InputMaybe<LocalDateOperationFilterInput>;
+  userId?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type AverageAttendanceResultSortInput = {
+  averageClockIn?: InputMaybe<SortEnumType>;
+  averageClockOut?: InputMaybe<SortEnumType>;
+  averageTotalHoursWorked?: InputMaybe<SortEnumType>;
+  employeeeName?: InputMaybe<SortEnumType>;
+  startDate?: InputMaybe<SortEnumType>;
+  stopDate?: InputMaybe<SortEnumType>;
+  userId?: InputMaybe<SortEnumType>;
+};
+
 export type AverageClockTimeResult = {
   __typename?: "AverageClockTimeResult";
   averageClockIn?: Maybe<Scalars["DateTime"]["output"]>;
@@ -534,8 +567,11 @@ export type PunctualEmployees = {
 export type Query = {
   __typename?: "Query";
   attendanceByDate: Array<Attendance>;
+  attendanceByUserId: Array<Attendance>;
   attendanceByUserName: Array<Attendance>;
   attendances: Array<Attendance>;
+  averageAttendanceByDate: Array<AverageAttendanceResult>;
+  averageAttendanceByUserId?: Maybe<AverageAttendanceResult>;
   averageClockTime: AverageClockTimeResult;
   dashboardTotalStats: DashboardTotalSummary;
   graphData: Array<GraphDataResults>;
@@ -555,8 +591,18 @@ export type Query = {
 };
 
 export type QueryAttendanceByDateArgs = {
-  startDate: Scalars["DateTime"]["input"];
-  stopDate: Scalars["DateTime"]["input"];
+  order?: InputMaybe<Array<AttendanceSortInput>>;
+  startDate: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+  where?: InputMaybe<AttendanceFilterInput>;
+};
+
+export type QueryAttendanceByUserIdArgs = {
+  order?: InputMaybe<Array<AttendanceSortInput>>;
+  startDate: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+  userId: Scalars["Int"]["input"];
+  where?: InputMaybe<AttendanceFilterInput>;
 };
 
 export type QueryAttendanceByUserNameArgs = {
@@ -567,6 +613,21 @@ export type QueryAttendanceByUserNameArgs = {
 export type QueryAttendancesArgs = {
   order?: InputMaybe<Array<AttendanceSortInput>>;
   where?: InputMaybe<AttendanceFilterInput>;
+};
+
+export type QueryAverageAttendanceByDateArgs = {
+  order?: InputMaybe<Array<AverageAttendanceResultSortInput>>;
+  startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  stopDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  where?: InputMaybe<AverageAttendanceResultFilterInput>;
+};
+
+export type QueryAverageAttendanceByUserIdArgs = {
+  endDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  order?: InputMaybe<Array<AverageAttendanceResultSortInput>>;
+  startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  userId: Scalars["Int"]["input"];
+  where?: InputMaybe<AverageAttendanceResultFilterInput>;
 };
 
 export type QueryAverageClockTimeArgs = {

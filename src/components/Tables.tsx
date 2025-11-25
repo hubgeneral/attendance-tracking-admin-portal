@@ -28,6 +28,7 @@ const TableComponent: React.FC<TablesProps> = ({ columns, data }) => {
     <TableContainer
       component={Paper}
       elevation={0}
+      className="bg-[#F0F2F5] dark:bg-[#1A2D26]"
       sx={{
         flexGrow: 1,
         minHeight: "250px",
@@ -47,7 +48,7 @@ const TableComponent: React.FC<TablesProps> = ({ columns, data }) => {
                   color: "#000",
                   fontWeight: "600",
                 }}
-                className="dark:bg-[#243e35] dark:text-[#E8EAE9] dark:border-[#253F35]"
+                className="bg-[#F0F2F5] color-[#000]  dark:bg-[#243e35] dark:text-[#E8EAE9] dark:border-[#253F35]"
               >
                 {col.headerName}
               </TableCell>
@@ -57,15 +58,11 @@ const TableComponent: React.FC<TablesProps> = ({ columns, data }) => {
         <TableBody>
           {data.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length}>
-                <Typography
-                  variant="body2"
-                  align="center"
-                  sx={{
-                    color: "#888888",
-                    py: 3,
-                  }}
-                >
+              <TableCell
+                colSpan={columns.length}
+                className="dark:bg-[#1A2D26] dark:text-[#E8EAE9] dark:border-[#253F35]"
+              >
+                <Typography variant="body2" align="center">
                   No records found.
                 </Typography>
               </TableCell>
@@ -74,7 +71,10 @@ const TableComponent: React.FC<TablesProps> = ({ columns, data }) => {
             data.map((row, index) => (
               <TableRow key={index} hover>
                 {columns.map((col) => (
-                  <TableCell key={col.field}>
+                  <TableCell
+                    key={col.field}
+                    className="dark:bg-[#1A2D26] dark:text-[#E8EAE9] dark:border-[#253F35]"
+                  >
                     {col.renderCell
                       ? col.renderCell(row)
                       : col.valueGetter
