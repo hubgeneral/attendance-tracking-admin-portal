@@ -14,8 +14,7 @@ import { formatTime } from "../../misc";
 import { useState } from "react";
 import Requests from "../components/Requests";
 import WorkHourSummary from "../components/WorkHourSummary";
-// import { skip } from "node:test";
-// import { useEffect } from "react";
+
 const Dashboard = () => {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
@@ -30,8 +29,12 @@ const Dashboard = () => {
     ? dateRange[1].toISOString().split("T")[0]
     : today;
 
-  const { data, loading, error } = useTotalStatsQuery();
-  const { data: clockData } = useClockTimeQuery();
+  const { data, loading, error } = useTotalStatsQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
+  const { data: clockData } = useClockTimeQuery({
+    variables: { startDay: startDate, stopDate: endDate },
+  });
   const { data: punctualData } = useMostPunctualQuery({
     variables: { startDay: startDate, stopDate: endDate },
   });
@@ -132,9 +135,7 @@ const Dashboard = () => {
                     Average Clock-In Time
                   </p>
                   <h2 className="text-2xl font-bold dark:text-[#E8EAE9]">
-                    {formatTime(
-                      clockData?.averageClockTime.averageClockIn || "N/A"
-                    )}
+                    {formatTime(clockData?.averageClockTime.averageClockIn)}
                   </h2>
                 </CardContent>
               </Card>
@@ -161,7 +162,7 @@ const Dashboard = () => {
               </Card>
 
               <div className="flex-1">
-                <Requests />
+                <Requests startDay={startDate} stopDate={endDate} />
               </div>
             </div>
           </div>

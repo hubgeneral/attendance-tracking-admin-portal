@@ -20,12 +20,8 @@ const EmployerBarChart = ({
   stopDate: string;
 }) => {
   const { data, loading, error } = useAttendanceGraphDataQuery({
-    variables: { startDay: startDay, stopDate: stopDate },
+    variables: { startDay: startDay, stopDate: stopDate } as any,
   });
-
-  if (loading) return <p>Loading chart...</p>;
-  if (error) return <p>Error loading chart: {error.message}</p>;
-
   const chartData = data?.graphData || [];
 
   const formattedData = chartData.map((item) => ({

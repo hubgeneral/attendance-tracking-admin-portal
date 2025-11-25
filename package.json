@@ -23,6 +23,7 @@
     "@mui/x-charts": "^8.11.3",
     "@mui/x-date-pickers": "^8.11.3",
     "dayjs": "^1.11.18",
+    "expo": "^54.0.25",
     "graphql": "^16.11.0",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",

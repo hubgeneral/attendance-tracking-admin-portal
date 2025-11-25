@@ -32,3 +32,22 @@ export function formatTime(timeString: string) {
     hour12: true,
   });
 }
+
+
+// export function refetchRecentRequestsHelper(
+//   refetch: (vars?: any) => void,
+//   startDate: string,
+//   endDate: string
+// ) {
+//   refetch({
+//     startday: startDate,
+//     stopdate: endDate,
+//   });
+// }
+
+
+// import { refetchRecentRequests } from "../utils/refetchHelpers";
+
+// // inside handleSubmit:
+// await addManualAttendance({...});
+// refetchRecentRequests(refetchRecentRequestsFn, startDate, endDate);

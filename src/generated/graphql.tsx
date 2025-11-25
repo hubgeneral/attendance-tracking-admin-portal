@@ -197,6 +197,39 @@ export type AttendanceSortInput = {
   user?: InputMaybe<AppUserSortInput>;
 };
 
+export type AverageAttendanceResult = {
+  __typename?: "AverageAttendanceResult";
+  averageClockIn?: Maybe<Scalars["DateTime"]["output"]>;
+  averageClockOut?: Maybe<Scalars["DateTime"]["output"]>;
+  averageTotalHoursWorked?: Maybe<Scalars["Decimal"]["output"]>;
+  employeeeName?: Maybe<Scalars["String"]["output"]>;
+  startDate: Scalars["LocalDate"]["output"];
+  stopDate: Scalars["LocalDate"]["output"];
+  userId: Scalars["Int"]["output"];
+};
+
+export type AverageAttendanceResultFilterInput = {
+  and?: InputMaybe<Array<AverageAttendanceResultFilterInput>>;
+  averageClockIn?: InputMaybe<DateTimeOperationFilterInput>;
+  averageClockOut?: InputMaybe<DateTimeOperationFilterInput>;
+  averageTotalHoursWorked?: InputMaybe<DecimalOperationFilterInput>;
+  employeeeName?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<AverageAttendanceResultFilterInput>>;
+  startDate?: InputMaybe<LocalDateOperationFilterInput>;
+  stopDate?: InputMaybe<LocalDateOperationFilterInput>;
+  userId?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type AverageAttendanceResultSortInput = {
+  averageClockIn?: InputMaybe<SortEnumType>;
+  averageClockOut?: InputMaybe<SortEnumType>;
+  averageTotalHoursWorked?: InputMaybe<SortEnumType>;
+  employeeeName?: InputMaybe<SortEnumType>;
+  startDate?: InputMaybe<SortEnumType>;
+  stopDate?: InputMaybe<SortEnumType>;
+  userId?: InputMaybe<SortEnumType>;
+};
+
 export type AverageClockTimeResult = {
   __typename?: "AverageClockTimeResult";
   averageClockIn?: Maybe<Scalars["DateTime"]["output"]>;
@@ -413,7 +446,7 @@ export type Mutation = {
   __typename?: "Mutation";
   createAttendance: Attendance;
   createManualLog: RequestLog;
-  createRequest: Scalars["String"]["output"];
+  createRequestLog: Scalars["String"]["output"];
   createUser: AppUser;
   deleteAttendance: Scalars["Boolean"]["output"];
   deleteRequest: Scalars["String"]["output"];
@@ -424,7 +457,7 @@ export type Mutation = {
   loginForForgottenPassword: UserLoginResponse;
   resetPassword: UserResetPasswordResponse;
   updateAttendance?: Maybe<Attendance>;
-  updateRequest: Scalars["String"]["output"];
+  updateRequestLog: Scalars["String"]["output"];
   updateUser?: Maybe<AppUser>;
 };
 
@@ -443,12 +476,12 @@ export type MutationCreateManualLogArgs = {
   approvalStatus: Scalars["String"]["input"];
   clockIn: Scalars["DateTime"]["input"];
   clockOut: Scalars["DateTime"]["input"];
-  employeeId: Scalars["Int"]["input"];
   employeeName: Scalars["String"]["input"];
   reason: Scalars["String"]["input"];
+  userid: Scalars["Int"]["input"];
 };
 
-export type MutationCreateRequestArgs = {
+export type MutationCreateRequestLogArgs = {
   reason: Scalars["String"]["input"];
   userid: Scalars["Int"]["input"];
 };
@@ -510,7 +543,7 @@ export type MutationUpdateAttendanceArgs = {
   totalhoursworked: Scalars["Int"]["input"];
 };
 
-export type MutationUpdateRequestArgs = {
+export type MutationUpdateRequestLogArgs = {
   reason: Scalars["String"]["input"];
   requestId: Scalars["Int"]["input"];
 };
@@ -535,7 +568,10 @@ export type Query = {
   __typename?: "Query";
   attendanceByDate: Array<Attendance>;
   attendanceByUserId: Array<Attendance>;
+  attendanceByUserName: Array<Attendance>;
   attendances: Array<Attendance>;
+  averageAttendanceByDate: Array<AverageAttendanceResult>;
+  averageAttendanceByUserId?: Maybe<AverageAttendanceResult>;
   averageClockTime: AverageClockTimeResult;
   dashboardTotalStats: DashboardTotalSummary;
   graphData: Array<GraphDataResults>;
@@ -555,17 +591,43 @@ export type Query = {
 };
 
 export type QueryAttendanceByDateArgs = {
-  startDate: Scalars["DateTime"]["input"];
-  stopDate: Scalars["DateTime"]["input"];
+  order?: InputMaybe<Array<AttendanceSortInput>>;
+  startDate: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+  where?: InputMaybe<AttendanceFilterInput>;
 };
 
 export type QueryAttendanceByUserIdArgs = {
+  order?: InputMaybe<Array<AttendanceSortInput>>;
+  startDate: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+  userId: Scalars["Int"]["input"];
+  where?: InputMaybe<AttendanceFilterInput>;
+};
+
+export type QueryAttendanceByUserNameArgs = {
+  day: Scalars["LocalDate"]["input"];
   username: Scalars["String"]["input"];
 };
 
 export type QueryAttendancesArgs = {
   order?: InputMaybe<Array<AttendanceSortInput>>;
   where?: InputMaybe<AttendanceFilterInput>;
+};
+
+export type QueryAverageAttendanceByDateArgs = {
+  order?: InputMaybe<Array<AverageAttendanceResultSortInput>>;
+  startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  stopDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  where?: InputMaybe<AverageAttendanceResultFilterInput>;
+};
+
+export type QueryAverageAttendanceByUserIdArgs = {
+  endDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  order?: InputMaybe<Array<AverageAttendanceResultSortInput>>;
+  startDate?: InputMaybe<Scalars["LocalDate"]["input"]>;
+  userId: Scalars["Int"]["input"];
+  where?: InputMaybe<AverageAttendanceResultFilterInput>;
 };
 
 export type QueryAverageClockTimeArgs = {
@@ -796,8 +858,8 @@ export type WorkingHours = {
 export type AddManualAttendanceMutationVariables = Exact<{
   adminID: Scalars["Int"]["input"];
   adminName: Scalars["String"]["input"];
-  employeeID: Scalars["Int"]["input"];
   employeeName: Scalars["String"]["input"];
+  userid: Scalars["Int"]["input"];
   reason: Scalars["String"]["input"];
   clockIn: Scalars["DateTime"]["input"];
   clockOut: Scalars["DateTime"]["input"];
@@ -919,6 +981,7 @@ export type GetAttendanceByDateQuery = {
     clockOut?: any | null;
     clockingType: boolean;
     totalHoursWorked?: any | null;
+    currentDate?: any | null;
     user?: {
       __typename?: "AppUser";
       staffId?: string | null;
@@ -928,7 +991,10 @@ export type GetAttendanceByDateQuery = {
   }>;
 };
 
-export type TotalStatsQueryVariables = Exact<{ [key: string]: never }>;
+export type TotalStatsQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
 
 export type TotalStatsQuery = {
   __typename?: "Query";
@@ -942,7 +1008,10 @@ export type TotalStatsQuery = {
   };
 };
 
-export type ClockTimeQueryVariables = Exact<{ [key: string]: never }>;
+export type ClockTimeQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
 
 export type ClockTimeQuery = {
   __typename?: "Query";
@@ -953,7 +1022,10 @@ export type ClockTimeQuery = {
   };
 };
 
-export type AttendanceGraphDataQueryVariables = Exact<{ [key: string]: never }>;
+export type AttendanceGraphDataQueryVariables = Exact<{
+  startDay: Scalars["LocalDate"]["input"];
+  stopDate: Scalars["LocalDate"]["input"];
+}>;
 
 export type AttendanceGraphDataQuery = {
   __typename?: "Query";
@@ -1051,12 +1123,15 @@ export type RecentRequestsQuery = {
   }>;
 };
 
-export type LogHistroyQueryVariables = Exact<{ [key: string]: never }>;
+export type LogHistoryQueryVariables = Exact<{
+  search?: InputMaybe<Scalars["String"]["input"]>;
+}>;
 
-export type LogHistroyQuery = {
+export type LogHistoryQuery = {
   __typename?: "Query";
   manualLogs: Array<{
     __typename?: "RequestLog";
+    id: number;
     employeeName?: string | null;
     currentDate?: any | null;
     timeOfDay?: any | null;
@@ -1112,8 +1187,8 @@ export const AddManualAttendanceDocument = gql`
   mutation AddManualAttendance(
     $adminID: Int!
     $adminName: String!
-    $employeeID: Int!
     $employeeName: String!
+    $userid: Int!
     $reason: String!
     $clockIn: DateTime!
     $clockOut: DateTime!
@@ -1122,8 +1197,8 @@ export const AddManualAttendanceDocument = gql`
     createManualLog(
       adminId: $adminID
       adminName: $adminName
-      employeeId: $employeeID
       reason: $reason
+      userid: $userid
       employeeName: $employeeName
       clockIn: $clockIn
       clockOut: $clockOut
@@ -1156,8 +1231,8 @@ export type AddManualAttendanceMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      adminID: // value for 'adminID'
  *      adminName: // value for 'adminName'
- *      employeeID: // value for 'employeeID'
  *      employeeName: // value for 'employeeName'
+ *      userid: // value for 'userid'
  *      reason: // value for 'reason'
  *      clockIn: // value for 'clockIn'
  *      clockOut: // value for 'clockOut'
@@ -1561,6 +1636,7 @@ export const GetAttendanceByDateDocument = gql`
       clockOut
       clockingType
       totalHoursWorked
+      currentDate
       user {
         staffId
         employeeName
@@ -1643,8 +1719,8 @@ export type GetAttendanceByDateQueryResult = Apollo.QueryResult<
   GetAttendanceByDateQueryVariables
 >;
 export const TotalStatsDocument = gql`
-  query TotalStats {
-    dashboardTotalStats {
+  query TotalStats($startDay: LocalDate!, $stopDate: LocalDate!) {
+    dashboardTotalStats(startDate: $startDay, endDate: $stopDate) {
       totalEmployees
       employeesClockedIn
       employeesClockedOut
@@ -1666,14 +1742,20 @@ export const TotalStatsDocument = gql`
  * @example
  * const { data, loading, error } = useTotalStatsQuery({
  *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
  *   },
  * });
  */
 export function useTotalStatsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     TotalStatsQuery,
     TotalStatsQueryVariables
-  >
+  > &
+    (
+      | { variables: TotalStatsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<TotalStatsQuery, TotalStatsQueryVariables>(
@@ -1719,8 +1801,8 @@ export type TotalStatsQueryResult = Apollo.QueryResult<
   TotalStatsQueryVariables
 >;
 export const ClockTimeDocument = gql`
-  query ClockTime {
-    averageClockTime {
+  query ClockTime($startDay: LocalDate!, $stopDate: LocalDate!) {
+    averageClockTime(startDate: $startDay, endDate: $stopDate) {
       averageClockIn
       averageClockOut
     }
@@ -1739,11 +1821,17 @@ export const ClockTimeDocument = gql`
  * @example
  * const { data, loading, error } = useClockTimeQuery({
  *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
  *   },
  * });
  */
 export function useClockTimeQuery(
-  baseOptions?: Apollo.QueryHookOptions<ClockTimeQuery, ClockTimeQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<
+    ClockTimeQuery,
+    ClockTimeQueryVariables
+  > &
+    ({ variables: ClockTimeQueryVariables; skip?: boolean } | { skip: boolean })
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ClockTimeQuery, ClockTimeQueryVariables>(
@@ -1789,8 +1877,8 @@ export type ClockTimeQueryResult = Apollo.QueryResult<
   ClockTimeQueryVariables
 >;
 export const AttendanceGraphDataDocument = gql`
-  query attendanceGraphData {
-    graphData {
+  query attendanceGraphData($startDay: LocalDate!, $stopDate: LocalDate!) {
+    graphData(startDate: $startDay, endDate: $stopDate) {
       day
       clockedInCount
       absent
@@ -1811,14 +1899,20 @@ export const AttendanceGraphDataDocument = gql`
  * @example
  * const { data, loading, error } = useAttendanceGraphDataQuery({
  *   variables: {
+ *      startDay: // value for 'startDay'
+ *      stopDate: // value for 'stopDate'
  *   },
  * });
  */
 export function useAttendanceGraphDataQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     AttendanceGraphDataQuery,
     AttendanceGraphDataQueryVariables
-  >
+  > &
+    (
+      | { variables: AttendanceGraphDataQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
@@ -2373,9 +2467,18 @@ export type RecentRequestsQueryResult = Apollo.QueryResult<
   RecentRequestsQuery,
   RecentRequestsQueryVariables
 >;
-export const LogHistroyDocument = gql`
-  query LogHistroy {
-    manualLogs {
+export const LogHistoryDocument = gql`
+  query LogHistory($search: String) {
+    manualLogs(
+      where: {
+        or: [
+          { employeeName: { contains: $search } }
+          { reason: { contains: $search } }
+          { actionBy: { contains: $search } }
+        ]
+      }
+    ) {
+      id
       employeeName
       currentDate
       timeOfDay
@@ -2388,68 +2491,69 @@ export const LogHistroyDocument = gql`
 `;
 
 /**
- * __useLogHistroyQuery__
+ * __useLogHistoryQuery__
  *
- * To run a query within a React component, call `useLogHistroyQuery` and pass it any options that fit your needs.
- * When your component renders, `useLogHistroyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLogHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLogHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLogHistroyQuery({
+ * const { data, loading, error } = useLogHistoryQuery({
  *   variables: {
+ *      search: // value for 'search'
  *   },
  * });
  */
-export function useLogHistroyQuery(
+export function useLogHistoryQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    LogHistroyQuery,
-    LogHistroyQueryVariables
+    LogHistoryQuery,
+    LogHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export function useLogHistroyLazyQuery(
+export function useLogHistoryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    LogHistroyQuery,
-    LogHistroyQueryVariables
+    LogHistoryQuery,
+    LogHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useLazyQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export function useLogHistroySuspenseQuery(
+export function useLogHistorySuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<LogHistroyQuery, LogHistroyQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<LogHistoryQuery, LogHistoryQueryVariables>
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LogHistroyQuery, LogHistroyQueryVariables>(
-    LogHistroyDocument,
+  return Apollo.useSuspenseQuery<LogHistoryQuery, LogHistoryQueryVariables>(
+    LogHistoryDocument,
     options
   );
 }
-export type LogHistroyQueryHookResult = ReturnType<typeof useLogHistroyQuery>;
-export type LogHistroyLazyQueryHookResult = ReturnType<
-  typeof useLogHistroyLazyQuery
+export type LogHistoryQueryHookResult = ReturnType<typeof useLogHistoryQuery>;
+export type LogHistoryLazyQueryHookResult = ReturnType<
+  typeof useLogHistoryLazyQuery
 >;
-export type LogHistroySuspenseQueryHookResult = ReturnType<
-  typeof useLogHistroySuspenseQuery
+export type LogHistorySuspenseQueryHookResult = ReturnType<
+  typeof useLogHistorySuspenseQuery
 >;
-export type LogHistroyQueryResult = Apollo.QueryResult<
-  LogHistroyQuery,
-  LogHistroyQueryVariables
+export type LogHistoryQueryResult = Apollo.QueryResult<
+  LogHistoryQuery,
+  LogHistoryQueryVariables
 >;
 export const GetUsersDocument = gql`
   query getUsers($search: String) {
