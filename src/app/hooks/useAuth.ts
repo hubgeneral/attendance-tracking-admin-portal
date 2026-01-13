@@ -4,6 +4,7 @@ import {
   type UserLoginResponse,
 } from "../../generated/graphql";
 import AuthContext from "../contexts/auth-context/authContext";
+import Cookies from "js-cookie";
 
 interface LoginCredentials {
   username: string;
@@ -21,11 +22,29 @@ interface UseAuthProps {
   updateAccessToken: (accessToken: string) => void;
 }
 
-// local storage keys
 const STORAGE_KEYS = {
   ACCESS_TOKEN: "accessToken",
   REFRESH_TOKEN: "refreshToken",
   CURRENT_USER: "currentUser",
+};
+
+const COOKIE_EXPIRATION_DAYS = 1;
+const COOKIE_BASE_OPTIONS = {
+  path: "/",
+  sameSite: "strict" as const,
+  secure:
+    typeof window !== "undefined" && window.location.protocol === "https:",
+};
+
+const setCookie = (key: string, value: string) => {
+  Cookies.set(key, value, {
+    ...COOKIE_BASE_OPTIONS,
+    expires: COOKIE_EXPIRATION_DAYS,
+  });
+};
+
+const removeCookie = (key: string) => {
+  Cookies.remove(key, { path: COOKIE_BASE_OPTIONS.path });
 };
 
 export const useAuth = (): UseAuthProps => {
@@ -34,20 +53,17 @@ export const useAuth = (): UseAuthProps => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
 
-  const { authContextData, setAuthContextData, isLoading, setIsLoading } = context;
+  const { authContextData, setAuthContextData, isLoading, setIsLoading } =
+    context;
   const isAuthenticated = Boolean(authContextData?.currentUser);
   const [loginMutation] = useLoginMutation();
 
   useEffect(() => {
     const loadAuthFromStorage = () => {
       try {
-        const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-        const storedAccessToken = localStorage.getItem(
-          STORAGE_KEYS.ACCESS_TOKEN
-        );
-        const storedRefreshToken = localStorage.getItem(
-          STORAGE_KEYS.REFRESH_TOKEN
-        );
+        const storedUser = Cookies.get(STORAGE_KEYS.CURRENT_USER);
+        const storedAccessToken = Cookies.get(STORAGE_KEYS.ACCESS_TOKEN);
+        const storedRefreshToken = Cookies.get(STORAGE_KEYS.REFRESH_TOKEN);
 
         if (storedUser && storedAccessToken && storedRefreshToken) {
           const user: UserLoginResponse = JSON.parse(storedUser);
@@ -63,11 +79,10 @@ export const useAuth = (): UseAuthProps => {
           }
         }
       } catch (error) {
-        console.error("Failed to load auth data from localStorage:", error);
-        // Clear corrupted data
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+        console.error("Failed to load auth data from cookies:", error);
+        removeCookie(STORAGE_KEYS.CURRENT_USER);
+        removeCookie(STORAGE_KEYS.ACCESS_TOKEN);
+        removeCookie(STORAGE_KEYS.REFRESH_TOKEN);
       } finally {
         if (setIsLoading) {
           setIsLoading(false);
@@ -78,38 +93,31 @@ export const useAuth = (): UseAuthProps => {
     loadAuthFromStorage();
   }, [setAuthContextData, setIsLoading]);
 
-  // Save to localStorage helper
-
-  //
-
-  //
-
-  const saveToLocalStorage = useCallback((user: UserLoginResponse) => {
+  const saveToCookies = useCallback((user: UserLoginResponse) => {
     try {
-      if (user.accessToken && user.refreshToken) {
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, user.accessToken);
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, user.refreshToken);
-
-        // Store user data without tokens (tokens stored separately)
-        const { accessToken, refreshToken, ...userWithoutTokens } = user;
-        localStorage.setItem(
-          STORAGE_KEYS.CURRENT_USER,
-          JSON.stringify(userWithoutTokens)
-        );
+      if (user.accessToken) {
+        setCookie(STORAGE_KEYS.ACCESS_TOKEN, user.accessToken);
       }
+      if (user.refreshToken) {
+        setCookie(STORAGE_KEYS.REFRESH_TOKEN, user.refreshToken);
+      }
+
+      const userWithoutTokens: Partial<UserLoginResponse> = { ...user };
+      delete userWithoutTokens.accessToken;
+      delete userWithoutTokens.refreshToken;
+      setCookie(STORAGE_KEYS.CURRENT_USER, JSON.stringify(userWithoutTokens));
     } catch (error) {
-      console.error("Failed to save auth data to localStorage:", error);
+      console.error("Failed to save auth data to cookies:", error);
     }
   }, []);
 
-  // Clear localStorage helper
-  const clearLocalStorage = useCallback(() => {
+  const clearAuthCookies = useCallback(() => {
     try {
-      localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      removeCookie(STORAGE_KEYS.ACCESS_TOKEN);
+      removeCookie(STORAGE_KEYS.REFRESH_TOKEN);
+      removeCookie(STORAGE_KEYS.CURRENT_USER);
     } catch (error) {
-      console.error("Failed to clear auth data from localStorage:", error);
+      console.error("Failed to clear auth data from cookies:", error);
     }
   }, []);
 
@@ -156,13 +164,13 @@ export const useAuth = (): UseAuthProps => {
           currentUser: userData,
         });
 
-        saveToLocalStorage(userData);
+        saveToCookies(userData);
       } catch (error) {
         console.error("Login error:", error);
         throw error;
       }
     },
-    [setAuthContextData, loginMutation]
+    [setAuthContextData, loginMutation, saveToCookies]
   );
 
   const logout = useCallback(() => {
@@ -173,8 +181,8 @@ export const useAuth = (): UseAuthProps => {
       currentUser: undefined,
     });
 
-    clearLocalStorage();
-  }, [setAuthContextData]);
+    clearAuthCookies();
+  }, [setAuthContextData, clearAuthCookies]);
 
   const setAuthData = useCallback(
     (user: UserLoginResponse) => {
@@ -185,9 +193,9 @@ export const useAuth = (): UseAuthProps => {
         currentUser: user,
       });
 
-      saveToLocalStorage(user);
+      saveToCookies(user);
     },
-    [setAuthContextData, saveToLocalStorage]
+    [setAuthContextData, saveToCookies]
   );
 
   const updateUser = useCallback(
@@ -200,8 +208,10 @@ export const useAuth = (): UseAuthProps => {
         ...prev,
         currentUser: user,
       }));
+
+      saveToCookies(user);
     },
-    [setAuthContextData]
+    [setAuthContextData, saveToCookies]
   );
 
   const updateAccessToken = useCallback(
@@ -210,10 +220,24 @@ export const useAuth = (): UseAuthProps => {
         throw new Error("setAuthContextData is not defined");
       }
 
-      setAuthContextData((prev) => ({
-        ...prev,
-        accessToken,
-      }));
+      setAuthContextData((prev) => {
+        if (!prev?.currentUser) {
+          return prev ?? { currentUser: undefined };
+        }
+        return {
+          ...prev,
+          currentUser: {
+            ...prev.currentUser,
+            accessToken,
+          },
+        };
+      });
+
+      if (accessToken) {
+        setCookie(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+      } else {
+        removeCookie(STORAGE_KEYS.ACCESS_TOKEN);
+      }
     },
     [setAuthContextData]
   );

@@ -5,7 +5,9 @@ import {
   from,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { setContext } from "@apollo/client/link/context";
 import type { GraphQLError } from "graphql";
+import Cookies from "js-cookie";
 
 // ✅ Apollo v3.10+ compatible onError
 const errorLink = onError((error) => {
@@ -29,15 +31,36 @@ const errorLink = onError((error) => {
   }
 });
 
+const getAccessToken = () => {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  try {
+    return Cookies.get("accessToken") ?? "";
+  } catch (error) {
+    console.error("Failed to read access token from cookies:", error);
+    return "";
+  }
+};
+
+const authLink = setContext((_, { headers }) => {
+  const token = getAccessToken();
+
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
 const httpLink = new HttpLink({
   uri: import.meta.env.VITE_API_URL1 || "http://localhost:5015/graphql",
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-  },
 });
 
 const client = new ApolloClient({
-  link: from([errorLink, httpLink]),
+  link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
 });
 

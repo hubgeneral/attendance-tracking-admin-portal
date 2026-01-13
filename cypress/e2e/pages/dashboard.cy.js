@@ -5,20 +5,26 @@
 
 // })
 
-const ensureAdminOrAccessDenied = () => {
-  return cy.window().then((win) => {
-    const storedUser = win.localStorage.getItem("currentUser");
-    const role = storedUser ? JSON.parse(storedUser).role : undefined;
-    const isAdmin = role?.toLowerCase() === "admin";
-    win.localStorage.setItem("cypress-is-admin", JSON.stringify(isAdmin));
+const parseUserFromCookie = (cookie) => {
+  if (!cookie?.value) {
+    return undefined;
+  }
 
-    if (isAdmin) {
-      cy.visit("/app/dashboard");
-    } else {
-      cy.visit("/access-denied");
-    }
+  try {
+    return JSON.parse(decodeURIComponent(cookie.value));
+  } catch (error) {
+    console.error("Failed to parse currentUser cookie:", error);
+    return undefined;
+  }
+};
+
+const ensureAdminOrAccessDenied = () => {
+  return cy.getCookie("currentUser").then((cookie) => {
+    const role = parseUserFromCookie(cookie)?.role?.toLowerCase();
+    const isAdmin = role === "admin";
 
     cy.wrap(isAdmin).as("isAdmin");
+    cy.visit(isAdmin ? "/app/dashboard" : "/access-denied");
   });
 };
 

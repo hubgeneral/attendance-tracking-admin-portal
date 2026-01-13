@@ -43,7 +43,7 @@ Cypress.Commands.add("login", () => {
     cy.get('input[type="password"]').type("password@123");
     cy.get(".loginbtn").click();
 
-    cy.url().then((currentUrl) => {
+    cy.url().should((currentUrl) => {
       const routedToDashboard = currentUrl.includes("/app/");
       const routedToAccessDenied = currentUrl.includes("/access-denied");
 
@@ -51,16 +51,6 @@ Cypress.Commands.add("login", () => {
         routedToDashboard || routedToAccessDenied,
         "User should land on dashboard or access denied page"
       ).to.be.true;
-
-      cy.window().then((win) => {
-        const isAdmin = routedToDashboard;
-        win.localStorage.setItem("cypress-is-admin", JSON.stringify(isAdmin));
-      });
-    });
-
-    cy.window().then((win) => {
-      console.log("localStorage:", win.localStorage);
-      console.log("sessionStorage:", win.sessionStorage);
     });
   });
 });
