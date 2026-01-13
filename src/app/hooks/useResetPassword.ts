@@ -5,6 +5,7 @@ import {
   type UserLoginResponse,
 } from "../../generated/graphql";
 import AuthContext from "../contexts/auth-context/authContext";
+import Cookies from "js-cookie";
 
 interface ForgotPasswordCredentials {
   email: string;
@@ -24,12 +25,26 @@ interface ResetPasswordProps {
   resetPassword: (credentials: ResetPasswordCredentials) => Promise<void>;
 }
 
-// local storage keys
 const STORAGE_KEYS = {
   ACCESS_TOKEN: "accessToken",
   REFRESH_TOKEN: "refreshToken",
   RESET_TOKEN: "resetToken",
   CURRENT_USER: "currentUser",
+};
+
+const COOKIE_EXPIRATION_DAYS = 1;
+const COOKIE_BASE_OPTIONS = {
+  path: "/",
+  sameSite: "strict" as const,
+  secure: typeof window !== "undefined" && window.location.protocol === "https:",
+};
+
+const setCookie = (key: string, value: string) => {
+  Cookies.set(key, value, { ...COOKIE_BASE_OPTIONS, expires: COOKIE_EXPIRATION_DAYS });
+};
+
+const removeCookie = (key: string) => {
+  Cookies.remove(key, { path: COOKIE_BASE_OPTIONS.path });
 };
 
 export const useResetPassword = (): ResetPasswordProps => {
@@ -46,14 +61,10 @@ export const useResetPassword = (): ResetPasswordProps => {
   useEffect(() => {
     const loadAuthFromStorage = () => {
       try {
-        const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-        const storedAccessToken = localStorage.getItem(
-          STORAGE_KEYS.ACCESS_TOKEN
-        );
-        const storedRefreshToken = localStorage.getItem(
-          STORAGE_KEYS.REFRESH_TOKEN
-        );
-        const storedResetToken = localStorage.getItem(STORAGE_KEYS.RESET_TOKEN);
+        const storedUser = Cookies.get(STORAGE_KEYS.CURRENT_USER);
+        const storedAccessToken = Cookies.get(STORAGE_KEYS.ACCESS_TOKEN);
+        const storedRefreshToken = Cookies.get(STORAGE_KEYS.REFRESH_TOKEN);
+        const storedResetToken = Cookies.get(STORAGE_KEYS.RESET_TOKEN);
 
         if (
           storedUser &&
@@ -75,35 +86,36 @@ export const useResetPassword = (): ResetPasswordProps => {
           }
         }
       } catch (error) {
-        console.error("Failed to load auth data from localStorage:", error);
-        // Clear corrupted data
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.RESET_TOKEN);
+        console.error("Failed to load auth data from cookies:", error);
+        removeCookie(STORAGE_KEYS.CURRENT_USER);
+        removeCookie(STORAGE_KEYS.ACCESS_TOKEN);
+        removeCookie(STORAGE_KEYS.REFRESH_TOKEN);
+        removeCookie(STORAGE_KEYS.RESET_TOKEN);
       }
     };
 
     loadAuthFromStorage();
   }, [setAuthContextData]);
 
-  const saveToLocalStorage = useCallback((user: UserLoginResponse) => {
+  const saveToCookies = useCallback((user: UserLoginResponse) => {
     try {
-      if (user.accessToken && user.refreshToken && user.resetToken) {
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, user.accessToken);
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, user.refreshToken);
-        localStorage.setItem(STORAGE_KEYS.RESET_TOKEN, user.resetToken);
-
-        // Store user data without tokens (tokens stored separately)
-        const { accessToken, refreshToken, resetToken, ...userWithoutTokens } =
-          user;
-        localStorage.setItem(
-          STORAGE_KEYS.CURRENT_USER,
-          JSON.stringify(userWithoutTokens)
-        );
+      if (user.accessToken) {
+        setCookie(STORAGE_KEYS.ACCESS_TOKEN, user.accessToken);
       }
+      if (user.refreshToken) {
+        setCookie(STORAGE_KEYS.REFRESH_TOKEN, user.refreshToken);
+      }
+      if (user.resetToken) {
+        setCookie(STORAGE_KEYS.RESET_TOKEN, user.resetToken);
+      }
+
+      const userWithoutTokens: Partial<UserLoginResponse> = { ...user };
+      delete userWithoutTokens.accessToken;
+      delete userWithoutTokens.refreshToken;
+      delete userWithoutTokens.resetToken;
+      setCookie(STORAGE_KEYS.CURRENT_USER, JSON.stringify(userWithoutTokens));
     } catch (error) {
-      console.error("Failed to save auth data to localStorage:", error);
+      console.error("Failed to save auth data to cookies:", error);
     }
   }, []);
 
@@ -155,13 +167,13 @@ export const useResetPassword = (): ResetPasswordProps => {
           currentUser: userData,
         });
 
-        saveToLocalStorage(userData);
+        saveToCookies(userData);
       } catch (error) {
         console.error("Error occurred while requesting password reset:", error);
         throw error;
       }
     },
-    [forgotPasswordMutation, setAuthContextData, saveToLocalStorage]
+    [forgotPasswordMutation, setAuthContextData, saveToCookies]
   );
 
   const resetPassword = useCallback(
@@ -180,8 +192,8 @@ export const useResetPassword = (): ResetPasswordProps => {
         //   throw new Error("Password must be at least 8 characters");
         // }
 
-        const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-        const storedToken = localStorage.getItem(STORAGE_KEYS.RESET_TOKEN);
+        const storedUser = Cookies.get(STORAGE_KEYS.CURRENT_USER);
+        const storedToken = Cookies.get(STORAGE_KEYS.RESET_TOKEN);
 
         if (!storedUser || !storedToken) {
           throw new Error(
@@ -235,9 +247,9 @@ export const useResetPassword = (): ResetPasswordProps => {
         console.log("Password reset successful");
 
         // Optional: Clear auth data after successful reset
-        // localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        // localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-        // localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+        // removeCookie(STORAGE_KEYS.ACCESS_TOKEN);
+        // removeCookie(STORAGE_KEYS.REFRESH_TOKEN);
+        // removeCookie(STORAGE_KEYS.CURRENT_USER);
 
         if (setAuthContextData) {
           setAuthContextData({ currentUser: undefined });

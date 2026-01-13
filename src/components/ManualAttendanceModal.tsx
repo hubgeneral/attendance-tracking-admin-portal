@@ -97,7 +97,7 @@ export default function ManualAttendanceModal({
         variables: {
           adminID: 1,
           adminName: "Admin",
-          employeeID: Number(form.employeeID),
+          userid: Number(form.employeeID),
           employeeName: form.employeeName,
           reason: form.reason,
           clockIn: new Date(`${today}T${form.clockIn}:00`),
